@@ -31,6 +31,9 @@ set(TS_FILES queens_game_fr_FR.ts)
 set(SRC src/)
 set(INC include/)
 
+file(GLOB GAMES "games/*")
+add_custom_target(games SOURCES ${GAMES})
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 if(ANDROID)
@@ -39,6 +42,10 @@ if(ANDROID)
     ${SRC}mainwindow.cpp
     ${INC}mainwindow.h
     ${SRC}mainwindow.ui
+    ${SRC}gamepresenter.cpp
+    ${INC}gamepresenter.h
+    ${SRC}gamemodel.cpp
+    ${INC}gamemodel.h
     ${TS_FILES}
   )
 else()
@@ -47,6 +54,10 @@ else()
     ${SRC}mainwindow.cpp
     ${INC}mainwindow.h
     ${SRC}mainwindow.ui
+    ${SRC}gamepresenter.cpp
+    ${INC}gamepresenter.h
+    ${SRC}gamemodel.cpp
+    ${INC}gamemodel.h
     ${TS_FILES}
   )
 endif()
