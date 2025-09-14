@@ -13,3 +13,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::debug(QString newText, bool keep)
+{
+    debugText = !keep ? newText : debugText + newText;
+    ui->debugLabel->setText(debugText);
+}
+

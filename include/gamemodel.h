@@ -7,7 +7,7 @@ class GameModel : public QObject
 {
     Q_OBJECT
 public:
-    explicit GameModel(QObject *parent = nullptr);
+    GameModel(QObject *parent = nullptr);
 
 signals:
 

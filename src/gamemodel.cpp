@@ -1,4 +1,4 @@
-#include "../include/gamemodel.h"
+#include "gamemodel.h"
 
 GameModel::GameModel(QObject *parent) : QObject(parent)
 {

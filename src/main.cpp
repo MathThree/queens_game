@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "gamemodel.h"
 #include "gamepresenter.h"
 
 #include <QApplication>
@@ -6,11 +7,16 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow gameView;
-    GamePresenter gamePresenter;
+    MainWindow view;
+    GameModel model;
+    GamePresenter presenter(nullptr, &model, &view);
 
+    QString level = "001.txt";
+    presenter.LoadGameFile(level);
 
+    //view.debug("Test\n", false);
+    //view.debug("Test2\n", true);
 
-    gameView.show();
+    view.show();
     return a.exec();
 }
