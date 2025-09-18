@@ -16,6 +16,6 @@ MainWindow::~MainWindow()
 void MainWindow::debug(QString newText, bool keep)
 {
     debugText = !keep ? newText : debugText + newText;
-    ui->debugLabel->setText(debugText);
+    ui->debugText->setText(debugText);
 }
 

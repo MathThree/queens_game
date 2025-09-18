@@ -2,6 +2,7 @@
 #include "gamemodel.h"
 #include "gamepresenter.h"
 
+#include <QDebug>
 #include <QApplication>
 
 int main(int argc, char *argv[])

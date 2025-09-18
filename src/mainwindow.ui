@@ -14,20 +14,14 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="debugLabel">
+   <widget class="QTextBrowser" name="debugText">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>320</y>
-      <width>241</width>
-      <height>221</height>
+      <x>10</x>
+      <y>360</y>
+      <width>780</width>
+      <height>190</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
     </property>
    </widget>
   </widget>

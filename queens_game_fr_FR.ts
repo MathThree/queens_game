@@ -8,10 +8,5 @@
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="src/mainwindow.ui" line="27"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 </TS>

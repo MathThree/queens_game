@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QFile>
 #include <QByteArray>
+#include <QTextStream>
+#include <QStringList>
 #include "gamemodel.h"
 #include "mainwindow.h"
 
