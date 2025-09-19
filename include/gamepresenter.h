@@ -11,15 +11,21 @@
 
 class GamePresenter : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    GamePresenter(QObject *parent = nullptr, GameModel *model = nullptr, MainWindow *view = nullptr);
+	GamePresenter(QObject *parent = nullptr, GameModel *model = nullptr, MainWindow *view = nullptr);
 
-    void LoadGameFile(QString gameName);
+	void loadGameFile(QString gameName);
+	void initCells();
+
+public slots:
+	void handleCellClicked(const int row, const int col);
 
 private:
-    GameModel *_model;
-    MainWindow *_view;
+	void toggleCellValue(const int row, const int col);
+
+	GameModel *_model;
+	MainWindow *_view;
 
 signals:
 

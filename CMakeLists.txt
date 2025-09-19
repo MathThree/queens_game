@@ -37,35 +37,39 @@ add_custom_target(games SOURCES ${GAMES})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 if(ANDROID)
-  add_library(queens_game SHARED
-    ${SRC}main.cpp
-    ${SRC}mainwindow.cpp
-    ${INC}mainwindow.h
-    ${SRC}mainwindow.ui
-    ${SRC}gamepresenter.cpp
-    ${INC}gamepresenter.h
-    ${SRC}gamemodel.cpp
-    ${INC}gamemodel.h
-    ${TS_FILES}
-  )
+	add_library(queens_game SHARED
+		${SRC}main.cpp
+		${SRC}mainwindow.cpp
+		${INC}mainwindow.h
+		${SRC}mainwindow.ui
+		${SRC}gamepresenter.cpp
+		${INC}gamepresenter.h
+		${SRC}gamemodel.cpp
+		${INC}gamemodel.h
+		${SRC}cellbutton.cpp
+		${INC}cellbutton.h
+		${TS_FILES}
+	)
 else()
-  add_executable(queens_game
-    ${SRC}main.cpp
-    ${SRC}mainwindow.cpp
-    ${INC}mainwindow.h
-    ${SRC}mainwindow.ui
-    ${SRC}gamepresenter.cpp
-    ${INC}gamepresenter.h
-    ${SRC}gamemodel.cpp
-    ${INC}gamemodel.h
-    ${TS_FILES}
-  )
+	add_executable(queens_game
+		${SRC}main.cpp
+		${SRC}mainwindow.cpp
+		${INC}mainwindow.h
+		${SRC}mainwindow.ui
+		${SRC}gamepresenter.cpp
+		${INC}gamepresenter.h
+		${SRC}gamemodel.cpp
+		${INC}gamemodel.h
+		${SRC}cellbutton.cpp
+		${INC}cellbutton.h
+		${TS_FILES}
+	)
 endif()
 
 target_link_libraries(queens_game PRIVATE Qt5::Widgets)
 
 target_include_directories(queens_game PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR}/queens_game_autogen/include
+	${CMAKE_CURRENT_BINARY_DIR}/queens_game_autogen/include
 )
 
 qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

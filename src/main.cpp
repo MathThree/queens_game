@@ -7,17 +7,15 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow view;
-    GameModel model;
-    GamePresenter presenter(nullptr, &model, &view);
+	QApplication a(argc, argv);
+	MainWindow view;
+	GameModel model;
+	GamePresenter presenter(nullptr, &model, &view);
 
-    QString level = "001.txt";
-    presenter.LoadGameFile(level);
+	QString level = "001.txt";
+	presenter.loadGameFile(level);
+	presenter.initCells();
 
-    //view.debug("Test\n", false);
-    //view.debug("Test2\n", true);
-
-    view.show();
-    return a.exec();
+	view.show();
+	return a.exec();
 }

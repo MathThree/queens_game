@@ -5,33 +5,40 @@
 #include <vector>
 #include <utility>
 #include <QStringList>
+#include <QColor>
 
 using namespace std;
 
 class GameModel : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    GameModel(QObject *parent = nullptr);
+	GameModel(QObject *parent = nullptr);
 
-    void setSize(const int newSize);
-    void setQueens(const QStringList queenList);
-    void setZones(const QStringList zoneList);
+	void setSize(const int newSize);
+	void setQueens(const QStringList queenList);
+	void setZones(const QStringList zoneList);
+	void setColors();
+	void setPlayerValue(const int row, const int col);
 
-    QString toQString();
+	int getSize() const { return n; }
+	QColor getColor(const int row, const int col) const {return colors[grid[row][col].colorZone];}
+
+	QString toQString();
 
 private:
-    struct Cell
-    {
-        bool hasQueen = false;
-        int colorZone = 0;
-        int playerValue = 0;
-        int bonusValue = 0;
-    };
+	struct Cell
+	{
+		bool hasQueen = false;
+		int colorZone = 0;
+		int playerValue = 0;
+		int bonusValue = 0;
+	};
 
-    int n;
-    vector<vector<Cell>> grid;
-    vector<vector<Cell*>> zones;
+	int n;
+	vector<vector<Cell>> grid;
+	vector<vector<Cell*>> zones;
+	vector<QColor> colors;
 
 signals:
 

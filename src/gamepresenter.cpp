@@ -6,36 +6,48 @@ GamePresenter::GamePresenter(QObject *parent, GameModel *model, MainWindow *view
     _view = view;
 }
 
-void GamePresenter::LoadGameFile(QString gameName)
+void GamePresenter::loadGameFile(QString gameName)
 {
-    QFile file("../queens_game/games/" + gameName);
+	QFile file("../queens_game/games/" + gameName);
 
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
+	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+		return;
 
-    QTextStream in(&file);
-    QString line;
+	QTextStream in(&file);
+	QString line;
 
-    line = in.readLine();
-    _model->setSize(line.toInt());
+	line = in.readLine();
+	_model->setSize(line.toInt());
 
-    line = in.readLine();
-    QStringList numbers = line.split(" ");
-    _model->setQueens(numbers);
+	line = in.readLine();
+	QStringList numbers = line.split(" ");
+	_model->setQueens(numbers);
 
-    line = in.readAll();
-    QStringList zone_list = line.split("\n");
-    _model->setZones(zone_list);
-    //_view->debug(zone_list[0]);
+	line = in.readAll();
+	QStringList zone_list = line.split("\n");
+	_model->setZones(zone_list);
 
-    _view->debug(_model->toQString());
-    /*
-    while (!in.atEnd())
-    {
-        line = in.readLine();
-        _view->debug(line, true);
-    }
-    */
+	_view->debug(_model->toQString());
+}
 
+void GamePresenter::initCells()
+{
+	connect(_view, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
+	_view->initCells(_model->getSize());
+	for (int i=0; i<_model->getSize(); ++i)
+		for(int j=0; j<_model->getSize(); ++j)
+		{
+			_view->setCell(i, j, _model->getColor(i, j));
+		}
+}
+
+void GamePresenter::handleCellClicked(const int row, const int col)
+{
+	_view->debug(QString("Clicked (P): %1; %2\n").arg(row+1).arg(col+1));
+
+}
+
+void GamePresenter::toggleCellValue(const int row, const int col)
+{
 
 }
