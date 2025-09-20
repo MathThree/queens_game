@@ -25,7 +25,7 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
-	void initCells(const int n);
+	void initCellGrid(const int n);
 	void setCell(const int row, const int col, const QColor color);
 	void setCellValue(const int row, const int col, const int value);
 
@@ -41,5 +41,6 @@ private:
 	QString debugText;
 	Ui::MainWindow *ui;
 	vector<vector<CellButton*>> cells;
+	QWidget *gameWidget = nullptr;
 };
 #endif // MAINWINDOW_H

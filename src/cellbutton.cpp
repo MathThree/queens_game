@@ -1,8 +1,15 @@
 #include "cellbutton.h"
 
-CellButton::CellButton(int row, int col, QWidget* parent) : QPushButton(parent), _row(row), _col(col)
+CellButton::CellButton(int row, int col, const QColor color, QWidget* parent) : QPushButton(parent), _row(row), _col(col), _color(color)
 {
 	connect(this, SIGNAL(clicked()), this, SLOT(handleCellClicked()));
+
+	this->setStyleSheet(QString(
+							"background-color: %1;"
+							"border: 1px solid black;"
+							"border-radius: 0px").arg(color.name()));
+
+	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 void CellButton::setCellValue(const int value)

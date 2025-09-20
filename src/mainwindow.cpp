@@ -13,21 +13,21 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::initCells(const int n)
+void MainWindow::initCellGrid(const int n)
 {
-	QWidget *gameWidget = new QWidget(this);
-	ui->gameGrid->setParent(gameWidget);
+	if (!gameWidget)
+	{
+		gameWidget = new QWidget(this);
+		ui->gameGrid->setParent(gameWidget);
+		gameWidget->setMinimumSize(330, 330);
+	}
+	if (n<cells.size())
+	{
+		for (int i=n; i<cells.size(); ++i)
+			for(int j=n; j<cells[i].size(); ++j)
+				cells[i][j]->deleteLater();
+	}
 	cells = vector<vector<CellButton*>>(n, vector<CellButton*>(n));
-	for (int i=0; i<n; ++i)
-		for (int j=0; j<n; ++j)
-		{
-			CellButton *cell = new CellButton(i, j);
-			ui->gameGrid->addWidget(cell, i, j);
-			cells[i][j] = cell;
-			connect(cell, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
-		}
-
-	gameWidget->setMinimumSize(330, 330);
 }
 
 void MainWindow::setCell(const int row, const int col, const QColor color)
@@ -35,16 +35,10 @@ void MainWindow::setCell(const int row, const int col, const QColor color)
 	if (row<0 || row>=cells.size()) return;
 	if (col<0 || col>=cells[row].size()) return;
 
-	CellButton *cell = cells[row][col];
-
-	if (!cell) return;
-
-	cell->setStyleSheet(QString(
-							"background-color: %1;"
-							"border: 1px solid black;"
-							"border-radius: 0px").arg(color.name()));
-
-	cell->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	CellButton *cell = new CellButton(row, col, color, gameWidget);
+	cells[row][col] = cell;
+	ui->gameGrid->addWidget(cell, row, col);
+	connect(cell, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
 }
 
 void MainWindow::setCellValue(const int row, const int col, const int value)

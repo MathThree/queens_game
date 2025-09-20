@@ -33,7 +33,7 @@ void GamePresenter::loadGameFile(QString gameName)
 void GamePresenter::initCells()
 {
 	connect(_view, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
-	_view->initCells(_model->getSize());
+	_view->initCellGrid(_model->getSize());
 	for (int i=0; i<_model->getSize(); ++i)
 		for(int j=0; j<_model->getSize(); ++j)
 		{
