@@ -6,6 +6,8 @@
 #include <utility>
 #include <QStringList>
 #include <QColor>
+#include <QFile>
+#include <QTextStream>
 
 using namespace std;
 
@@ -19,11 +21,14 @@ public:
 	void setQueens(const QStringList queenList);
 	void setZones(const QStringList zoneList);
 	void setColors();
-	void togglePlayerValue(const int row, const int col);
 
 	int getSize() const { return n; }
 	int getPlayerValue(const int row, const int col) const { return grid[row][col].playerValue; }
 	QColor getColor(const int row, const int col) const {return colors[grid[row][col].colorZone];}
+
+	void togglePlayerValue(const int row, const int col);
+
+	void loadGameFile(QString gameName);
 
 	QString toQString();
 
@@ -42,7 +47,7 @@ private:
 	vector<QColor> colors;
 
 signals:
-
+	void cellUpdated(const int row, const int col, const int playerValue, const int bonusValue);
 };
 
 #endif // GAMEMODEL_H

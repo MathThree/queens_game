@@ -4,30 +4,25 @@ CellButton::CellButton(int row, int col, const QColor color, QWidget* parent) : 
 {
 	connect(this, SIGNAL(clicked()), this, SLOT(handleCellClicked()));
 
-	this->setStyleSheet(QString(
-							"background-color: %1;"
-							"border: 1px solid black;"
-							"border-radius: 0px").arg(color.name()));
+	setColor(_color);
 
 	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
-void CellButton::setCellValue(const int value)
+void CellButton::setCellValue(const QString value)
 {
-	switch (value)
-	{
-	case -1:
-		this->setText("•");
-		break;
-	case 1:
-		this->setText("♛");
-		break;
-	default:
-		this->setText("");
-	}
+	this->setText(value);
 }
 
 void CellButton::handleCellClicked()
 {
 	emit clicked(_row, _col);
+}
+
+void CellButton::setColor(const QColor color)
+{
+	this->setStyleSheet(QString(
+							"background-color: %1;"
+							"border: 1px solid black;"
+							"border-radius: 0px").arg(color.name()));
 }

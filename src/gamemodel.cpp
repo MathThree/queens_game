@@ -5,6 +5,28 @@ GameModel::GameModel(QObject *parent) : QObject(parent)
 
 }
 
+void GameModel::loadGameFile(QString gameName)
+{
+	QFile file("../queens_game/games/" + gameName);
+
+	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+		return;
+
+	QTextStream in(&file);
+	QString line;
+
+	line = in.readLine();
+	setSize(line.toInt());
+
+	line = in.readLine();
+	QStringList numbers = line.split(" ");
+	setQueens(numbers);
+
+	line = in.readAll();
+	QStringList zone_list = line.split("\n");
+	setZones(zone_list);
+}
+
 void GameModel::setSize(const int newSize)
 {
 	n = newSize;
@@ -53,6 +75,7 @@ void GameModel::setColors()
 void GameModel::togglePlayerValue(const int row, const int col)
 {
 	grid[row][col].playerValue = (grid[row][col].playerValue + 3) % 3 - 1;
+	emit cellUpdated(row, col, grid[row][col].playerValue, grid[row][col].bonusValue);
 }
 
 QString GameModel::toQString()

@@ -10,10 +10,10 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 	MainWindow view;
 	GameModel model;
-	GamePresenter presenter(nullptr, &model, &view);
+	GamePresenter presenter(&model, &view);
 
 	QString level = "001.txt";
-	presenter.loadGameFile(level);
+	model.loadGameFile(level);
 	presenter.initCells();
 
 	view.show();

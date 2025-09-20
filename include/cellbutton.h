@@ -10,7 +10,8 @@ class CellButton : public QPushButton
 	Q_OBJECT
 public:
 	CellButton(int row, int col, const QColor color = QColor("white"), QWidget* parent = nullptr);
-	void setCellValue(const int value);
+	void setCellValue(const QString value);
+	void setColor(const QColor color);
 
 signals:
 	void clicked(const int row, const int col);

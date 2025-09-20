@@ -1,29 +1,28 @@
 #ifndef GAMEPRESENTER_H
 #define GAMEPRESENTER_H
 
+#include "gamemodel.h"
+#include "mainwindow.h"
+
 #include <QObject>
 #include <QFile>
 #include <QByteArray>
 #include <QTextStream>
 #include <QStringList>
-#include "gamemodel.h"
-#include "mainwindow.h"
 
 class GamePresenter : public QObject
 {
 	Q_OBJECT
 public:
-	GamePresenter(QObject *parent = nullptr, GameModel *model = nullptr, MainWindow *view = nullptr);
+	GamePresenter(GameModel *model = nullptr, MainWindow *view = nullptr, QObject *parent = nullptr);
 
-	void loadGameFile(QString gameName);
 	void initCells();
 
 public slots:
 	void handleCellClicked(const int row, const int col);
+	void handleCellUpdated(const int row, const int col, const int playerValue, const int bonusValue);
 
 private:
-	void toggleCellValue(const int row, const int col);
-
 	GameModel *_model;
 	MainWindow *_view;
 

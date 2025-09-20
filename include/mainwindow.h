@@ -42,5 +42,6 @@ private:
 	Ui::MainWindow *ui;
 	vector<vector<CellButton*>> cells;
 	QWidget *gameWidget = nullptr;
+	vector<QString> symbols = {"•", "", "♛"};
 };
 #endif // MAINWINDOW_H

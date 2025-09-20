@@ -43,7 +43,7 @@ void MainWindow::setCell(const int row, const int col, const QColor color)
 
 void MainWindow::setCellValue(const int row, const int col, const int value)
 {
-	((CellButton *) cells[row][col])->setCellValue(value);
+	((CellButton *) cells[row][col])->setCellValue(symbols[value+1]);
 }
 
 void MainWindow::handleCellClicked(const int row, const int col)
