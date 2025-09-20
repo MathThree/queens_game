@@ -50,9 +50,9 @@ void GameModel::setColors()
 	}
 }
 
-void GameModel::setPlayerValue(const int row, const int col)
+void GameModel::togglePlayerValue(const int row, const int col)
 {
-	grid[row][col].playerValue = (grid[row][col].playerValue + 1) % 3 - 1;
+	grid[row][col].playerValue = (grid[row][col].playerValue + 3) % 3 - 1;
 }
 
 QString GameModel::toQString()

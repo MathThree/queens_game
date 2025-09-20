@@ -2,13 +2,14 @@
 #define CELLBUTTON_H
 
 #include <QPushButton>
-#include <QRadioButton>
+#include <QString>
 
 class CellButton : public QPushButton
 {
 	Q_OBJECT
 public:
 	CellButton(int row, int col, QWidget* parent = nullptr);
+	void setCellValue(const int value);
 
 signals:
 	void clicked(const int row, const int col);

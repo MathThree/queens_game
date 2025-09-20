@@ -19,9 +19,10 @@ public:
 	void setQueens(const QStringList queenList);
 	void setZones(const QStringList zoneList);
 	void setColors();
-	void setPlayerValue(const int row, const int col);
+	void togglePlayerValue(const int row, const int col);
 
 	int getSize() const { return n; }
+	int getPlayerValue(const int row, const int col) const { return grid[row][col].playerValue; }
 	QColor getColor(const int row, const int col) const {return colors[grid[row][col].colorZone];}
 
 	QString toQString();

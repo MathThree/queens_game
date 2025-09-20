@@ -27,7 +27,7 @@ void GamePresenter::loadGameFile(QString gameName)
 	QStringList zone_list = line.split("\n");
 	_model->setZones(zone_list);
 
-	_view->debug(_model->toQString());
+	//_view->debug(_model->toQString());
 }
 
 void GamePresenter::initCells()
@@ -43,11 +43,13 @@ void GamePresenter::initCells()
 
 void GamePresenter::handleCellClicked(const int row, const int col)
 {
-	_view->debug(QString("Clicked (P): %1; %2\n").arg(row+1).arg(col+1));
-
+	_view->debug(QString("[%1; %2] : ").arg(row+1).arg(col+1));
+	toggleCellValue(row, col);
 }
 
 void GamePresenter::toggleCellValue(const int row, const int col)
 {
-
+	_model->togglePlayerValue(row, col);
+	_view->setCellValue(row, col, _model->getPlayerValue(row, col));
+	_view->debug(QString("[-> %1]\n").arg(_model->getPlayerValue(row, col)));
 }

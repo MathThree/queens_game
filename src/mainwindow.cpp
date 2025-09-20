@@ -47,9 +47,14 @@ void MainWindow::setCell(const int row, const int col, const QColor color)
 	cell->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
+void MainWindow::setCellValue(const int row, const int col, const int value)
+{
+	((CellButton *) cells[row][col])->setCellValue(value);
+}
+
 void MainWindow::handleCellClicked(const int row, const int col)
 {
-	debug(QString("Clicked (V): %1; %2\n").arg(row+1).arg(col+1));
+	//debug(QString("Clicked (V): %1; %2\n").arg(row+1).arg(col+1));
 	emit clicked(row, col);
 }
 

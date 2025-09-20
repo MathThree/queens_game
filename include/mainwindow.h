@@ -27,6 +27,7 @@ public:
 
 	void initCells(const int n);
 	void setCell(const int row, const int col, const QColor color);
+	void setCellValue(const int row, const int col, const int value);
 
 	void debug(QString newText, bool keep = true);
 
