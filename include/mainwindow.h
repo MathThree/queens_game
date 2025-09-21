@@ -11,6 +11,7 @@
 #include <utility>
 #include <QColor>
 #include <QScrollBar>
+#include <QDebug>
 
 using namespace std;
 

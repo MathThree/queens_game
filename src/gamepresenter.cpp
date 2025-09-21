@@ -5,7 +5,7 @@ GamePresenter::GamePresenter(GameModel *model, MainWindow *view, QObject *parent
 	connect(_view, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
 
 	connect(_model, SIGNAL(debug(QString,bool)), this, SLOT(handleModelDebug(QString,bool)));
-	connect(_model, SIGNAL(cellUpdated(int,int,int,int)), this, SLOT(handleCellUpdated(int,int,int,int)));
+	connect(_model, SIGNAL(cellUpdated(int,int,int)), this, SLOT(handleCellUpdated(int,int,int)));
 }
 
 void GamePresenter::initCells()
@@ -28,8 +28,8 @@ void GamePresenter::handleModelDebug(const QString debugText, const bool keep)
 	_view->debug(debugText, keep);
 }
 
-void GamePresenter::handleCellUpdated(const int row, const int col, const int playerValue, const int bonusValue)
+void GamePresenter::handleCellUpdated(const int row, const int col, const int value)
 {
-	_view->setCellValue(row, col, playerValue);
-	_view->debug(QString("[%1; %2] -> %3\n").arg(row+1).arg(col+1).arg(playerValue));
+	_view->setCellValue(row, col, value);
+	_view->debug(QString("[%1; %2] -> %3\n").arg(row+1).arg(col+1).arg(value));
 }

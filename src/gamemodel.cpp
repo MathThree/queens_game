@@ -74,8 +74,9 @@ void GameModel::setColors()
 void GameModel::togglePlayerValue(const int row, const int col)
 {
 	Cell *cell = (Cell*) &grid[row][col];
-	cell->playerValue = (cell->playerValue + 3) % 3 - 1;
-	emit cellUpdated(row, col, cell->playerValue, cell->bonusValue);
+	cell->playerValue = (cell->playerValue == 0 && cell->bonusValue == -1 && help) ? 1 : (cell->playerValue + 3) % 3 - 1;
+	qDebug() << "M: [" << row << "; " << col << "]";
+	emit cellUpdated(row, col, getValueToSend(cell->playerValue, cell->bonusValue));
 
 	switch (cell->playerValue)
 	{
@@ -96,7 +97,12 @@ void GameModel::setQueenToCell(const int row, const int col, const Cell *cell)
 	for (const tuple<int, int, int>& t : getRelatedCells(row, col, cell->colorZone))
 	{
 		Cell *c = &grid[get<0>(t)][get<1>(t)];
-		c->bonusValue = -1;
+		if (c->bonusValue != -1)
+		{
+			c->bonusValue = -1;
+			if (help)
+				emit cellUpdated(get<0>(t), get<1>(t), getValueToSend(c->playerValue, c->bonusValue));
+		}
 	}
 	debug(toQString());
 }
@@ -119,7 +125,12 @@ void GameModel::setNoneToCell(const int row, const int col, const Cell *cell)
 		bool b3 = isQueenInColumn(get<1>(t));
 		bool b4 = isQueenInKingZone(get<0>(t), get<1>(t));
 		debug(QString("N :\t%1 - %2  %3 %4 %5 %6\n").arg(get<0>(t)+1).arg(get<1>(t)+1).arg(b1).arg(b2).arg(b3).arg(b4));
-		c->bonusValue = (isQueenInZone(c->colorZone) || isQueenInRow(get<0>(t)) || isQueenInColumn(get<1>(t)) || isQueenInKingZone(get<0>(t), get<1>(t))) ? -1 : 0;
+		if (!b1 && !b2 && !b3 && !b4)
+		{
+			c->bonusValue = 0;
+			if (help)
+				emit cellUpdated(get<0>(t), get<1>(t), getValueToSend(c->playerValue, c->bonusValue));
+		}
 	}
 	debug(toQString());
 }
@@ -156,7 +167,7 @@ bool GameModel::isQueenInKingZone(const int row, const int col)
 	return false;
 }
 
-set<tuple<int, int, int>> GameModel::getRelatedCells(const int row, const int col, const int zone)
+set<tuple<int, int, int>> GameModel::getRelatedCells(const int row, const int col, const int zone, const bool addTarget)
 {
 	set<tuple<int, int, int>> relatedCells;
 	for (pair<int, int> p : zones[zone])
@@ -176,7 +187,20 @@ set<tuple<int, int, int>> GameModel::getRelatedCells(const int row, const int co
 			if (0<=x && x<n && 0<=y && y<n)
 				relatedCells.insert(make_tuple(x, y, grid[x][y].colorZone));
 		}
+	if (!addTarget)
+	{
+		relatedCells.erase(make_tuple(row, col, zone));
+	}
 	return relatedCells;
+}
+
+int GameModel::getValueToSend(const int playerValue, const int bonusValue) const
+{
+	if (playerValue != 0)
+		return playerValue;
+	if (help && playerValue == 0)
+		return bonusValue;
+	return playerValue;
 }
 
 QString GameModel::toQString()

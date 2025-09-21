@@ -21,7 +21,7 @@ public:
 
 public slots:
 	void handleCellClicked(const int row, const int col);
-	void handleCellUpdated(const int row, const int col, const int playerValue, const int bonusValue);
+	void handleCellUpdated(const int row, const int col, const int value);
 	void handleModelDebug(const QString debugText, const bool keep);
 
 private:

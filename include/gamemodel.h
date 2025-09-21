@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QString>
+#include <QDebug>
 
 using namespace std;
 
@@ -50,7 +51,8 @@ private:
 	vector<vector<pair<int, int>>> zones;
 	list<tuple<int, int, int>> queenList;
 	vector<QColor> colors;
-	int offsets[2];// = {-1, 1};
+	int offsets[2];
+	bool help = false;
 
 	void setQueenToCell(const int row, const int col, const Cell *cell);
 	void setDotToCell(const int row, const int col, const Cell *cell);
@@ -61,10 +63,11 @@ private:
 	bool isQueenInColumn(const int col);
 	bool isQueenInKingZone(const int row, const int col);
 
-	set<tuple<int, int, int>> getRelatedCells(const int row, const int col, const int zone);
+	set<tuple<int, int, int>> getRelatedCells(const int row, const int col, const int zone, const bool addTarget = false);
+	int getValueToSend(const int playerValue, const int bonusValue) const;
 
 signals:
-	void cellUpdated(const int row, const int col, const int playerValue, const int bonusValue);
+	void cellUpdated(const int row, const int col, const int value);
 	void debug(const QString debugText, const bool keep = true);
 };
 
