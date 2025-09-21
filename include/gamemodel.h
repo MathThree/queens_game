@@ -3,11 +3,15 @@
 
 #include <QObject>
 #include <vector>
+#include <list>
+#include <set>
+#include <tuple>
 #include <utility>
 #include <QStringList>
 #include <QColor>
 #include <QFile>
 #include <QTextStream>
+#include <QString>
 
 using namespace std;
 
@@ -43,11 +47,25 @@ private:
 
 	int n;
 	vector<vector<Cell>> grid;
-	vector<vector<Cell*>> zones;
+	vector<vector<pair<int, int>>> zones;
+	list<tuple<int, int, int>> queenList;
 	vector<QColor> colors;
+	int offsets[2];// = {-1, 1};
+
+	void setQueenToCell(const int row, const int col, const Cell *cell);
+	void setDotToCell(const int row, const int col, const Cell *cell);
+	void setNoneToCell(const int row, const int col, const Cell *cell);
+
+	bool isQueenInZone(const int zone);
+	bool isQueenInRow(const int row);
+	bool isQueenInColumn(const int col);
+	bool isQueenInKingZone(const int row, const int col);
+
+	set<tuple<int, int, int>> getRelatedCells(const int row, const int col, const int zone);
 
 signals:
 	void cellUpdated(const int row, const int col, const int playerValue, const int bonusValue);
+	void debug(const QString debugText, const bool keep = true);
 };
 
 #endif // GAMEMODEL_H

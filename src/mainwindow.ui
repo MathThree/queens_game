@@ -23,6 +23,15 @@
       <height>190</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Courier</family>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+      <kerning>true</kerning>
+     </font>
+    </property>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">

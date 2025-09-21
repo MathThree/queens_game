@@ -1,8 +1,7 @@
 #include "gamemodel.h"
 
-GameModel::GameModel(QObject *parent) : QObject(parent)
+GameModel::GameModel(QObject *parent) : QObject(parent), offsets{-1, 1}
 {
-
 }
 
 void GameModel::loadGameFile(QString gameName)
@@ -31,7 +30,7 @@ void GameModel::setSize(const int newSize)
 {
 	n = newSize;
 	grid = vector<vector<Cell>>(n, vector<Cell>(n));
-	zones = vector<vector<Cell *>>(n, vector<Cell *>(0));
+	zones = vector<vector<pair<int, int>>>(n, vector<pair<int, int>>(0));
 	setColors();
 }
 
@@ -53,7 +52,7 @@ void GameModel::setZones(const QStringList zoneList)
 		{
 			int colorZone = line.at(j).toInt();
 			grid[i][j].colorZone = colorZone-1;
-			zones[colorZone-1].push_back(&grid[i][j]);
+			zones[colorZone-1].push_back(pair<int, int>(i, j));
 		}
 	}
 }
@@ -74,32 +73,136 @@ void GameModel::setColors()
 
 void GameModel::togglePlayerValue(const int row, const int col)
 {
-	grid[row][col].playerValue = (grid[row][col].playerValue + 3) % 3 - 1;
-	emit cellUpdated(row, col, grid[row][col].playerValue, grid[row][col].bonusValue);
+	Cell *cell = (Cell*) &grid[row][col];
+	cell->playerValue = (cell->playerValue + 3) % 3 - 1;
+	emit cellUpdated(row, col, cell->playerValue, cell->bonusValue);
+
+	switch (cell->playerValue)
+	{
+	case 1:
+		setQueenToCell(row, col, cell);
+		break;
+	case -1:
+		setDotToCell(row, col, cell);
+		break;
+	default:
+		setNoneToCell(row, col, cell);
+	}
+}
+
+void GameModel::setQueenToCell(const int row, const int col, const Cell *cell)
+{
+	queenList.push_back(make_tuple(row, col, cell->colorZone));
+	for (const tuple<int, int, int>& t : getRelatedCells(row, col, cell->colorZone))
+	{
+		Cell *c = &grid[get<0>(t)][get<1>(t)];
+		c->bonusValue = -1;
+	}
+	debug(toQString());
+}
+
+void GameModel::setDotToCell(const int row, const int col, const Cell *cell)
+{
+	debug(toQString());
+}
+
+void GameModel::setNoneToCell(const int row, const int col, const Cell *cell)
+{
+	auto it = find(queenList.begin(), queenList.end(), make_tuple(row, col, cell->colorZone));
+	if (it != queenList.end())
+		queenList.erase(it);
+	for (const tuple<int, int, int>& t : getRelatedCells(row, col, cell->colorZone))
+	{
+		Cell *c = &grid[get<0>(t)][get<1>(t)];
+		bool b1 = isQueenInZone(c->colorZone);
+		bool b2 = isQueenInRow(get<0>(t));
+		bool b3 = isQueenInColumn(get<1>(t));
+		bool b4 = isQueenInKingZone(get<0>(t), get<1>(t));
+		debug(QString("N :\t%1 - %2  %3 %4 %5 %6\n").arg(get<0>(t)+1).arg(get<1>(t)+1).arg(b1).arg(b2).arg(b3).arg(b4));
+		c->bonusValue = (isQueenInZone(c->colorZone) || isQueenInRow(get<0>(t)) || isQueenInColumn(get<1>(t)) || isQueenInKingZone(get<0>(t), get<1>(t))) ? -1 : 0;
+	}
+	debug(toQString());
+}
+
+bool GameModel::isQueenInZone(const int zone)
+{
+	for (const tuple<int, int, int>& t : queenList)
+		if (get<2>(t) == zone)
+			return true;
+	return false;
+}
+
+bool GameModel::isQueenInRow(const int row)
+{
+	for (const tuple<int, int, int>& t : queenList)
+		if (get<0>(t) == row)
+			return true;
+	return false;
+}
+
+bool GameModel::isQueenInColumn(const int col)
+{
+	for (const tuple<int, int, int>& t : queenList)
+		if (get<1>(t) == col)
+			return true;
+	return false;
+}
+
+bool GameModel::isQueenInKingZone(const int row, const int col)
+{
+	for (const tuple<int, int, int>& t : queenList)
+		if (max(abs(row - get<0>(t)), abs(col - get<1>(t))) == 1)
+			return true;
+	return false;
+}
+
+set<tuple<int, int, int>> GameModel::getRelatedCells(const int row, const int col, const int zone)
+{
+	set<tuple<int, int, int>> relatedCells;
+	for (pair<int, int> p : zones[zone])
+	{
+		relatedCells.insert(make_tuple(p.first, p.second, grid[p.first][p.second].colorZone));
+	}
+	for (int i=0; i<n; ++i)
+	{
+		relatedCells.insert(make_tuple(i, col, grid[i][col].colorZone));
+		relatedCells.insert(make_tuple(row, i, grid[row][i].colorZone));
+	}
+	for (int dx : offsets)
+		for (int dy : offsets)
+		{
+			int x = row + dx;
+			int y = col + dy;
+			if (0<=x && x<n && 0<=y && y<n)
+				relatedCells.insert(make_tuple(x, y, grid[x][y].colorZone));
+		}
+	return relatedCells;
 }
 
 QString GameModel::toQString()
 {
-	QString out = "Size: " + QString::number(n) + "\n";
+	QString out = " " + QString::number(n) + "\n";
 
 	for (const auto &row : grid)
 	{
 		for (const auto &cell : row)
 		{
-			QString hasQueen = cell.hasQueen ? "X" : "  ";
-			out += " [" + QString::number(cell.colorZone) + "|" + hasQueen + "] ";
+			QString hasQueen = cell.hasQueen ? "X" : " ";
+			QString playerValue = cell.playerValue == 1 ? "X" : cell.playerValue == 0 ? "_" : ".";
+			QString bonusValue = cell.bonusValue == 1 ? "X" : cell.bonusValue == 0 ? "_" : ".";
+			out += " [" + QString::number(cell.colorZone) + "|" + hasQueen + playerValue + bonusValue + "]  ";
 		}
 		out += "\n";
 	}
 	out += "\n";
-	for (const auto &zone : zones)
+	/*for (const auto &zone : zones)
 	{
 		for (const auto &ptr : zone)
 		{
 			out += "|";
 		}
 		out += "\n";
-	}
+	}*/
 
 	return out;
 }

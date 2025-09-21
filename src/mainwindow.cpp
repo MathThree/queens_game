@@ -56,4 +56,6 @@ void MainWindow::debug(QString newText, bool keep)
 {
 	debugText = !keep ? newText : debugText + newText;
 	ui->debugText->setText(debugText);
+	QScrollBar *sb = ui->debugText->verticalScrollBar();
+	sb->setValue(sb->maximum());
 }

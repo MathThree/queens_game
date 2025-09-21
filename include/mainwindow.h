@@ -10,6 +10,7 @@
 #include <vector>
 #include <utility>
 #include <QColor>
+#include <QScrollBar>
 
 using namespace std;
 

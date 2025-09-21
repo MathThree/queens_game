@@ -9,6 +9,7 @@
 #include <QByteArray>
 #include <QTextStream>
 #include <QStringList>
+#include <QString>
 
 class GamePresenter : public QObject
 {
@@ -21,6 +22,7 @@ public:
 public slots:
 	void handleCellClicked(const int row, const int col);
 	void handleCellUpdated(const int row, const int col, const int playerValue, const int bonusValue);
+	void handleModelDebug(const QString debugText, const bool keep);
 
 private:
 	GameModel *_model;
