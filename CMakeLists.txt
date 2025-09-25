@@ -34,6 +34,10 @@ set(INC include/)
 file(GLOB GAMES "games/*")
 add_custom_target(games SOURCES ${GAMES})
 
+add_custom_target(Doc SOURCES "documentation/Doxyfile")
+
+add_custom_target(Git SOURCES ".gitignore")
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 if(ANDROID)

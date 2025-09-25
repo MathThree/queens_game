@@ -74,110 +74,124 @@ void GameModel::setColors()
 void GameModel::togglePlayerValue(const int row, const int col)
 {
 	Cell *cell = (Cell*) &grid[row][col];
-	cell->playerValue = (cell->playerValue == 0 && cell->bonusValue == -1 && help) ? 1 : (cell->playerValue + 3) % 3 - 1;
-	qDebug() << "M: [" << row << "; " << col << "]";
-	emit cellUpdated(row, col, getValueToSend(cell->playerValue, cell->bonusValue));
+	cell->playerValue = (cell->playerValue == 0 && !cell->couldHaveQueen && help) ? 1 : (cell->playerValue + 3) % 3 - 1;
+	qDebug() << "M: [" << row << "; " << col << "]: " << cell->playerValue << " (" << cell->couldHaveQueen << ")" ;
 
 	switch (cell->playerValue)
 	{
 	case 1:
-		setQueenToCell(row, col, cell);
+		setQueenToCell(row, col);
 		break;
 	case -1:
-		setDotToCell(row, col, cell);
+		setDotToCell(row, col);
 		break;
 	default:
-		setNoneToCell(row, col, cell);
+		setNoneToCell(row, col);
 	}
+
+
 }
 
-void GameModel::setQueenToCell(const int row, const int col, const Cell *cell)
+void GameModel::setQueenToCell(const int row, const int col)
 {
-	queenList.push_back(make_tuple(row, col, cell->colorZone));
-	for (const tuple<int, int, int>& t : getRelatedCells(row, col, cell->colorZone))
+	queenList.push_back(make_pair(row, col));
+	emit cellUpdated(row, col, getValueToSend(&grid[row][col]));
+	for (const pair<int, int>& p : getRelatedCells(row, col))
 	{
-		Cell *c = &grid[get<0>(t)][get<1>(t)];
-		if (c->bonusValue != -1)
+		Cell *c = &grid[p.first][p.second];
+		if (c->couldHaveQueen)
 		{
-			c->bonusValue = -1;
+			c->couldHaveQueen = false;
 			if (help)
-				emit cellUpdated(get<0>(t), get<1>(t), getValueToSend(c->playerValue, c->bonusValue));
+				emit cellUpdated(p.first, p.second, getValueToSend(&grid[p.first][p.second]));
 		}
 	}
 	debug(toQString());
 }
 
-void GameModel::setDotToCell(const int row, const int col, const Cell *cell)
+void GameModel::setDotToCell(const int row, const int col)
 {
+	emit cellUpdated(row, col, getValueToSend(&grid[row][col]));
 	debug(toQString());
 }
 
-void GameModel::setNoneToCell(const int row, const int col, const Cell *cell)
+void GameModel::setNoneToCell(const int row, const int col)
 {
-	auto it = find(queenList.begin(), queenList.end(), make_tuple(row, col, cell->colorZone));
+	auto it = find(queenList.begin(), queenList.end(), make_pair(row, col));
 	if (it != queenList.end())
 		queenList.erase(it);
-	for (const tuple<int, int, int>& t : getRelatedCells(row, col, cell->colorZone))
+	emit cellUpdated(row, col, getValueToSend(&grid[row][col]));
+	for (const pair<int, int>& p : getRelatedCells(row, col))
 	{
-		Cell *c = &grid[get<0>(t)][get<1>(t)];
-		bool b1 = isQueenInZone(c->colorZone);
-		bool b2 = isQueenInRow(get<0>(t));
-		bool b3 = isQueenInColumn(get<1>(t));
-		bool b4 = isQueenInKingZone(get<0>(t), get<1>(t));
-		debug(QString("N :\t%1 - %2  %3 %4 %5 %6\n").arg(get<0>(t)+1).arg(get<1>(t)+1).arg(b1).arg(b2).arg(b3).arg(b4));
-		if (!b1 && !b2 && !b3 && !b4)
+		Cell *c = &grid[p.first][p.second];
+		bool b = isQueenInZone(p.first, p.second);
+		if (!b)
 		{
-			c->bonusValue = 0;
+			c->couldHaveQueen = !b;
 			if (help)
-				emit cellUpdated(get<0>(t), get<1>(t), getValueToSend(c->playerValue, c->bonusValue));
+				emit cellUpdated(p.first, p.second, getValueToSend(&grid[p.first][p.second]));
 		}
 	}
 	debug(toQString());
 }
 
-bool GameModel::isQueenInZone(const int zone)
+bool GameModel::isQueenInZone(const int row, const int col)
 {
-	for (const tuple<int, int, int>& t : queenList)
-		if (get<2>(t) == zone)
+	bool b1 = isQueenInColorZone(row, col);
+	bool b2 = isQueenInRow(row, col);
+	bool b3 = isQueenInColumn(row, col);
+	bool b4 = isQueenInKingZone(row, col);
+	bool b = b1 || b2 || b3 || b4;
+	debug(QString("N :\t%1 - %2  %3 || %4 || %5 || %6 = %7\n").arg(row+1).arg(col+1).arg(b1).arg(b2).arg(b3).arg(b4).arg(b));
+	return (b);
+}
+
+bool GameModel::isQueenInColorZone(const int row, const int col)
+{
+	int colorZone = grid[row][col].colorZone;
+	for (const pair<int, int>& p : queenList)
+		if (p.first != row && p.second != col && grid[p.first][p.second].colorZone == colorZone)
 			return true;
 	return false;
 }
 
-bool GameModel::isQueenInRow(const int row)
+bool GameModel::isQueenInRow(const int row, const int col)
 {
-	for (const tuple<int, int, int>& t : queenList)
-		if (get<0>(t) == row)
+	for (const pair<int, int>& p : queenList)
+		if (p.second != col && p.first == row)
 			return true;
 	return false;
 }
 
-bool GameModel::isQueenInColumn(const int col)
+bool GameModel::isQueenInColumn(const int row, const int col)
 {
-	for (const tuple<int, int, int>& t : queenList)
-		if (get<1>(t) == col)
+	for (const pair<int, int>& p : queenList)
+		if (p.first != row && p.second == col)
 			return true;
 	return false;
 }
 
 bool GameModel::isQueenInKingZone(const int row, const int col)
 {
-	for (const tuple<int, int, int>& t : queenList)
-		if (max(abs(row - get<0>(t)), abs(col - get<1>(t))) == 1)
+	for (const pair<int, int>& p : queenList)
+		if (max(abs(row - p.first), abs(col - p.second)) == 1)
 			return true;
 	return false;
 }
 
-set<tuple<int, int, int>> GameModel::getRelatedCells(const int row, const int col, const int zone, const bool addTarget)
+void GameModel::
+
+set<pair<int, int>> GameModel::getRelatedCells(const int row, const int col, const bool addTarget)
 {
-	set<tuple<int, int, int>> relatedCells;
-	for (pair<int, int> p : zones[zone])
+	set<pair<int, int>> relatedCells;
+	for (pair<int, int> p : zones[grid[row][col].colorZone])
 	{
-		relatedCells.insert(make_tuple(p.first, p.second, grid[p.first][p.second].colorZone));
+		relatedCells.insert(make_pair(p.first, p.second));
 	}
 	for (int i=0; i<n; ++i)
 	{
-		relatedCells.insert(make_tuple(i, col, grid[i][col].colorZone));
-		relatedCells.insert(make_tuple(row, i, grid[row][i].colorZone));
+		relatedCells.insert(make_pair(i, col));
+		relatedCells.insert(make_pair(row, i));
 	}
 	for (int dx : offsets)
 		for (int dy : offsets)
@@ -185,23 +199,24 @@ set<tuple<int, int, int>> GameModel::getRelatedCells(const int row, const int co
 			int x = row + dx;
 			int y = col + dy;
 			if (0<=x && x<n && 0<=y && y<n)
-				relatedCells.insert(make_tuple(x, y, grid[x][y].colorZone));
+				relatedCells.insert(make_pair(x, y));
 		}
 	if (!addTarget)
 	{
-		relatedCells.erase(make_tuple(row, col, zone));
+		relatedCells.erase(make_pair(row, col));
 	}
 	return relatedCells;
 }
 
-int GameModel::getValueToSend(const int playerValue, const int bonusValue) const
+int GameModel::getValueToSend(const Cell *cell) const
 {
-	if (playerValue != 0)
-		return playerValue;
-	if (help && playerValue == 0)
-		return bonusValue;
-	return playerValue;
+	if (cell->playerValue != 0)
+		return cell->playerValue;
+	if (help && cell->playerValue == 0)
+		return cell->couldHaveQueen ? 0 : -1 ;
+	return cell->playerValue;
 }
+
 
 QString GameModel::toQString()
 {
@@ -213,8 +228,8 @@ QString GameModel::toQString()
 		{
 			QString hasQueen = cell.hasQueen ? "X" : " ";
 			QString playerValue = cell.playerValue == 1 ? "X" : cell.playerValue == 0 ? "_" : ".";
-			QString bonusValue = cell.bonusValue == 1 ? "X" : cell.bonusValue == 0 ? "_" : ".";
-			out += " [" + QString::number(cell.colorZone) + "|" + hasQueen + playerValue + bonusValue + "]  ";
+			QString couldHaveQueen = cell.couldHaveQueen ? "_" : ".";
+			out += " [" + QString::number(cell.colorZone) + "|" + hasQueen + playerValue + couldHaveQueen + "]  ";
 		}
 		out += "\n";
 	}
