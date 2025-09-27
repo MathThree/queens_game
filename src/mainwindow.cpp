@@ -16,8 +16,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::openGameDir(const QString dir)
 {
-	qDebug().noquote() << dir;
-	QString filePath = QFileDialog::getOpenFileName(this, "Select a game file", dir, "Fichiers de jeu (*.txt);;Tous les fichiers (*)");
+	QString filePath = QFileDialog::getOpenFileName(this, "Select a game file", dir, "Game files (*.txt);;All files (*)");
 	if (!filePath.isEmpty())
 	{
 		QFileInfo info(filePath);
@@ -29,10 +28,8 @@ void MainWindow::openGameDir(const QString dir)
 void MainWindow::initCellGrid(const int n)
 {
 	gameWidget = new QWidget(this);
-	//ui->gameGrid->setParent(gameWidget);
 	gameWidget->setMinimumSize(330, 330);
 	gameWidget->setLayout(ui->gameGrid);
-	//cells = vector<vector<CellButton*>>(n, vector<CellButton*>(n));
 	setCellGridSize(n);
 }
 
@@ -70,20 +67,19 @@ void MainWindow::setCellGridSize(const int n)
 			}
 		}
 	}
+	gameWidget->setEnabled(true);
 }
 
 void MainWindow::setCell(const int row, const int col, const QColor color)
 {
 	if (row<0 || row>=cells.size()) return;
 	if (col<0 || col>=cells[row].size()) return;
-	qDebug() << "V: SetCell: " << row << "; " << col;
 
 	CellButton *cell = cells[row][col];
 	cell->setColor(color);
 	setCellValue(row, col, 0);
 	if (!ui->gameGrid->itemAtPosition(row, col))
 	{
-		qDebug() << "HERE: " << row << "; " << col;
 		ui->gameGrid->addWidget(cell, row, col);
 		connect(cell, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
 	}
@@ -91,19 +87,18 @@ void MainWindow::setCell(const int row, const int col, const QColor color)
 
 void MainWindow::setCellValue(const int row, const int col, const int value)
 {
-	qDebug() << "V: [" << row << "; " << col << "] -> " << value;
+	qDebug() << "V -> Cell value:\t\t[" << row << "; " << col << "] -> " << value;
 	((CellButton *) cells[row][col])->setCellValue(symbols[value+1]);
 }
 
 void MainWindow::victory()
 {
-	qDebug() << "V: VICTORY!";
+	qDebug() << "V -> VICTORY!";
 	gameWidget->setEnabled(false);
 }
 
 void MainWindow::handleCellClicked(const int row, const int col)
 {
-	//debug(QString("Clicked (V): %1; %2\n").arg(row+1).arg(col+1));
 	emit clicked(row, col);
 }
 

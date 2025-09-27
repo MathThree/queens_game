@@ -31,7 +31,7 @@ void GamePresenter::handleModelDebug(const QString debugText, const bool keep)
 void GamePresenter::handleCellUpdated(const int row, const int col, const int value)
 {
 	_view->setCellValue(row, col, value);
-	_view->debug(QString("[%1; %2] -> %3\n").arg(row+1).arg(col+1).arg(value));
+	_view->debug(QString("P -> Cell updated: [%1; %2] -> %3\n").arg(row).arg(col).arg(value));
 }
 
 void GamePresenter::handleVictory()
@@ -46,7 +46,6 @@ void GamePresenter::handleChooseGame()
 
 void GamePresenter::handleGetGameFile(QString fileName)
 {
-	qDebug() << fileName;
 	_model->loadGameFile(fileName);
 	_view->setCellGridSize(_model->getSize());
 	initCells();

@@ -6,7 +6,6 @@ GameModel::GameModel(QObject *parent) : QObject(parent), offsets{-1, 1}
 
 void GameModel::loadGameFile(QString gameName)
 {
-	qDebug() << "Loading game...";
 	QFile file("../queens_game/games/" + gameName);
 
 	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -26,7 +25,7 @@ void GameModel::loadGameFile(QString gameName)
 	QStringList zone_list = line.split("\n");
 	setZones(zone_list);
 
-	qDebug() << "Game loaded";
+	qDebug() << "M -> Game loaded:\t" << gameName;
 }
 
 void GameModel::setSize(const int newSize)
@@ -34,6 +33,7 @@ void GameModel::setSize(const int newSize)
 	n = newSize;
 	grid = vector<vector<Cell>>(n, vector<Cell>(n));
 	zones = vector<vector<pair<int, int>>>(n, vector<pair<int, int>>(0));
+	queenList.clear();
 	setColors();
 }
 
@@ -78,7 +78,7 @@ void GameModel::togglePlayerValue(const int row, const int col)
 {
 	Cell *cell = (Cell*) &grid[row][col];
 	cell->playerValue = (cell->playerValue == 0 && !cell->couldHaveQueen && help) ? 1 : (cell->playerValue + 3) % 3 - 1;
-	qDebug() << "M: [" << row << "; " << col << "]: " << cell->playerValue << " (" << cell->couldHaveQueen << ")" ;
+	qDebug() << "M -> Cell clicked:\t[" << row << "; " << col << "] -> " << cell->playerValue ;
 
 	switch (cell->playerValue)
 	{
@@ -94,7 +94,8 @@ void GameModel::togglePlayerValue(const int row, const int col)
 
 	if (isVictory())
 	{
-		debug("##### VICTORY! #####");
+		qDebug() << "M -> ##### VICTORY! #####";
+		debug("M -> ##### VICTORY! #####");
 		emit victory();
 	}
 }
@@ -149,7 +150,7 @@ bool GameModel::isQueenInZone(const int row, const int col)
 	bool b3 = isQueenInColumn(row, col);
 	bool b4 = isQueenInKingZone(row, col);
 	bool b = b1 || b2 || b3 || b4;
-	debug(QString("N :\t%1 - %2  %3 || %4 || %5 || %6 = %7\n").arg(row+1).arg(col+1).arg(b1).arg(b2).arg(b3).arg(b4).arg(b));
+	qDebug() << (QString("N -> Queen in zone:\t%1 - %2  %3 || %4 || %5 || %6 = %7").arg(row+1).arg(col+1).arg(b1).arg(b2).arg(b3).arg(b4).arg(b));
 	return (b);
 }
 
@@ -250,14 +251,5 @@ QString GameModel::toQString()
 		out += "\n";
 	}
 	out += "\n";
-	/*for (const auto &zone : zones)
-	{
-		for (const auto &ptr : zone)
-		{
-			out += "|";
-		}
-		out += "\n";
-	}*/
-
 	return out;
 }
