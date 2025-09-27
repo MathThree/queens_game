@@ -6,6 +6,7 @@ GameModel::GameModel(QObject *parent) : QObject(parent), offsets{-1, 1}
 
 void GameModel::loadGameFile(QString gameName)
 {
+	qDebug() << "Loading game...";
 	QFile file("../queens_game/games/" + gameName);
 
 	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -18,12 +19,14 @@ void GameModel::loadGameFile(QString gameName)
 	setSize(line.toInt());
 
 	line = in.readLine();
-	QStringList numbers = line.split(" ");
+	QStringList numbers = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 	setQueens(numbers);
 
 	line = in.readAll();
 	QStringList zone_list = line.split("\n");
 	setZones(zone_list);
+
+	qDebug() << "Game loaded";
 }
 
 void GameModel::setSize(const int newSize)
@@ -47,7 +50,7 @@ void GameModel::setZones(const QStringList zoneList)
 {
 	for (int i=0; i<zoneList.size(); ++i)
 	{
-		QStringList line = zoneList.at(i).split(" ");
+		QStringList line = zoneList.at(i).split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 		for (int j=0; j<line.size(); ++j)
 		{
 			int colorZone = line.at(j).toInt();
@@ -89,7 +92,11 @@ void GameModel::togglePlayerValue(const int row, const int col)
 		setNoneToCell(row, col);
 	}
 
-
+	if (isVictory())
+	{
+		debug("##### VICTORY! #####");
+		emit victory();
+	}
 }
 
 void GameModel::setQueenToCell(const int row, const int col)
@@ -179,7 +186,17 @@ bool GameModel::isQueenInKingZone(const int row, const int col)
 	return false;
 }
 
-void GameModel::
+bool GameModel::isVictory()
+{
+	if (queenList.size() != n)
+		return false;
+	for (const auto &p : queenList)
+	{
+		if (!grid[p.first][p.second].couldHaveQueen)
+			return false;
+	}
+	return true;
+}
 
 set<pair<int, int>> GameModel::getRelatedCells(const int row, const int col, const bool addTarget)
 {
@@ -216,7 +233,6 @@ int GameModel::getValueToSend(const Cell *cell) const
 		return cell->couldHaveQueen ? 0 : -1 ;
 	return cell->playerValue;
 }
-
 
 QString GameModel::toQString()
 {

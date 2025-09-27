@@ -1,12 +1,21 @@
 #include "cellbutton.h"
 
-CellButton::CellButton(int row, int col, const QColor color, QWidget* parent) : QPushButton(parent), _row(row), _col(col), _color(color)
+CellButton::CellButton(const int row, const int col, QWidget* parent, const QColor color) : QPushButton(parent), _row(row), _col(col), _color(color)
 {
 	connect(this, SIGNAL(clicked()), this, SLOT(handleCellClicked()));
 
 	setColor(_color);
 
 	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+	qDebug() << "Cell created: [" << row << "; " << col << "]";
+}
+
+void CellButton::resetCellButton(int row, int col, const QColor color)
+{
+	_color = color;
+	setColor(_color);
+	setCellValue("");
 }
 
 void CellButton::setCellValue(const QString value)
@@ -21,8 +30,14 @@ void CellButton::handleCellClicked()
 
 void CellButton::setColor(const QColor color)
 {
+	_color = color;
 	this->setStyleSheet(QString(
 							"background-color: %1;"
 							"border: 1px solid black;"
 							"border-radius: 0px").arg(color.name()));
+}
+
+QSize CellButton::sizeHint() const
+{
+	return QSize(0, 0);
 }

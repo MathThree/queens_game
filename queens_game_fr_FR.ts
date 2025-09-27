@@ -8,5 +8,10 @@
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="src/mainwindow.ui" line="64"/>
+        <source>Choose game</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -3,19 +3,19 @@
 GamePresenter::GamePresenter(GameModel *model, MainWindow *view, QObject *parent) : QObject(parent), _model(model), _view(view)
 {
 	connect(_view, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
+	connect(_view, &MainWindow::chooseGameclicked, this, &GamePresenter::handleChooseGame);
+	connect(_view, &MainWindow::sendGameFile, this, &GamePresenter::handleGetGameFile);
 
 	connect(_model, SIGNAL(debug(QString,bool)), this, SLOT(handleModelDebug(QString,bool)));
 	connect(_model, SIGNAL(cellUpdated(int,int,int)), this, SLOT(handleCellUpdated(int,int,int)));
+	connect(_model, SIGNAL(victory()), this, SLOT(handleVictory()));
 }
 
 void GamePresenter::initCells()
 {
-	_view->initCellGrid(_model->getSize());
 	for (int i=0; i<_model->getSize(); ++i)
 		for(int j=0; j<_model->getSize(); ++j)
-		{
 			_view->setCell(i, j, _model->getColor(i, j));
-		}
 }
 
 void GamePresenter::handleCellClicked(const int row, const int col)
@@ -32,4 +32,22 @@ void GamePresenter::handleCellUpdated(const int row, const int col, const int va
 {
 	_view->setCellValue(row, col, value);
 	_view->debug(QString("[%1; %2] -> %3\n").arg(row+1).arg(col+1).arg(value));
+}
+
+void GamePresenter::handleVictory()
+{
+	_view->victory();
+}
+
+void GamePresenter::handleChooseGame()
+{
+	_view->openGameDir(_model->getGameDir());
+}
+
+void GamePresenter::handleGetGameFile(QString fileName)
+{
+	qDebug() << fileName;
+	_model->loadGameFile(fileName);
+	_view->setCellGridSize(_model->getSize());
+	initCells();
 }

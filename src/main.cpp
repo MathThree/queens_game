@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 
 	QString level = "001.txt";
 	model.loadGameFile(level);
+	view.initCellGrid(model.getSize());
 	presenter.initCells();
 
 	view.show();

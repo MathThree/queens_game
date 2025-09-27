@@ -36,10 +36,10 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>150</y>
-      <width>160</width>
-      <height>80</height>
+      <x>109</x>
+      <y>49</y>
+      <width>311</width>
+      <height>181</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gameGrid">
@@ -50,6 +50,19 @@
       <number>0</number>
      </property>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="chooseGameButton">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>190</y>
+      <width>121</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Choose game</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

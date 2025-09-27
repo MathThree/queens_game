@@ -12,6 +12,8 @@
 #include <QColor>
 #include <QScrollBar>
 #include <QDebug>
+#include <QFileDialog>
+#include <QLayoutItem>
 
 using namespace std;
 
@@ -27,14 +29,19 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
+	void openGameDir(const QString dir);
 	void initCellGrid(const int n);
+	void setCellGridSize(const int n);
 	void setCell(const int row, const int col, const QColor color);
 	void setCellValue(const int row, const int col, const int value);
+	void victory();
 
 	void debug(QString newText, bool keep = true);
 
 signals:
 	void clicked(const int row, const int col);
+	void chooseGameclicked();
+	void sendGameFile(QString fileName);
 
 public slots:
 	void handleCellClicked(const int row, const int col);

@@ -13,6 +13,7 @@
 #include <QTextStream>
 #include <QString>
 #include <QDebug>
+#include <QRegularExpression>
 
 using namespace std;
 
@@ -30,27 +31,10 @@ public:
 	GameModel(QObject *parent = nullptr);
 
 	/**
-	 * @brief Set grid size
-	 * @param newSize New size of the square grid (int)
+	 * @brief Get game directory
+	 * @return Directory name (QString)
 	 */
-	void setSize(const int newSize);
-
-	/**
-	 * @brief Set queens from input
-	 * @param queenList List of strings of numbers with queen data (QStringList)
-	 */
-	void setQueens(const QStringList queenList);
-
-	/**
-	 * @brief Set zones from input
-	 * @param zoneList List of strings of numbers with zone data (QStringList)
-	 */
-	void setZones(const QStringList zoneList);
-
-	/**
-	 * @brief Initialize colors according to number of zones
-	 */
-	void setColors();
+	QString getGameDir() const { return gameDir; }
 
 	/**
 	 * @brief Get grid size
@@ -105,13 +89,37 @@ private:
 		bool couldHaveQueen = true;  ///< True if a queen could be placed by the player according to game rules (bool (default true)
 	};
 
+	QString gameDir = QString("../queens_game/games/");
 	int n;  ///< Grid size (n*n)
 	vector<vector<Cell>> grid; ///< Square grid storing current state
 	vector<vector<pair<int, int>>> zones; ///< Cells grouped by zone
 	list<pair<int, int>> queenList; ///< Positions of queens placed by the player
 	vector<QColor> colors; ///< Colors per zone
 	int offsets[2]; ///< Helper array {-1, 1} for diagonals
-	bool help = false; ///< Show help dots if true
+	bool help = true; ///< Show help dots if true
+
+	/**
+	 * @brief Initialize colors according to number of zones
+	 */
+	void setColors();
+
+	/**
+	 * @brief Set grid size
+	 * @param newSize New size of the square grid (int)
+	 */
+	void setSize(const int newSize);
+
+	/**
+	 * @brief Set queens from input
+	 * @param queenList List of strings of numbers with queen data (QStringList)
+	 */
+	void setQueens(const QStringList queenList);
+
+	/**
+	 * @brief Set zones from input
+	 * @param zoneList List of strings of numbers with zone data (QStringList)
+	 */
+	void setZones(const QStringList zoneList);
 
 	/**
 	 * @brief Place a queen in a cell
@@ -175,6 +183,12 @@ private:
 	bool isQueenInKingZone(const int row, const int col);
 
 	/**
+	 * @brief Check if all queens are placed to the right cells according to the game rules
+	 * @return True if there is a victory
+	 */
+	bool isVictory();
+
+	/**
 	 * @brief Get related cells (same zone/row/col/corners)
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
@@ -205,6 +219,8 @@ signals:
 	 * @param keep Append if true, replace if false (bool, default true)
 	 */
 	void debug(const QString debugText, const bool keep = true);
+
+	void victory();
 };
 
 #endif // GAMEMODEL_H
