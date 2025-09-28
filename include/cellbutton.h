@@ -5,6 +5,7 @@
 #include <QString>
 #include <QColor>
 #include <QDebug>
+#include <QResizeEvent>
 
 class CellButton : public QPushButton
 {
@@ -26,6 +27,7 @@ private:
 	int _row;
 	int _col;
 	QColor _color;
+
 };
 
 #endif // CELLBUTTON_H

@@ -4,12 +4,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="src/mainwindow.ui" line="14"/>
+        <location filename="src/mainwindow.ui" line="78"/>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainwindow.ui" line="64"/>
+        <location filename="src/mainwindow.ui" line="138"/>
         <source>Choose game</source>
         <translation type="unfinished"></translation>
     </message>

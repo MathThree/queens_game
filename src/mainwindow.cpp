@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-	: QMainWindow(parent)
-	, ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
 	connect(ui->chooseGameButton, &QPushButton::clicked, this, &MainWindow::chooseGameclicked);
+
+	gameWidget = ui->gameWidget;
+	gameWidget->setMinimumSize(330, 330);
+	gameWidget->setLayout(ui->gameGrid);
 }
 
 MainWindow::~MainWindow()
@@ -27,9 +29,6 @@ void MainWindow::openGameDir(const QString dir)
 
 void MainWindow::initCellGrid(const int n)
 {
-	gameWidget = new QWidget(this);
-	gameWidget->setMinimumSize(330, 330);
-	gameWidget->setLayout(ui->gameGrid);
 	setCellGridSize(n);
 }
 
@@ -100,6 +99,18 @@ void MainWindow::victory()
 void MainWindow::handleCellClicked(const int row, const int col)
 {
 	emit clicked(row, col);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+	QMainWindow::resizeEvent(event);
+
+	int w = event->size().width();
+	int h = event->size().height();
+
+	int side = min(w, h) * 0.7;
+
+	gameWidget->setFixedSize(side, side);
 }
 
 void MainWindow::debug(QString newText, bool keep)

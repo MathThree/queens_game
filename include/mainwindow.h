@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QLayoutItem>
+#include <QResizeEvent>
 
 using namespace std;
 
@@ -50,7 +51,9 @@ private:
 	QString debugText;
 	Ui::MainWindow *ui;
 	vector<vector<CellButton*>> cells;
-	QWidget *gameWidget = nullptr;
+	QWidget *gameWidget;
 	vector<QString> symbols = {"•", "", "♛"};
+
+	void resizeEvent(QResizeEvent *event);
 };
 #endif // MAINWINDOW_H

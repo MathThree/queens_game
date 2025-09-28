@@ -6,7 +6,7 @@ CellButton::CellButton(const int row, const int col, QWidget* parent, const QCol
 
 	setColor(_color);
 
-	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	this->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
 	qDebug() << "CB-> Cell created:\t[" << row << ";\t" << col << "]";
 }
