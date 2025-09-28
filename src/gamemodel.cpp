@@ -66,12 +66,16 @@ void GameModel::setColors()
 	double h = -.5 / n;
 	double s = .62;
 	double v = .78;
+
 	double offset = .5 / n;
 	for (int i=0; i<colors.size(); ++i)
 	{
 		h += 2. * offset;
 		colors[i] = QColor::fromHsvF(h, s, v);
 	}
+
+	static mt19937 rng(random_device{}());
+	shuffle(colors.begin(), colors.end(), rng);
 }
 
 void GameModel::togglePlayerValue(const int row, const int col)
