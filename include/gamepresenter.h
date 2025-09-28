@@ -25,7 +25,8 @@ public slots:
 	void handleModelDebug(const QString debugText, const bool keep);
 	void handleVictory();
 	void handleChooseGame();
-	void handleGetGameFile(QString fileName);
+	void handleGetGameFile(const QString fileName);
+	void handleGetGameName(const QString gameName);
 
 private:
 	GameModel *_model;

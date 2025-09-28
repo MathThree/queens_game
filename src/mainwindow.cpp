@@ -90,6 +90,11 @@ void MainWindow::setCellValue(const int row, const int col, const int value)
 	((CellButton *) cells[row][col])->setCellValue(symbols[value+1]);
 }
 
+void MainWindow::setGameName(const QString gameName)
+{
+	ui->gameName->setText(gameName);
+}
+
 void MainWindow::victory()
 {
 	qDebug() << "V -> VICTORY!";

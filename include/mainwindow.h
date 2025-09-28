@@ -15,6 +15,7 @@
 #include <QFileDialog>
 #include <QLayoutItem>
 #include <QResizeEvent>
+#include <QLabel>
 
 using namespace std;
 
@@ -35,6 +36,7 @@ public:
 	void setCellGridSize(const int n);
 	void setCell(const int row, const int col, const QColor color);
 	void setCellValue(const int row, const int col, const int value);
+	void setGameName(const QString gameName);
 	void victory();
 
 	void debug(QString newText, bool keep = true);

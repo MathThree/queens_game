@@ -11,6 +11,9 @@ void GameModel::loadGameFile(QString gameName)
 	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return;
 
+	QFileInfo info(file);
+	emit sendGameName(info.completeBaseName());
+
 	QTextStream in(&file);
 	QString line;
 

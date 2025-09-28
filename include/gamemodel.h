@@ -10,6 +10,7 @@
 #include <QStringList>
 #include <QColor>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QString>
 #include <QDebug>
@@ -206,6 +207,8 @@ private:
 	int getValueToSend(const Cell *cell) const;
 
 signals:
+	void sendGameName(const QString row);
+
 	/**
 	 * @brief Emitted when a cell is updated
 	 * @param row Row index of the cell (int)
@@ -214,14 +217,14 @@ signals:
 	 */
 	void cellUpdated(const int row, const int col, const int value);
 
+	void victory();
+
 	/**
 	 * @brief Debug signal
 	 * @param debugText Debug message (QString)
 	 * @param keep Append if true, replace if false (bool, default true)
 	 */
 	void debug(const QString debugText, const bool keep = true);
-
-	void victory();
 };
 
 #endif // GAMEMODEL_H

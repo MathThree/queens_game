@@ -2,13 +2,14 @@
 
 GamePresenter::GamePresenter(GameModel *model, MainWindow *view, QObject *parent) : QObject(parent), _model(model), _view(view)
 {
-	connect(_view, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
+	connect(_view, &MainWindow::clicked, this, &GamePresenter::handleCellClicked);
 	connect(_view, &MainWindow::chooseGameclicked, this, &GamePresenter::handleChooseGame);
 	connect(_view, &MainWindow::sendGameFile, this, &GamePresenter::handleGetGameFile);
 
-	connect(_model, SIGNAL(debug(QString,bool)), this, SLOT(handleModelDebug(QString,bool)));
-	connect(_model, SIGNAL(cellUpdated(int,int,int)), this, SLOT(handleCellUpdated(int,int,int)));
-	connect(_model, SIGNAL(victory()), this, SLOT(handleVictory()));
+	connect(_model, &GameModel::debug, this, &GamePresenter::handleModelDebug);
+	connect(_model, &GameModel::sendGameName, this, &GamePresenter::handleGetGameName);
+	connect(_model, &GameModel::cellUpdated, this, &GamePresenter::handleCellUpdated);
+	connect(_model, &GameModel::victory, this, &GamePresenter::handleVictory);
 }
 
 void GamePresenter::initCells()
@@ -44,9 +45,14 @@ void GamePresenter::handleChooseGame()
 	_view->openGameDir(_model->getGameDir());
 }
 
-void GamePresenter::handleGetGameFile(QString fileName)
+void GamePresenter::handleGetGameFile(const QString fileName)
 {
 	_model->loadGameFile(fileName);
 	_view->setCellGridSize(_model->getSize());
 	initCells();
+}
+
+void GamePresenter::handleGetGameName(const QString gameName)
+{
+	_view->setGameName(gameName);
 }
