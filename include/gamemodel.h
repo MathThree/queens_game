@@ -60,6 +60,8 @@ public:
 	 */
 	QColor getColor(const int row, const int col) const { return colors[grid[row][col].colorZone]; }
 
+	array<int, 4> getBorders(const int row, const int col) const;
+
 	/**
 	 * @brief Toggle cell value
 	 * @param row Row index of the cell (int)
@@ -205,6 +207,8 @@ private:
 	 * @return Computed value (int)
 	 */
 	int getValueToSend(const Cell *cell) const;
+
+	int getBorder(int row, int col, const Cell *cell) const;
 
 signals:
 	void sendGameName(const QString row);

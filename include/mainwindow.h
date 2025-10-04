@@ -34,7 +34,7 @@ public:
 	void openGameDir(const QString dir);
 	void initCellGrid(const int n);
 	void setCellGridSize(const int n);
-	void setCell(const int row, const int col, const QColor color);
+	void setCell(const int row, const int col, const QColor color, const array<int, 4> borders);
 	void setCellValue(const int row, const int col, const int value);
 	void setGameName(const QString gameName);
 	void victory();

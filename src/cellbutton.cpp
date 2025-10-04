@@ -31,11 +31,30 @@ void CellButton::handleCellClicked()
 void CellButton::setColor(const QColor color)
 {
 	_color = color;
-	this->setStyleSheet(QString(
-							"background-color: %1;"
-							"border: 1px solid black;"
-							"border-radius: 0px").arg(color.name()));
 }
+
+void CellButton::setBorders(const array<int, 4> borders)
+{
+	_borders = borders;
+}
+
+void CellButton::updateDisplay()
+{
+	this->setStyleSheet(QString(
+		"background-color: %1;"
+		"border-top: %2px solid black;"
+		"border-right: %3px solid black;"
+		"border-bottom: %4px solid black;"
+		"border-left: %5px solid black;"
+		"border-radius: 0px")
+		.arg(_color.name())
+		.arg(_borders[0])
+		.arg(_borders[1])
+		.arg(_borders[2])
+		.arg(_borders[3])
+	);
+}
+
 
 QSize CellButton::sizeHint() const
 {

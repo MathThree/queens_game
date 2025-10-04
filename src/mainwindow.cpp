@@ -69,13 +69,15 @@ void MainWindow::setCellGridSize(const int n)
 	gameWidget->setEnabled(true);
 }
 
-void MainWindow::setCell(const int row, const int col, const QColor color)
+void MainWindow::setCell(const int row, const int col, const QColor color, const array<int, 4> borders)
 {
 	if (row<0 || row>=cells.size()) return;
 	if (col<0 || col>=cells[row].size()) return;
 
 	CellButton *cell = cells[row][col];
 	cell->setColor(color);
+	cell->setBorders(borders);
+	cell->updateDisplay();
 	setCellValue(row, col, 0);
 	if (!ui->gameGrid->itemAtPosition(row, col))
 	{
