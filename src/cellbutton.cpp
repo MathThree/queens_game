@@ -4,11 +4,25 @@ CellButton::CellButton(const int row, const int col, QWidget* parent, const QCol
 {
 	connect(this, SIGNAL(clicked()), this, SLOT(handleCellClicked()));
 
-	setColor(_color);
+	updateDisplay();
 
-	this->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	//this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
 	qDebug() << "CB-> Cell created:\t[" << row << ";\t" << col << "]";
+}
+
+CellButton::CellButton(QWidget *parent) : QPushButton(parent)
+{
+	_row = 0;
+	_col = 0;
+	_color = QColor("white");
+	connect(this, SIGNAL(clicked()), this, SLOT(handleCellClicked()));
+
+	updateDisplay();
+
+	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	//this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
 
 void CellButton::resetCellButton(int row, int col, const QColor color)
@@ -53,10 +67,4 @@ void CellButton::updateDisplay()
 		.arg(_borders[2])
 		.arg(_borders[3])
 	);
-}
-
-
-QSize CellButton::sizeHint() const
-{
-	return QSize(0, 0);
 }

@@ -79,100 +79,100 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="gameName">
-      <property name="text">
-       <string>TextLabel</string>
+    <item>
+     <widget class="QWidget" name="widget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="hLayout_game">
-      <item>
-       <widget class="QWidget" name="gameWidget" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <widget class="QWidget" name="gridLayoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>50</y>
-           <width>431</width>
-           <height>201</height>
-          </rect>
-         </property>
-         <layout class="QGridLayout" name="gameGrid">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetDefaultConstraint</enum>
-          </property>
-          <property name="spacing">
-           <number>0</number>
-          </property>
-         </layout>
-        </widget>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="hLayout_chooseGame">
-      <item>
-       <spacer name="hSpacer1">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="chooseGameButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Choose game</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="hSpacer0">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+      <property name="minimumSize">
        <size>
-        <width>20</width>
-        <height>40</height>
+        <width>10</width>
+        <height>50</height>
        </size>
       </property>
-     </spacer>
+      <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0">
+       <item alignment="Qt::AlignHCenter|Qt::AlignBottom">
+        <widget class="QLabel" name="gameName">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="GridContainer" name="gameWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">/*background-color: rgba(255, 0, 0, 50); 
+border: 2px dashed rgb(255, 0, 0); */
+</string>
+         </property>
+         <widget class="QWidget" name="gridWidget" native="true">
+          <property name="geometry">
+           <rect>
+            <x>243</x>
+            <y>0</y>
+            <width>296</width>
+            <height>296</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="gameGrid">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="CellButton" name="firstCell">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: white;
+border: 4px solid black;
+border-radius: 0px;</string>
+             </property>
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+        <widget class="QPushButton" name="chooseGameButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Choose game</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item>
      <widget class="QTextBrowser" name="debugText">
@@ -191,6 +191,9 @@
         <kerning>true</kerning>
        </font>
       </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
      </widget>
     </item>
    </layout>
@@ -206,6 +209,19 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GridContainer</class>
+   <extends>QWidget</extends>
+   <header location="global">gridcontainer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CellButton</class>
+   <extends>QPushButton</extends>
+   <header>cellbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

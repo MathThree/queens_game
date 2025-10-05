@@ -9,12 +9,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainwindow.ui" line="85"/>
+        <location filename="src/mainwindow.ui" line="100"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainwindow.ui" line="145"/>
+        <location filename="src/mainwindow.ui" line="148"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/mainwindow.ui" line="165"/>
         <source>Choose game</source>
         <translation type="unfinished"></translation>
     </message>

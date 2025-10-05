@@ -246,7 +246,7 @@ array<int, 4> GameModel::getBorders(const int row, const int col) const
 {
 	array<int, 4> borders = {0, 0, 0, 0};
 	const Cell *cell = &grid[row][col];
-	const array<pair<int, int>, 4> directions = {{{-1, 0}, {0, 1}, {1, 0}, {0, -1} }};
+	const array<pair<int, int>, 4> directions = {{{-1, 0}, {0, 1}, {1, 0}, {0, -1}}};
 	for (int k=0; k<4; ++k)
 	{
 		int r = row + directions[k].first;

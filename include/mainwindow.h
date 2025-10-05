@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "cellbutton.h"
+#include "gridcontainer.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -16,6 +17,7 @@
 #include <QLayoutItem>
 #include <QResizeEvent>
 #include <QLabel>
+#include <QRect>
 
 using namespace std;
 
@@ -53,9 +55,7 @@ private:
 	QString debugText;
 	Ui::MainWindow *ui;
 	vector<vector<CellButton*>> cells;
-	QWidget *gameWidget;
+	GridContainer *gameWidget;
 	vector<QString> symbols = {"•", "", "♛"};
-
-	void resizeEvent(QResizeEvent *event);
 };
 #endif // MAINWINDOW_H

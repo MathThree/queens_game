@@ -7,8 +7,8 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 	connect(ui->chooseGameButton, &QPushButton::clicked, this, &MainWindow::chooseGameclicked);
 
 	gameWidget = ui->gameWidget;
-	gameWidget->setMinimumSize(330, 330);
-	gameWidget->setLayout(ui->gameGrid);
+
+	ui->debugText->hide();
 }
 
 MainWindow::~MainWindow()
@@ -29,7 +29,9 @@ void MainWindow::openGameDir(const QString dir)
 
 void MainWindow::initCellGrid(const int n)
 {
-	setCellGridSize(n);
+	cells.resize(1);
+	cells[0].resize(1);
+	cells[0][0] = ui->firstCell;
 }
 
 void MainWindow::setCellGridSize(const int n)
@@ -106,18 +108,6 @@ void MainWindow::victory()
 void MainWindow::handleCellClicked(const int row, const int col)
 {
 	emit clicked(row, col);
-}
-
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
-	QMainWindow::resizeEvent(event);
-
-	int w = event->size().width();
-	int h = event->size().height();
-
-	int side = min(w, h) * 0.7;
-
-	gameWidget->setFixedSize(side, side);
 }
 
 void MainWindow::debug(QString newText, bool keep)
