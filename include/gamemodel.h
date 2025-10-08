@@ -66,8 +66,9 @@ public:
 	 * @brief Toggle cell value
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
+	 * @param left True if it is a left click, right click otherwise (bool)
 	 */
-	void togglePlayerValue(const int row, const int col);
+	void togglePlayerValue(const int row, const int col, const bool left);
 
 	/**
 	 * @brief Load game file
@@ -93,14 +94,14 @@ private:
 		bool couldHaveQueen = true;  ///< True if a queen could be placed by the player according to game rules (bool (default true)
 	};
 
-	QString gameDir = QString("../queens_game/games/");
-	int n;  ///< Grid size (n*n)
-	vector<vector<Cell>> grid; ///< Square grid storing current state
-	vector<vector<pair<int, int>>> zones; ///< Cells grouped by zone
-	list<pair<int, int>> queenList; ///< Positions of queens placed by the player
-	vector<QColor> colors; ///< Colors per zone
-	int offsets[2]; ///< Helper array {-1, 1} for diagonals
-	bool help = true; ///< Show help dots if true
+	QString gameDir = QString("../queens_game/games/"); ///< Game directory name
+	int n;                                              ///< Grid size (n*n)
+	vector<vector<Cell>> grid;                          ///< Square grid storing current state
+	vector<vector<pair<int, int>>> zones;               ///< Cells grouped by zone
+	list<pair<int, int>> queenList;                     ///< Positions of queens placed by the player
+	vector<QColor> colors;                              ///< Colors per zone
+	int offsets[2];                                     ///< Helper array {-1, 1} for diagonals
+	bool help = true;                                  ///< Show help dots if true
 
 	/**
 	 * @brief Initialize colors according to number of zones
@@ -145,6 +146,13 @@ private:
 	 * @param col Column index of the cell (int)
 	 */
 	void setNoneToCell(const int row, const int col);
+
+	/**
+	 * @brief Remove a queen (if exists) and update concerned cells
+	 * @param row Row index of the cell (int)
+	 * @param col Column index of the cell (int)
+	 */
+	void removeQueen(const int row, const int col);
 
 	/**
 	 * @brief Check if a queen exists in a cell zone, ignoring the cell itself

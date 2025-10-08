@@ -44,18 +44,18 @@ public:
 	void debug(QString newText, bool keep = true);
 
 signals:
-	void clicked(const int row, const int col);
+	void clicked(const int row, const int col, const bool left);
 	void chooseGameclicked();
 	void sendGameFile(QString fileName);
 
 public slots:
-	void handleCellClicked(const int row, const int col);
+	void handleCellClicked(const int row, const int col, const bool left);
 
 private:
 	QString debugText;
 	Ui::MainWindow *ui;
 	vector<vector<CellButton*>> cells;
 	GridContainer *gameWidget;
-	vector<QString> symbols = {"•", "", "♛"};
+	vector<QString> symbols = {"", "•", "♛", "·"};
 };
 #endif // MAINWINDOW_H

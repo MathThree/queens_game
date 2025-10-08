@@ -14,12 +14,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainwindow.ui" line="148"/>
+        <location filename="src/mainwindow.ui" line="153"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainwindow.ui" line="165"/>
+        <location filename="src/mainwindow.ui" line="170"/>
         <source>Choose game</source>
         <translation type="unfinished"></translation>
     </message>

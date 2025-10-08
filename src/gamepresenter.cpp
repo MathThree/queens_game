@@ -19,9 +19,9 @@ void GamePresenter::initCells()
 			_view->setCell(i, j, _model->getColor(i, j), _model->getBorders(i, j));
 }
 
-void GamePresenter::handleCellClicked(const int row, const int col)
+void GamePresenter::handleCellClicked(const int row, const int col, const bool left)
 {
-	_model->togglePlayerValue(row, col);
+	_model->togglePlayerValue(row, col, left);
 }
 
 void GamePresenter::handleModelDebug(const QString debugText, const bool keep)

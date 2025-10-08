@@ -20,7 +20,7 @@ public:
 	void initCells();
 
 public slots:
-	void handleCellClicked(const int row, const int col);
+	void handleCellClicked(const int row, const int col, const bool left);
 	void handleCellUpdated(const int row, const int col, const int value);
 	void handleModelDebug(const QString debugText, const bool keep);
 	void handleVictory();

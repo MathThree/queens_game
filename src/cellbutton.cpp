@@ -2,12 +2,11 @@
 
 CellButton::CellButton(const int row, const int col, QWidget* parent, const QColor color) : QPushButton(parent), _row(row), _col(col), _color(color)
 {
-	connect(this, SIGNAL(clicked()), this, SLOT(handleCellClicked()));
+	//connect(this, &CellButton::clicked, this, &CellButton::handleCellClicked);
 
 	updateDisplay();
 
-	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	//this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+	this->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
 	qDebug() << "CB-> Cell created:\t[" << row << ";\t" << col << "]";
 }
@@ -17,12 +16,11 @@ CellButton::CellButton(QWidget *parent) : QPushButton(parent)
 	_row = 0;
 	_col = 0;
 	_color = QColor("white");
-	connect(this, SIGNAL(clicked()), this, SLOT(handleCellClicked()));
+	//connect(this, &CellButton::clicked, this, &CellButton::handleCellClicked);
 
 	updateDisplay();
 
-	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	//this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+	this->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
 
 void CellButton::resetCellButton(int row, int col, const QColor color)
@@ -39,7 +37,7 @@ void CellButton::setCellValue(const QString value)
 
 void CellButton::handleCellClicked()
 {
-	emit clicked(_row, _col);
+	emit clicked(_row, _col, true);
 }
 
 void CellButton::setColor(const QColor color)
@@ -67,4 +65,20 @@ void CellButton::updateDisplay()
 		.arg(_borders[2])
 		.arg(_borders[3])
 	);
+}
+
+void CellButton::mousePressEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton)
+		emit clicked(_row, _col, true);
+	else if (event->button() == Qt::RightButton)
+		emit clicked(_row, _col, false);
+}
+
+void CellButton::resizeEvent(QResizeEvent *event)
+{
+	QPushButton::resizeEvent(event);
+	QFont f = font();
+	f.setPointSize(event->size().height() / 3);
+	setFont(f);
 }

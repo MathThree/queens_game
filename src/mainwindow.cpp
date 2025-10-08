@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 
 	gameWidget = ui->gameWidget;
 
-	ui->debugText->hide();
+	//ui->debugText->hide();
 }
 
 MainWindow::~MainWindow()
@@ -32,6 +32,7 @@ void MainWindow::initCellGrid(const int n)
 	cells.resize(1);
 	cells[0].resize(1);
 	cells[0][0] = ui->firstCell;
+	connect(ui->firstCell, &CellButton::clicked, this, &MainWindow::handleCellClicked);
 }
 
 void MainWindow::setCellGridSize(const int n)
@@ -84,14 +85,14 @@ void MainWindow::setCell(const int row, const int col, const QColor color, const
 	if (!ui->gameGrid->itemAtPosition(row, col))
 	{
 		ui->gameGrid->addWidget(cell, row, col);
-		connect(cell, SIGNAL(clicked(int,int)), this, SLOT(handleCellClicked(int,int)));
+		connect(cell, &CellButton::clicked, this, &MainWindow::handleCellClicked);
 	}
 }
 
 void MainWindow::setCellValue(const int row, const int col, const int value)
 {
 	qDebug() << "V -> Cell value:\t\t[" << row << "; " << col << "] -> " << value;
-	((CellButton *) cells[row][col])->setCellValue(symbols[value+1]);
+	((CellButton *) cells[row][col])->setCellValue(symbols[value]);
 }
 
 void MainWindow::setGameName(const QString gameName)
@@ -105,9 +106,9 @@ void MainWindow::victory()
 	gameWidget->setEnabled(false);
 }
 
-void MainWindow::handleCellClicked(const int row, const int col)
+void MainWindow::handleCellClicked(const int row, const int col, const bool left)
 {
-	emit clicked(row, col);
+	emit clicked(row, col, left);
 }
 
 void MainWindow::debug(QString newText, bool keep)

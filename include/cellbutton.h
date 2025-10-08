@@ -6,6 +6,7 @@
 #include <QColor>
 #include <QDebug>
 #include <QResizeEvent>
+#include <QFont>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ public:
 	void resetCellButton(int row, int col, const QColor color = QColor("white"));
 
 signals:
-	void clicked(const int row, const int col);
+	void clicked(const int row, const int col, const bool left=true);
 
 public slots:
 	void handleCellClicked();
@@ -32,6 +33,10 @@ private:
 	int _col;
 	QColor _color;
 	array<int, 4> _borders;
+
+protected:
+	void mousePressEvent(QMouseEvent *event) override;
+	void resizeEvent(QResizeEvent *event) override;
 
 };
 
