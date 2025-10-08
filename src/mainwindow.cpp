@@ -8,6 +8,11 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 
 	gameWidget = ui->gameWidget;
 
+	QShortcut *toggleDebug = new QShortcut(QKeySequence(Qt::Key_F3), this);
+	connect(toggleDebug, &QShortcut::activated, this, [this]() {
+		ui->debugText->setVisible(!ui->debugText->isVisible());
+	});
+
 	//ui->debugText->hide();
 }
 

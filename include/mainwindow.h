@@ -18,6 +18,8 @@
 #include <QResizeEvent>
 #include <QLabel>
 #include <QRect>
+#include <QShortcut>
+#include <QKeySequence>
 
 using namespace std;
 

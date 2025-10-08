@@ -286,7 +286,7 @@ int GameModel::getBorder(int row, int col, const Cell *cell) const
 
 QString GameModel::toQString()
 {
-	QString out = " " + QString::number(n) + "\n";
+	QString out = "\n┌────────────\n│   " + QString::number(n) + "\n";
 
 	for (const auto &row : grid)
 	{
@@ -295,10 +295,10 @@ QString GameModel::toQString()
 			QString hasQueen = cell.hasQueen ? "X" : " ";
 			QString playerValue = cell.playerValue == 2 ? "X" : cell.playerValue == 0 ? "_" : ".";
 			QString couldHaveQueen = cell.couldHaveQueen ? "_" : ".";
-			out += " [" + QString::number(cell.colorZone) + "|" + hasQueen + playerValue + couldHaveQueen + "]  ";
+			out += "│   [" + QString::number(cell.colorZone) + "|" + hasQueen + playerValue + couldHaveQueen + "]  ";
 		}
 		out += "\n";
 	}
-	out += "\n";
+	out += "└────────────\n";
 	return out;
 }
