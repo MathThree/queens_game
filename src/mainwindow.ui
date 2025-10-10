@@ -114,7 +114,7 @@
 border: 2px dashed rgb(255, 0, 0); */
 </string>
          </property>
-         <widget class="QWidget" name="gridWidget" native="true">
+         <widget class="GridWidget" name="gridWidget" native="true">
           <property name="geometry">
            <rect>
             <x>243</x>
@@ -158,17 +158,36 @@ border-radius: 0px;</string>
          </widget>
         </widget>
        </item>
-       <item alignment="Qt::AlignHCenter|Qt::AlignTop">
-        <widget class="QPushButton" name="chooseGameButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QWidget" name="buttonContainer" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>20</height>
+          </size>
          </property>
-         <property name="text">
-          <string>Choose game</string>
-         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="chooseGameButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Choose game</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="settingsButton">
+            <property name="text">
+             <string>Settings</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -220,6 +239,12 @@ border-radius: 0px;</string>
    <class>CellButton</class>
    <extends>QPushButton</extends>
    <header>cellbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GridWidget</class>
+   <extends>QWidget</extends>
+   <header>gridwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

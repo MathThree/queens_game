@@ -27,6 +27,9 @@ public slots:
 	void handleChooseGame();
 	void handleGetGameFile(const QString fileName);
 	void handleGetGameName(const QString gameName);
+	void handleAskFilter(const int row, const int col);
+	void handleCellHovered(const int row, const int col);
+	void handleAskHelp();
 
 private:
 	GameModel *_model;

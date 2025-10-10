@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QResizeEvent>
 #include <QFont>
+#include <QApplication>
+#include <QDateTime>
 
 using namespace std;
 
@@ -19,24 +21,36 @@ public:
 	void setCellValue(const QString value);
 	void setColor(const QColor color);
 	void setBorders(const array<int, 4> borders);
+	void setVisitID() { lastVisitID = globalVisitID; }
+	void setHoverActivated(bool hoverValue) { hoverActivated = hoverValue; }
+	bool isHoverActivated() { return hoverActivated; }
 	void updateDisplay();
 	void resetCellButton(int row, int col, const QColor color = QColor("white"));
+	void click() { emit clicked(_row, _col, true); };
+	void hover() { emit hovered(_row, _col); }
+	bool hasBeenVisited() { return (globalVisitID == lastVisitID); }
+	QString toQString();
 
 signals:
+	void askFilter(const int row, const int col);
 	void clicked(const int row, const int col, const bool left=true);
+	void hovered(const int row, const int col);
 
 public slots:
-	void handleCellClicked();
 
 private:
 	int _row;
 	int _col;
 	QColor _color;
 	array<int, 4> _borders;
+	qint64 lastVisitID = 0;
+	static qint64 globalVisitID;
+	static bool hoverActivated;
 
 protected:
-	void mousePressEvent(QMouseEvent *event) override;
 	void resizeEvent(QResizeEvent *event) override;
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseReleaseEvent(QMouseEvent *event) override;
 
 };
 

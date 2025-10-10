@@ -54,6 +54,8 @@ if(ANDROID)
 		${INC}cellbutton.h
 		${SRC}gridcontainer.cpp
 		${INC}gridcontainer.h
+		${SRC}gridwidget.cpp
+		${INC}gridwidget.h
 		${TS_FILES}
 	)
 else()
@@ -70,6 +72,8 @@ else()
 		${INC}cellbutton.h
 		${SRC}gridcontainer.cpp
 		${INC}gridcontainer.h
+		${SRC}gridwidget.cpp
+		${INC}gridwidget.h
 		${TS_FILES}
 	)
 endif()

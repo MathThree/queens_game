@@ -2,8 +2,6 @@
 
 CellButton::CellButton(const int row, const int col, QWidget* parent, const QColor color) : QPushButton(parent), _row(row), _col(col), _color(color)
 {
-	//connect(this, &CellButton::clicked, this, &CellButton::handleCellClicked);
-
 	updateDisplay();
 
 	this->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -16,12 +14,15 @@ CellButton::CellButton(QWidget *parent) : QPushButton(parent)
 	_row = 0;
 	_col = 0;
 	_color = QColor("white");
-	//connect(this, &CellButton::clicked, this, &CellButton::handleCellClicked);
 
 	updateDisplay();
 
 	this->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
+
+qint64 CellButton::globalVisitID = 0;
+
+bool CellButton::hoverActivated = false;
 
 void CellButton::resetCellButton(int row, int col, const QColor color)
 {
@@ -33,11 +34,6 @@ void CellButton::resetCellButton(int row, int col, const QColor color)
 void CellButton::setCellValue(const QString value)
 {
 	this->setText(value);
-}
-
-void CellButton::handleCellClicked()
-{
-	emit clicked(_row, _col, true);
 }
 
 void CellButton::setColor(const QColor color)
@@ -67,18 +63,38 @@ void CellButton::updateDisplay()
 	);
 }
 
-void CellButton::mousePressEvent(QMouseEvent *event)
-{
-	if (event->button() == Qt::LeftButton)
-		emit clicked(_row, _col, true);
-	else if (event->button() == Qt::RightButton)
-		emit clicked(_row, _col, false);
-}
-
 void CellButton::resizeEvent(QResizeEvent *event)
 {
 	QPushButton::resizeEvent(event);
 	QFont f = font();
 	f.setPointSize(event->size().height() / 3);
 	setFont(f);
+	qDebug() << "GW > " << event->size().height();
+}
+
+void CellButton::mousePressEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton)
+	{
+		emit askFilter(_row, _col);
+		globalVisitID = QDateTime::currentMSecsSinceEpoch();
+	}
+}
+
+void CellButton::mouseReleaseEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton)
+		if (!hasBeenVisited())
+			emit clicked(_row, _col, true);
+		else
+			setHoverActivated(false);
+	else if (event->button() == Qt::RightButton)
+		emit clicked(_row, _col, false);
+	globalVisitID = 0;
+}
+
+QString CellButton::toQString()
+{
+	QString out = "[" + QString::number(_row) + "; " + QString::number(_col) + "]";
+	return out;
 }

@@ -62,6 +62,10 @@ public:
 
 	array<int, 4> getBorders(const int row, const int col) const;
 
+	void setFilter(const int row, const int col) { filter = getFilterValue(grid[row][col].playerValue); }
+
+	void tryTogglePlayerValue(const int row, const int col);
+
 	/**
 	 * @brief Toggle cell value
 	 * @param row Row index of the cell (int)
@@ -69,6 +73,8 @@ public:
 	 * @param left True if it is a left click, right click otherwise (bool)
 	 */
 	void togglePlayerValue(const int row, const int col, const bool left);
+
+	void toggleHelp();
 
 	/**
 	 * @brief Load game file
@@ -101,7 +107,8 @@ private:
 	list<pair<int, int>> queenList;                     ///< Positions of queens placed by the player
 	vector<QColor> colors;                              ///< Colors per zone
 	int offsets[2];                                     ///< Helper array {-1, 1} for diagonals
-	bool help = true;                                  ///< Show help dots if true
+	bool help = false;                                  ///< Show help dots if true
+	int filter = 0;
 
 	/**
 	 * @brief Initialize colors according to number of zones
@@ -217,6 +224,10 @@ private:
 	int getValueToSend(const Cell *cell) const;
 
 	int getBorder(int row, int col, const Cell *cell) const;
+
+	int getFilterValue(int playerValue);
+
+	void updateGrid(const int row, const int col);
 
 signals:
 	void sendGameName(const QString row);

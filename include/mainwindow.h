@@ -46,12 +46,14 @@ public:
 	void debug(QString newText, bool keep = true);
 
 signals:
+	void askFilter(const int row, const int col);
 	void clicked(const int row, const int col, const bool left);
+	void hovered(const int row, const int col);
 	void chooseGameclicked();
 	void sendGameFile(QString fileName);
+	void askHelp();
 
 public slots:
-	void handleCellClicked(const int row, const int col, const bool left);
 
 private:
 	QString debugText;
@@ -59,5 +61,7 @@ private:
 	vector<vector<CellButton*>> cells;
 	GridContainer *gameWidget;
 	vector<QString> symbols = {"", "•", "♛", "·"};
+
+	void connectCell(const CellButton *cell);
 };
 #endif // MAINWINDOW_H

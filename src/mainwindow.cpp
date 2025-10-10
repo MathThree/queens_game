@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 {
 	ui->setupUi(this);
 	connect(ui->chooseGameButton, &QPushButton::clicked, this, &MainWindow::chooseGameclicked);
+	connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::askHelp);
 
 	gameWidget = ui->gameWidget;
 
@@ -13,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 		ui->debugText->setVisible(!ui->debugText->isVisible());
 	});
 
-	//ui->debugText->hide();
+	ui->debugText->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -37,7 +38,7 @@ void MainWindow::initCellGrid(const int n)
 	cells.resize(1);
 	cells[0].resize(1);
 	cells[0][0] = ui->firstCell;
-	connect(ui->firstCell, &CellButton::clicked, this, &MainWindow::handleCellClicked);
+	connectCell(ui->firstCell);
 }
 
 void MainWindow::setCellGridSize(const int n)
@@ -90,7 +91,7 @@ void MainWindow::setCell(const int row, const int col, const QColor color, const
 	if (!ui->gameGrid->itemAtPosition(row, col))
 	{
 		ui->gameGrid->addWidget(cell, row, col);
-		connect(cell, &CellButton::clicked, this, &MainWindow::handleCellClicked);
+		connectCell(cell);
 	}
 }
 
@@ -105,15 +106,17 @@ void MainWindow::setGameName(const QString gameName)
 	ui->gameName->setText(gameName);
 }
 
+void MainWindow::connectCell(const CellButton *cell)
+{
+	connect(cell, &CellButton::clicked, this, &MainWindow::clicked);
+	connect(cell, &CellButton::askFilter, this, &MainWindow::askFilter);
+	connect(cell, &CellButton::hovered, this, &MainWindow::hovered);
+}
+
 void MainWindow::victory()
 {
 	qDebug() << "V -> VICTORY!";
 	gameWidget->setEnabled(false);
-}
-
-void MainWindow::handleCellClicked(const int row, const int col, const bool left)
-{
-	emit clicked(row, col, left);
 }
 
 void MainWindow::debug(QString newText, bool keep)

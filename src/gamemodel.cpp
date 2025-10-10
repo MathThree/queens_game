@@ -81,13 +81,42 @@ void GameModel::setColors()
 	shuffle(colors.begin(), colors.end(), rng);
 }
 
+void GameModel::tryTogglePlayerValue(const int row, const int col)
+{
+	if (getFilterValue(grid[row][col].playerValue) == filter)
+	{
+		Cell *cell = (Cell*) &grid[row][col];
+		cell->playerValue = 1 - filter;
+		qDebug() << "M -> Cell clicked:\t[" << row << "; " << col << "] -> " << cell->playerValue ;
+
+		updateGrid(row, col);
+	}
+}
+
 void GameModel::togglePlayerValue(const int row, const int col, const bool left)
 {
 	Cell *cell = (Cell*) &grid[row][col];
 	cell->playerValue = (cell->playerValue + (left ? 1 : 2)) % 3;
 	qDebug() << "M -> Cell clicked:\t[" << row << "; " << col << "] -> " << cell->playerValue ;
 
-	switch (cell->playerValue)
+	updateGrid(row, col);
+}
+
+void GameModel::toggleHelp()
+{
+	help = !help;
+	for (int i=0; i<n; ++i)
+		for (int j=0; j<n; ++j)
+		{
+			Cell *c = &grid[i][j];
+			if (c->playerValue == 0)
+				emit cellUpdated(i, j, getValueToSend(c));
+		}
+}
+
+void GameModel::updateGrid(const int row, const int col)
+{
+	switch (grid[row][col].playerValue)
 	{
 	case 2:
 		setQueenToCell(row, col);
@@ -282,6 +311,11 @@ int GameModel::getBorder(int row, int col, const Cell *cell) const
 	if (cell->colorZone != other_cell->colorZone)
 		return 2;
 	return 1;
+}
+
+int GameModel::getFilterValue(int playerValue)
+{
+	return (playerValue == 2) ? 1 : playerValue;
 }
 
 QString GameModel::toQString()

@@ -19,8 +19,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainwindow.ui" line="170"/>
+        <location filename="src/mainwindow.ui" line="179"/>
         <source>Choose game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/mainwindow.ui" line="186"/>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

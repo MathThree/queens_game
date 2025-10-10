@@ -5,6 +5,9 @@ GamePresenter::GamePresenter(GameModel *model, MainWindow *view, QObject *parent
 	connect(_view, &MainWindow::clicked, this, &GamePresenter::handleCellClicked);
 	connect(_view, &MainWindow::chooseGameclicked, this, &GamePresenter::handleChooseGame);
 	connect(_view, &MainWindow::sendGameFile, this, &GamePresenter::handleGetGameFile);
+	connect(_view, &MainWindow::askFilter, this, &GamePresenter::handleAskFilter);
+	connect(_view, &MainWindow::hovered, this, &GamePresenter::handleCellHovered);
+	connect(_view, &MainWindow::askHelp, this, &GamePresenter::handleAskHelp);
 
 	connect(_model, &GameModel::debug, this, &GamePresenter::handleModelDebug);
 	connect(_model, &GameModel::sendGameName, this, &GamePresenter::handleGetGameName);
@@ -55,4 +58,19 @@ void GamePresenter::handleGetGameFile(const QString fileName)
 void GamePresenter::handleGetGameName(const QString gameName)
 {
 	_view->setGameName(gameName);
+}
+
+void GamePresenter::handleAskFilter(const int row, const int col)
+{
+	_model->setFilter(row, col);
+}
+
+void GamePresenter::handleCellHovered(const int row, const int col)
+{
+	_model->tryTogglePlayerValue(row, col);
+}
+
+void GamePresenter::handleAskHelp()
+{
+	_model->toggleHelp();
 }
