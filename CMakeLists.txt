@@ -26,16 +26,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
 
-set(TS_FILES queens_game_fr_FR.ts)
-
+set(TS_FILES i18n/queens_game_fr_FR.ts)
 set(SRC src/)
 set(INC include/)
 
 file(GLOB GAMES "games/*")
+
 add_custom_target(games SOURCES ${GAMES})
-
 add_custom_target(Doc SOURCES "documentation/Doxyfile")
-
 add_custom_target(Git SOURCES ".gitignore")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -84,4 +82,4 @@ target_include_directories(queens_game PRIVATE
 	${CMAKE_CURRENT_BINARY_DIR}/queens_game_autogen/include
 )
 
-qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+qt5_add_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

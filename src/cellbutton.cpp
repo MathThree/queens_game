@@ -69,7 +69,6 @@ void CellButton::resizeEvent(QResizeEvent *event)
 	QFont f = font();
 	f.setPointSize(event->size().height() / 3);
 	setFont(f);
-	qDebug() << "GW > " << event->size().height();
 }
 
 void CellButton::mousePressEvent(QMouseEvent *event)

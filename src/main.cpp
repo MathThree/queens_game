@@ -4,10 +4,18 @@
 
 #include <QDebug>
 #include <QApplication>
+#include <QTranslator>
+#include <QLocale>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
+	QTranslator translator;
+
+	translator.load("../queens_game/qm/queens_game_fr_FR.qm");
+	a.installTranslator(&translator);
+
 	MainWindow view;
 	GameModel model;
 	GamePresenter presenter(&model, &view);
