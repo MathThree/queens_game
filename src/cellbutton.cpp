@@ -31,35 +31,29 @@ void CellButton::resetCellButton(int row, int col, const QColor color)
 	setCellValue("");
 }
 
-void CellButton::setCellValue(const QString value)
-{
-	this->setText(value);
-}
-
-void CellButton::setColor(const QColor color)
-{
-	_color = color;
-}
-
-void CellButton::setBorders(const array<int, 4> borders)
-{
-	_borders = borders;
-}
-
 void CellButton::updateDisplay()
 {
 	this->setStyleSheet(QString(
 		"background-color: %1;"
-		"border-top: %2px solid black;"
-		"border-right: %3px solid black;"
-		"border-bottom: %4px solid black;"
-		"border-left: %5px solid black;"
-		"border-radius: 0px")
-		.arg(_color.name())
-		.arg(_borders[0])
-		.arg(_borders[1])
-		.arg(_borders[2])
-		.arg(_borders[3])
+		"border-top: %2px solid %10;"
+		"border-right: %3px solid %10;"
+		"border-bottom: %4px solid %10;"
+		"border-left: %5px solid %10;"
+		"border-top-left-radius: %6px;"
+		"border-top-right-radius: %7px;"
+		"border-bottom-right-radius: %8px;"
+		"border-bottom-left-radius: %9px;"
+	)
+	.arg(_color.name())
+	.arg(_borders[0])
+	.arg(_borders[1])
+	.arg(_borders[2])
+	.arg(_borders[3])
+	.arg(_corners[0] ? cornerValue*cornerFactor : 0)
+	.arg(_corners[1] ? cornerValue*cornerFactor : 0)
+	.arg(_corners[2] ? cornerValue*cornerFactor : 0)
+	.arg(_corners[3] ? cornerValue*cornerFactor : 0)
+	.arg(colorTheme.name())
 	);
 }
 
@@ -69,6 +63,8 @@ void CellButton::resizeEvent(QResizeEvent *event)
 	QFont f = font();
 	f.setPointSize(event->size().height() / 3);
 	setFont(f);
+	cornerValue = event->size().height() * 0.49;
+	updateDisplay();
 }
 
 void CellButton::mousePressEvent(QMouseEvent *event)

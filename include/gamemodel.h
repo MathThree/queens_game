@@ -62,6 +62,8 @@ public:
 
 	array<int, 4> getBorders(const int row, const int col) const;
 
+	array<bool, 4> getCorners(const int row, const int col) const;
+
 	void setFilter(const int row, const int col) { filter = getFilterValue(grid[row][col].playerValue); }
 
 	void tryTogglePlayerValue(const int row, const int col);
@@ -224,6 +226,8 @@ private:
 	int getValueToSend(const Cell *cell) const;
 
 	int getBorder(int row, int col, const Cell *cell) const;
+
+	bool getCorner(const array<int, 3>& rows, const array<int, 3>& cols, const Cell *cell) const;
 
 	int getFilterValue(int playerValue);
 

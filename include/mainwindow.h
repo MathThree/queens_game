@@ -3,6 +3,7 @@
 
 #include "cellbutton.h"
 #include "gridcontainer.h"
+#include "gridwidget.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -38,9 +39,11 @@ public:
 	void openGameDir(const QString dir);
 	void initCellGrid(const int n);
 	void setCellGridSize(const int n);
-	void setCell(const int row, const int col, const QColor color, const array<int, 4> borders);
+	void setCell(const int row, const int col, const QColor color, const array<int, 4>& borders, const array<bool, 4>& corners);
 	void setCellValue(const int row, const int col, const int value);
 	void setGameName(const QString gameName);
+	void setColorTheme(QColor color) { colorTheme = color; }
+	void updateColorTheme();
 	void victory();
 
 	void debug(QString newText, bool keep = true);
@@ -60,7 +63,9 @@ private:
 	Ui::MainWindow *ui;
 	vector<vector<CellButton*>> cells;
 	GridContainer *gameWidget;
+	GridWidget *gridWidget;
 	vector<QString> symbols = {"", "•", "♛", "·"};
+	QColor colorTheme = Qt::black;
 
 	void connectCell(const CellButton *cell);
 };

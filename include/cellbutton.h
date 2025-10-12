@@ -18,11 +18,14 @@ class CellButton : public QPushButton
 public:
 	explicit CellButton(QWidget *parent = nullptr);
 	CellButton(const int row, const int col, QWidget* parent = nullptr, const QColor color = QColor("white"));
-	void setCellValue(const QString value);
-	void setColor(const QColor color);
-	void setBorders(const array<int, 4> borders);
+	void setCellValue(const QString value) { this->setText(value); }
+	void setColor(const QColor color) { _color = color; }
+	void setColorTheme(const QColor color) { colorTheme = color; }
+	void setBorders(const array<int, 4>& borders) { _borders = borders; }
+	void setCorners(const array<bool, 4>& corners) { _corners = corners; }
 	void setVisitID() { lastVisitID = globalVisitID; }
 	void setHoverActivated(bool hoverValue) { hoverActivated = hoverValue; }
+	float getCornerRadius() { return cornerValue * cornerFactor; }
 	bool isHoverActivated() { return hoverActivated; }
 	void updateDisplay();
 	void resetCellButton(int row, int col, const QColor color = QColor("white"));
@@ -42,10 +45,14 @@ private:
 	int _row;
 	int _col;
 	QColor _color;
+	QColor colorTheme = Qt::black;
 	array<int, 4> _borders;
+	array<bool, 4> _corners;
 	qint64 lastVisitID = 0;
 	static qint64 globalVisitID;
 	static bool hoverActivated;
+	int cornerValue = 20;
+	float cornerFactor = .85;
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;

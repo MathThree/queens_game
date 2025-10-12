@@ -3,6 +3,28 @@
 GridWidget::GridWidget(QWidget *parent) : QWidget(parent)
 {
 	setMouseTracking(true);
+
+	/*QPalette pal = palette();
+	pal.setColor(QPalette::Window, Qt::black);
+	setPalette(pal);*/
+}
+
+void GridWidget::resizeEvent(QResizeEvent *event)
+{
+	QWidget::resizeEvent(event);
+	//setStyleSheet(QString("border-radius: %1px;").arg(firstCell->getCornerRadius()));
+}
+
+void GridWidget::paintEvent(QPaintEvent *event)
+{
+	int margin = layout()->contentsMargins().left();
+	int radius = firstCell->getCornerRadius() + margin;
+
+	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setBrush(colorTheme);
+	painter.setPen(Qt::NoPen);
+	painter.drawRoundedRect(rect(), radius, radius);
 }
 
 void GridWidget::mouseMoveEvent(QMouseEvent *event)

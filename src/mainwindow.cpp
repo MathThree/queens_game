@@ -9,14 +9,19 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 	connect(ui->chooseGameButton, &QPushButton::clicked, this, &MainWindow::chooseGameclicked);
 	connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::askHelp);
 
-	gameWidget = ui->gameWidget;
-
 	QShortcut *toggleDebug = new QShortcut(QKeySequence(Qt::Key_F3), this);
 	connect(toggleDebug, &QShortcut::activated, this, [this]() {
 		ui->debugText->setVisible(!ui->debugText->isVisible());
 	});
 
 	ui->debugText->setVisible(false);
+
+	gameWidget = ui->gameWidget;
+	gridWidget = ui->gridWidget;
+
+	gridWidget->setFirstCell(ui->firstCell);
+
+	setColorTheme(QColor(55, 55, 98));
 }
 
 MainWindow::~MainWindow()
@@ -78,9 +83,10 @@ void MainWindow::setCellGridSize(const int n)
 		}
 	}
 	gameWidget->setEnabled(true);
+	updateColorTheme();
 }
 
-void MainWindow::setCell(const int row, const int col, const QColor color, const array<int, 4> borders)
+void MainWindow::setCell(const int row, const int col, const QColor color, const array<int, 4>& borders, const array<bool, 4>& corners)
 {
 	if (row<0 || row>=cells.size()) return;
 	if (col<0 || col>=cells[row].size()) return;
@@ -88,6 +94,7 @@ void MainWindow::setCell(const int row, const int col, const QColor color, const
 	CellButton *cell = cells[row][col];
 	cell->setColor(color);
 	cell->setBorders(borders);
+	cell->setCorners(corners);
 	cell->updateDisplay();
 	setCellValue(row, col, 0);
 	if (!ui->gameGrid->itemAtPosition(row, col))
@@ -106,6 +113,19 @@ void MainWindow::setCellValue(const int row, const int col, const int value)
 void MainWindow::setGameName(const QString gameName)
 {
 	ui->gameName->setText(gameName);
+}
+
+void MainWindow::updateColorTheme()
+{
+	gridWidget->setColorTheme(colorTheme);
+	for (auto &row : cells)
+	{
+		for (auto &cell : row)
+		{
+			cell->setColorTheme(colorTheme);
+			cell->updateDisplay();
+		}
+	}
 }
 
 void MainWindow::connectCell(const CellButton *cell)

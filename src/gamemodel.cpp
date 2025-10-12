@@ -65,6 +65,8 @@ void GameModel::setZones(const QStringList zoneList)
 
 void GameModel::setColors()
 {
+	static mt19937 rng(random_device{}());
+
 	colors = vector<QColor>(n, QColor());
 	double h = -.5 / n;
 	double s = .62;
@@ -77,7 +79,6 @@ void GameModel::setColors()
 		colors[i] = QColor::fromHsvF(h, s, v);
 	}
 
-	static mt19937 rng(random_device{}());
 	shuffle(colors.begin(), colors.end(), rng);
 }
 
@@ -311,6 +312,39 @@ int GameModel::getBorder(int row, int col, const Cell *cell) const
 	if (cell->colorZone != other_cell->colorZone)
 		return 2;
 	return 1;
+}
+
+array<bool, 4> GameModel::getCorners(const int row, const int col) const
+{
+	array<bool, 4> corners;
+	const Cell *cell = &grid[row][col];
+	const array<pair<int, int>, 8> directions = {{{-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}}};
+	for (int k=0; k<4; ++k)
+	{
+		array<int, 3> rows;
+		array<int, 3> cols;
+		for (int l=0; l<3; ++l)
+		{
+			int index = (2*k + l + 7) % 8;
+			rows[l] = row + directions[index].first;
+			cols[l] = col + directions[index].second;
+		}
+		corners[k] = getCorner(rows, cols, cell);
+	}
+	return corners;
+}
+
+bool GameModel::getCorner(const array<int, 3>& rows, const array<int, 3>& cols, const Cell *cell) const
+{
+	if ((rows[1] != -1 && rows[1] != n) || (cols[1] != -1 && cols[1] != n))
+		for (int k=0; k<3; ++k)
+		{
+			if (rows[k] < 0 || rows[k] >= n || cols[k] < 0 || cols[k] >= n)
+				return false;
+			if (grid[rows[k]][cols[k]].colorZone == cell->colorZone)
+				return false;
+		}
+	return true;
 }
 
 int GameModel::getFilterValue(int playerValue)
