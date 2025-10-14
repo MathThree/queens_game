@@ -66,20 +66,26 @@ void GameModel::setZones(const QStringList zoneList)
 void GameModel::setColors()
 {
 	static mt19937 rng(random_device{}());
+	vector<int> indexes(n);
+	iota(indexes.begin(), indexes.end(), 0);
+	shuffle(indexes.begin(), indexes.end(), rng);
+	uniform_real_distribution<double> dist(0.0, 1.0);
 
-	colors = vector<QColor>(n, QColor());
-	double h = -.5 / n;
-	double s = .62;
-	double v = .78;
+	cellColors.resize(n);
+	borderColors.resize(n);
+	double h = -dist(rng) / n;
+	double sC = .62;
+	double vC = .78;
+	double sB = .72;
+	double vB = .46;
 
 	double offset = .5 / n;
-	for (int i=0; i<colors.size(); ++i)
+	for (int i=0; i<cellColors.size(); ++i)
 	{
 		h += 2. * offset;
-		colors[i] = QColor::fromHsvF(h, s, v);
+		cellColors[indexes[i]] = QColor::fromHsvF(h, sC, vC);
+		borderColors[indexes[i]] = QColor::fromHsvF(h, sB, vB);
 	}
-
-	shuffle(colors.begin(), colors.end(), rng);
 }
 
 void GameModel::tryTogglePlayerValue(const int row, const int col)
@@ -307,11 +313,11 @@ array<int, 4> GameModel::getBorders(const int row, const int col) const
 int GameModel::getBorder(int row, int col, const Cell *cell) const
 {
 	if (row < 0 || row >= n || col < 0 || col >= n)
-		return 4;
+		return 3; // out
 	const Cell *other_cell = &grid[row][col];
 	if (cell->colorZone != other_cell->colorZone)
-		return 2;
-	return 1;
+		return 3; // different color
+	return 1; // same color
 }
 
 array<bool, 4> GameModel::getCorners(const int row, const int col) const
@@ -336,14 +342,9 @@ array<bool, 4> GameModel::getCorners(const int row, const int col) const
 
 bool GameModel::getCorner(const array<int, 3>& rows, const array<int, 3>& cols, const Cell *cell) const
 {
-	if ((rows[1] != -1 && rows[1] != n) || (cols[1] != -1 && cols[1] != n))
-		for (int k=0; k<3; ++k)
-		{
-			if (rows[k] < 0 || rows[k] >= n || cols[k] < 0 || cols[k] >= n)
-				return false;
-			if (grid[rows[k]][cols[k]].colorZone == cell->colorZone)
-				return false;
-		}
+	for (int k = 0; k < 3; k += 2) // if one next cell in the grid and same color
+		if (rows[k] != -1 && rows[k] != n && cols[k] != -1 && cols[k] != n && grid[rows[k]][cols[k]].colorZone == cell->colorZone)
+			return false;
 	return true;
 }
 

@@ -83,7 +83,8 @@
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">#centralwidget{
-	 background:rgb(76, 76, 136)
+	 background:rgb(76, 76, 136);
+	border-radius: 20px;
 }</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -165,16 +166,16 @@ border: 2px dashed rgb(255, 0, 0); */
             <enum>QLayout::SetDefaultConstraint</enum>
            </property>
            <property name="leftMargin">
-            <number>12</number>
+            <number>0</number>
            </property>
            <property name="topMargin">
-            <number>12</number>
+            <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>12</number>
+            <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>12</number>
+            <number>0</number>
            </property>
            <property name="spacing">
             <number>0</number>

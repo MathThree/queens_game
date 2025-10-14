@@ -9,6 +9,9 @@
 #include <QFont>
 #include <QApplication>
 #include <QDateTime>
+#include <QPaintEvent>
+#include <QPainter>
+#include <QColor>
 
 using namespace std;
 
@@ -19,7 +22,7 @@ public:
 	explicit CellButton(QWidget *parent = nullptr);
 	CellButton(const int row, const int col, QWidget* parent = nullptr, const QColor color = QColor("white"));
 	void setCellValue(const QString value) { this->setText(value); }
-	void setColor(const QColor color) { _color = color; }
+	void setColors(const pair<QColor, QColor> colors) { _color = colors.first; borderColor = colors.second; }
 	void setColorTheme(const QColor color) { colorTheme = color; }
 	void setBorders(const array<int, 4>& borders) { _borders = borders; }
 	void setCorners(const array<bool, 4>& corners) { _corners = corners; }
@@ -45,17 +48,19 @@ private:
 	int _row;
 	int _col;
 	QColor _color;
+	QColor borderColor;
 	QColor colorTheme = Qt::black;
 	array<int, 4> _borders;
 	array<bool, 4> _corners;
 	qint64 lastVisitID = 0;
 	static qint64 globalVisitID;
 	static bool hoverActivated;
-	int cornerValue = 20;
-	float cornerFactor = .85;
+	int cornerValue;
+	float cornerFactor = .7;
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
+	void paintEvent(QPaintEvent *event) override;
 	void mousePressEvent(QMouseEvent *event) override;
 	void mouseReleaseEvent(QMouseEvent *event) override;
 

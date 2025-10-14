@@ -17,7 +17,8 @@ void GridWidget::resizeEvent(QResizeEvent *event)
 
 void GridWidget::paintEvent(QPaintEvent *event)
 {
-	int margin = layout()->contentsMargins().left();
+	int margin = width() * 0.025;
+	layout()->setContentsMargins(margin, margin, margin, margin);
 	int radius = firstCell->getCornerRadius() + margin;
 
 	QPainter painter(this);

@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 	gridWidget->setFirstCell(ui->firstCell);
 
 	setColorTheme(QColor(55, 55, 98));
+
+	setAttribute(Qt::WA_TranslucentBackground);
+	setWindowFlags(Qt::FramelessWindowHint);
 }
 
 MainWindow::~MainWindow()
@@ -83,16 +86,17 @@ void MainWindow::setCellGridSize(const int n)
 		}
 	}
 	gameWidget->setEnabled(true);
+	gameWidget->update();
 	updateColorTheme();
 }
 
-void MainWindow::setCell(const int row, const int col, const QColor color, const array<int, 4>& borders, const array<bool, 4>& corners)
+void MainWindow::setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<bool, 4>& corners)
 {
 	if (row<0 || row>=cells.size()) return;
 	if (col<0 || col>=cells[row].size()) return;
 
 	CellButton *cell = cells[row][col];
-	cell->setColor(color);
+	cell->setColors(colors);
 	cell->setBorders(borders);
 	cell->setCorners(corners);
 	cell->updateDisplay();

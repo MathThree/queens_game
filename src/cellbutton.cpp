@@ -26,34 +26,51 @@ bool CellButton::hoverActivated = false;
 
 void CellButton::resetCellButton(int row, int col, const QColor color)
 {
-	_color = color;
-	setColor(_color);
+	//_color = color;
 	setCellValue("");
 }
 
 void CellButton::updateDisplay()
 {
 	this->setStyleSheet(QString(
+	"QPushButton {"
+		"color: %10;"
 		"background-color: %1;"
-		"border-top: %2px solid %10;"
-		"border-right: %3px solid %10;"
-		"border-bottom: %4px solid %10;"
-		"border-left: %5px solid %10;"
+		"border-top: %2px solid %11;"
+		"border-right: %3px solid %11;"
+		"border-bottom: %4px solid %11;"
+		"border-left: %5px solid %11;"
 		"border-top-left-radius: %6px;"
 		"border-top-right-radius: %7px;"
 		"border-bottom-right-radius: %8px;"
 		"border-bottom-left-radius: %9px;"
+	"}"
+	"QPushButton:hover {"
+		"color: %10;"
+		"border-top: %2px solid %11;"
+		"border-right: %3px solid %11;"
+		"border-bottom: %4px solid %11;"
+		"border-left: %5px solid %11;"
+	"}"
+	"QPushButton:disabled {"
+		"color: %11;"
+		"border-top: 0px solid %11;"
+		"border-right: 0px solid %11;"
+		"border-bottom: 0px solid %11;"
+		"border-left: 0px solid %11;"
+	"}"
 	)
 	.arg(_color.name())
-	.arg(_borders[0])
-	.arg(_borders[1])
-	.arg(_borders[2])
-	.arg(_borders[3])
+	.arg(_borders[0]*width()*0.03)
+	.arg(_borders[1]*width()*0.03)
+	.arg(_borders[2]*width()*0.03)
+	.arg(_borders[3]*width()*0.03)
 	.arg(_corners[0] ? cornerValue*cornerFactor : 0)
 	.arg(_corners[1] ? cornerValue*cornerFactor : 0)
 	.arg(_corners[2] ? cornerValue*cornerFactor : 0)
 	.arg(_corners[3] ? cornerValue*cornerFactor : 0)
 	.arg(colorTheme.name())
+	.arg(borderColor.name())
 	);
 }
 
@@ -65,6 +82,11 @@ void CellButton::resizeEvent(QResizeEvent *event)
 	setFont(f);
 	cornerValue = event->size().height() * 0.49;
 	updateDisplay();
+}
+
+void CellButton::paintEvent(QPaintEvent *event)
+{
+	QPushButton::paintEvent(event);
 }
 
 void CellButton::mousePressEvent(QMouseEvent *event)

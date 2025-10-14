@@ -58,7 +58,7 @@ public:
 	 * @param col Column index of the cell (int)
 	 * @return Color associated with the cell's zone (QColor)
 	 */
-	QColor getColor(const int row, const int col) const { return colors[grid[row][col].colorZone]; }
+	pair<QColor, QColor> getColors(const int row, const int col) const { return make_pair(cellColors[grid[row][col].colorZone], borderColors[grid[row][col].colorZone]); }
 
 	array<int, 4> getBorders(const int row, const int col) const;
 
@@ -107,7 +107,8 @@ private:
 	vector<vector<Cell>> grid;                          ///< Square grid storing current state
 	vector<vector<pair<int, int>>> zones;               ///< Cells grouped by zone
 	list<pair<int, int>> queenList;                     ///< Positions of queens placed by the player
-	vector<QColor> colors;                              ///< Colors per zone
+	vector<QColor> cellColors;                          ///< Colors per zone
+	vector<QColor> borderColors;
 	int offsets[2];                                     ///< Helper array {-1, 1} for diagonals
 	bool help = false;                                  ///< Show help dots if true
 	int filter = 0;
