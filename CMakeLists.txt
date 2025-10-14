@@ -38,6 +38,8 @@ add_custom_target(Git SOURCES ".gitignore")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+qt5_add_resources(RESOURCES games/gamesData.qrc)
+
 if(ANDROID)
 	add_library(queens_game SHARED
 		${SRC}main.cpp
@@ -55,6 +57,7 @@ if(ANDROID)
 		${SRC}gridwidget.cpp
 		${INC}gridwidget.h
 		${TS_FILES}
+		${RESOURCES}
 	)
 else()
 	add_executable(queens_game
@@ -73,6 +76,7 @@ else()
 		${SRC}gridwidget.cpp
 		${INC}gridwidget.h
 		${TS_FILES}
+		${RESOURCES}
 	)
 endif()
 

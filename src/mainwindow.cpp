@@ -39,7 +39,7 @@ void MainWindow::openGameDir(const QString dir)
 	{
 		QFileInfo info(filePath);
 		QString fileName = info.fileName();
-		emit sendGameFile(fileName);
+		emit sendGameFile(filePath);
 	}
 }
 

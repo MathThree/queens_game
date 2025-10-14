@@ -6,7 +6,7 @@ GameModel::GameModel(QObject *parent) : QObject(parent), offsets{-1, 1}
 
 void GameModel::loadGameFile(QString gameName)
 {
-	QFile file("../queens_game/games/" + gameName);
+	QFile file(/*"../queens_game/games/" + */gameName);
 
 	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return;
