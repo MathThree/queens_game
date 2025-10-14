@@ -74,3 +74,6 @@ Thumbs.db
 # Doxygen output
 documentation/html/*
 documentation/latex/*
+
+# CMakeLists.txt.user
+CMakeLists.txt.user
