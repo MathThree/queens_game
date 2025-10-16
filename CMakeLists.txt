@@ -1,89 +1,85 @@
-cmake_minimum_required(VERSION 3.5)
-
+cmake_minimum_required(VERSION 3.19)
 project(queens_game LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# QtCreator supports the following variables for Android, which are identical to qmake Android variables.
-# Check http://doc.qt.io/qt-5/deployment-android.html for more information.
-# They need to be set before the find_package(Qt5 ...) call.
+# --- Detection of Qt 5 or Qt 6 ---
+find_package(Qt6 COMPONENTS Widgets LinguistTools QUIET)
+if(Qt6_FOUND)
+    message(STATUS "Using Qt 6")
+    set(QT_VERSION_MAJOR 6)
+else()
+    message(STATUS "Using Qt 5")
+    find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
+    set(QT_VERSION_MAJOR 5)
+endif()
 
-#if(ANDROID)
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
-#        set(ANDROID_EXTRA_LIBS
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
-#    endif()
-#endif()
-
-find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
-
+# --- Translation and source files ---
 set(TS_FILES i18n/queens_game_fr_FR.ts)
 set(SRC src/)
 set(INC include/)
 
 file(GLOB GAMES "games/*")
-
 add_custom_target(games SOURCES ${GAMES})
-add_custom_target(Doc SOURCES "documentation/Doxyfile")
-add_custom_target(Git SOURCES ".gitignore")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-qt5_add_resources(RESOURCES games/gamesData.qrc)
-
-if(ANDROID)
-	add_library(queens_game SHARED
-		${SRC}main.cpp
-		${SRC}mainwindow.cpp
-		${INC}mainwindow.h
-		${SRC}mainwindow.ui
-		${SRC}gamepresenter.cpp
-		${INC}gamepresenter.h
-		${SRC}gamemodel.cpp
-		${INC}gamemodel.h
-		${SRC}cellbutton.cpp
-		${INC}cellbutton.h
-		${SRC}gridcontainer.cpp
-		${INC}gridcontainer.h
-		${SRC}gridwidget.cpp
-		${INC}gridwidget.h
-		${TS_FILES}
-		${RESOURCES}
-	)
+# --- Qt Ressources ---
+if(${QT_VERSION_MAJOR} EQUAL 6)
+    qt_add_resources(RESOURCES games/gamesData.qrc)
 else()
-	add_executable(queens_game
-		${SRC}main.cpp
-		${SRC}mainwindow.cpp
-		${INC}mainwindow.h
-		${SRC}mainwindow.ui
-		${SRC}gamepresenter.cpp
-		${INC}gamepresenter.h
-		${SRC}gamemodel.cpp
-		${INC}gamemodel.h
-		${SRC}cellbutton.cpp
-		${INC}cellbutton.h
-		${SRC}gridcontainer.cpp
-		${INC}gridcontainer.h
-		${SRC}gridwidget.cpp
-		${INC}gridwidget.h
-		${TS_FILES}
-		${RESOURCES}
-	)
+    qt5_add_resources(RESOURCES games/gamesData.qrc)
 endif()
 
-target_link_libraries(queens_game PRIVATE Qt5::Widgets)
-
-target_include_directories(queens_game PRIVATE
-	${CMAKE_CURRENT_BINARY_DIR}/queens_game_autogen/include
+# --- Application files ---
+set(APP_SOURCES
+    ${SRC}main.cpp
+    ${SRC}mainwindow.cpp
+    ${INC}mainwindow.h
+    ${SRC}mainwindow.ui
+    ${SRC}gamepresenter.cpp
+    ${INC}gamepresenter.h
+    ${SRC}gamemodel.cpp
+    ${INC}gamemodel.h
+    ${SRC}cellbutton.cpp
+    ${INC}cellbutton.h
+    ${SRC}gridcontainer.cpp
+    ${INC}gridcontainer.h
+    ${SRC}gridwidget.cpp
+    ${INC}gridwidget.h
+    ${TS_FILES}
+    ${RESOURCES}
 )
 
-qt5_add_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+# --- Target definition ---
+qt_standard_project_setup()
+
+qt_add_executable(queens_game
+    WIN32 MACOSX_BUNDLE
+    ${APP_SOURCES}
+)
+
+# --- Linker ---
+if(${QT_VERSION_MAJOR} EQUAL 6)
+    target_link_libraries(queens_game PRIVATE Qt::Core Qt::Widgets)
+else()
+    target_link_libraries(queens_game PRIVATE Qt5::Widgets)
+endif()
+
+# --- WebAssembly deployment ---
+qt_generate_deploy_app_script(
+    TARGET queens_game
+    OUTPUT_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/deploy_script
+    NO_UNSUPPORTED_PLATFORM_ERROR
+)
+# install(SCRIPT ${deploy_script})
+
+# --- Auto-generated headers ---
+target_include_directories(queens_game PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}/queens_game_autogen/include
+)

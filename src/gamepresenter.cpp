@@ -2,12 +2,12 @@
 
 GamePresenter::GamePresenter(GameModel *model, MainWindow *view, QObject *parent) : QObject(parent), _model(model), _view(view)
 {
-	connect(_view, &MainWindow::clicked, this, &GamePresenter::handleCellClicked);
-	connect(_view, &MainWindow::chooseGameclicked, this, &GamePresenter::handleChooseGame);
-	connect(_view, &MainWindow::sendGameFile, this, &GamePresenter::handleGetGameFile);
-	connect(_view, &MainWindow::askFilter, this, &GamePresenter::handleAskFilter);
-	connect(_view, &MainWindow::hovered, this, &GamePresenter::handleCellHovered);
-	connect(_view, &MainWindow::askHelp, this, &GamePresenter::handleAskHelp);
+    connect(_view, &MainWindow::clicked, this, &GamePresenter::handleCellClicked);
+    connect(_view, &MainWindow::chooseGameclicked, this, &GamePresenter::handleChooseGame);
+    connect(_view, &MainWindow::sendGameFile, this, &GamePresenter::handleGetGameFile);
+    connect(_view, &MainWindow::askFilter, this, &GamePresenter::handleAskFilter);
+    connect(_view, &MainWindow::hovered, this, &GamePresenter::handleCellHovered);
+    connect(_view, &MainWindow::askHelp, this, &GamePresenter::handleAskHelp);
 
 	connect(_model, &GameModel::debug, this, &GamePresenter::handleModelDebug);
 	connect(_model, &GameModel::sendGameName, this, &GamePresenter::handleGetGameName);

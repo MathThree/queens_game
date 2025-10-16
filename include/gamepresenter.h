@@ -15,7 +15,7 @@ class GamePresenter : public QObject
 {
 	Q_OBJECT
 public:
-	GamePresenter(GameModel *model = nullptr, MainWindow *view = nullptr, QObject *parent = nullptr);
+    GamePresenter(GameModel *model = nullptr, MainWindow *view = nullptr, QObject *parent = nullptr);
 
 	void initCells();
 
@@ -33,7 +33,7 @@ public slots:
 
 private:
 	GameModel *_model;
-	MainWindow *_view;
+    MainWindow *_view;
 
 signals:
 

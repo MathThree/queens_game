@@ -21,7 +21,7 @@ void GameModel::loadGameFile(QString gameName)
 	setSize(line.toInt());
 
 	line = in.readLine();
-	QStringList numbers = line.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
+    QStringList numbers = line.split(QRegularExpression("\\s+"), QS_SKIP_EMPTY);
 	setQueens(numbers);
 
 	line = in.readAll();
@@ -53,7 +53,7 @@ void GameModel::setZones(const QStringList zoneList)
 {
 	for (int i=0; i<zoneList.size(); ++i)
 	{
-		QStringList line = zoneList.at(i).split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
+        QStringList line = zoneList.at(i).split(QRegularExpression("\\s+"), QS_SKIP_EMPTY);
 		for (int j=0; j<line.size(); ++j)
 		{
 			int colorZone = line.at(j).toInt();

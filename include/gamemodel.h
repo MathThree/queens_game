@@ -1,6 +1,23 @@
 #ifndef GAMEMODEL_H
 #define GAMEMODEL_H
 
+#pragma once
+
+#include <QtGlobal>
+#include <QString>
+
+#if QT_VERSION_MAJOR >= 6
+#define QS_SKIP_EMPTY Qt::SkipEmptyParts
+#define QS_KEEP_EMPTY Qt::KeepEmptyParts
+#define QS_CASE_INSENSITIVE Qt::CaseInsensitive
+#define QS_CASE_SENSITIVE Qt::CaseSensitive
+#else
+#define QS_SKIP_EMPTY QString::SkipEmptyParts
+#define QS_KEEP_EMPTY QString::KeepEmptyParts
+#define QS_CASE_INSENSITIVE QString::CaseInsensitive
+#define QS_CASE_SENSITIVE QString::CaseSensitive
+#endif
+
 #include <QObject>
 #include <vector>
 #include <list>

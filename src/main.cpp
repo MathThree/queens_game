@@ -11,21 +11,22 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QTranslator translator;
+    //QTranslator translator;
 
-	translator.load("../queens_game/qm/queens_game_fr_FR.qm");
-	a.installTranslator(&translator);
+    //translator.load("../queens_game/qm/queens_game_fr_FR.qm");
+    //a.installTranslator(&translator);
 
-	MainWindow view;
-	GameModel model;
-	GamePresenter presenter(&model, &view);
 
-	QString level = ":/games/002.txt";
-	model.loadGameFile(level);
-	view.initCellGrid(model.getSize());
-	view.setCellGridSize(model.getSize());
-	presenter.initCells();
+    MainWindow view;
+    GameModel model;
+    GamePresenter presenter(&model, &view);
 
-	view.show();
+    QString level = ":/games/002.txt";
+    model.loadGameFile(level);
+    view.initCellGrid(model.getSize());
+    view.setCellGridSize(model.getSize());
+    presenter.initCells();
+
+    view.show();
 	return a.exec();
 }

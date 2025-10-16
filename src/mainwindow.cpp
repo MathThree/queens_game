@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 
 	setColorTheme(QColor(55, 55, 98));
 
-	setAttribute(Qt::WA_TranslucentBackground);
-	setWindowFlags(Qt::FramelessWindowHint);
+    //setAttribute(Qt::WA_TranslucentBackground);
+    //setWindowFlags(Qt::FramelessWindowHint);
 }
 
 MainWindow::~MainWindow()
