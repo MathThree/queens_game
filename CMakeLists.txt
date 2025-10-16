@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.16)
 project(queens_game LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -57,12 +57,19 @@ set(APP_SOURCES
 )
 
 # --- Target definition ---
-qt_standard_project_setup()
+if(${QT_VERSION_MAJOR} EQUAL 6)
+	qt_standard_project_setup()
+	qt_add_executable(queens_game
+		WIN32 MACOSX_BUNDLE
+		${APP_SOURCES}
+	)
+else()
+	add_executable(queens_game
+		WIN32 MACOSX_BUNDLE
+		${APP_SOURCES}
+	)
+endif()
 
-qt_add_executable(queens_game
-    WIN32 MACOSX_BUNDLE
-    ${APP_SOURCES}
-)
 
 # --- Linker ---
 if(${QT_VERSION_MAJOR} EQUAL 6)
@@ -72,12 +79,13 @@ else()
 endif()
 
 # --- WebAssembly deployment ---
-qt_generate_deploy_app_script(
-    TARGET queens_game
-    OUTPUT_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/deploy_script
-    NO_UNSUPPORTED_PLATFORM_ERROR
-)
-# install(SCRIPT ${deploy_script})
+if(${QT_VERSION_MAJOR} EQUAL 6)
+	qt_generate_deploy_app_script(
+		TARGET queens_game
+		OUTPUT_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/deploy_script
+		NO_UNSUPPORTED_PLATFORM_ERROR
+		)
+endif()
 
 # --- Auto-generated headers ---
 target_include_directories(queens_game PRIVATE

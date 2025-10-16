@@ -89,16 +89,16 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <property name="leftMargin">
-     <number>90</number>
+     <number>9</number>
     </property>
     <property name="topMargin">
-     <number>90</number>
+     <number>9</number>
     </property>
     <property name="rightMargin">
-     <number>90</number>
+     <number>9</number>
     </property>
     <property name="bottomMargin">
-     <number>90</number>
+     <number>9</number>
     </property>
     <item>
      <widget class="QWidget" name="widget" native="true">
@@ -115,7 +115,7 @@
        </size>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0">
-       <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignBottom">
+       <item>
         <widget class="QLabel" name="gameName">
          <property name="font">
           <font>
@@ -175,7 +175,7 @@ border: 2px dashed rgb(255, 0, 0); */
           </property>
           <layout class="QGridLayout" name="gameGrid">
            <property name="sizeConstraint">
-            <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+            <enum>QLayout::SetDefaultConstraint</enum>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -214,7 +214,7 @@ border-radius: 0px;</string>
          </widget>
         </widget>
        </item>
-       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+       <item>
         <widget class="QWidget" name="buttonContainer" native="true">
          <property name="minimumSize">
           <size>
@@ -325,12 +325,13 @@ QPushButton:pressed {
        <font>
         <family>Courier</family>
         <pointsize>8</pointsize>
+        <weight>75</weight>
         <bold>true</bold>
         <kerning>true</kerning>
        </font>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
      </widget>
     </item>
@@ -342,7 +343,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>819</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
