@@ -4,6 +4,7 @@
 #include "cellbutton.h"
 #include "gridcontainer.h"
 #include "gridwidget.h"
+#include "levelselector.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -36,7 +37,8 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
-	void openGameDir(const QString dir);
+    void openGameDir(const QString dir);
+    void openGameFile(const QString filePath);
 	void initCellGrid(const int n);
 	void setCellGridSize(const int n);
 	void setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<bool, 4>& corners);
@@ -54,16 +56,18 @@ signals:
 	void hovered(const int row, const int col);
 	void chooseGameclicked();
 	void sendGameFile(QString fileName);
-	void askHelp();
+    void askHelp();
 
-public slots:
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
-	QString debugText;
-	Ui::MainWindow *ui;
-	vector<vector<CellButton*>> cells;
-	GridContainer *gameWidget;
-	GridWidget *gridWidget;
+    Ui::MainWindow *ui;
+    GridContainer *gameWidget;
+    GridWidget *gridWidget;
+    LevelSelector *levelSelector;
+    QString debugText;
+    vector<vector<CellButton*>> cells;
 	vector<QString> symbols = {"", "•", "♛", "·"};
 	QColor colorTheme = Qt::black;
 

@@ -25,7 +25,7 @@ public slots:
 	void handleModelDebug(const QString debugText, const bool keep);
 	void handleVictory();
 	void handleChooseGame();
-	void handleGetGameFile(const QString fileName);
+    void handleGetGameFile(const QString filePath);
 	void handleGetGameName(const QString gameName);
 	void handleAskFilter(const int row, const int col);
 	void handleCellHovered(const int row, const int col);

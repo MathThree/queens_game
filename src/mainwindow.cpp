@@ -6,18 +6,23 @@
 MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	connect(ui->chooseGameButton, &QPushButton::clicked, this, &MainWindow::chooseGameclicked);
+
+    gameWidget = ui->gameWidget;
+    gridWidget = ui->gridWidget;
+    levelSelector = new LevelSelector(ui->centralwidget);
+    levelSelector->raise();
+
+    //connect(ui->chooseGameButton, &QPushButton::clicked, this, &MainWindow::chooseGameclicked);
+    connect(ui->chooseGameButton, &QPushButton::clicked, levelSelector, &LevelSelector::show);
 	connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::askHelp);
+    connect(levelSelector, &LevelSelector::sendGameFile, this, &MainWindow::sendGameFile);
 
 	QShortcut *toggleDebug = new QShortcut(QKeySequence(Qt::Key_F3), this);
 	connect(toggleDebug, &QShortcut::activated, this, [this]() {
 		ui->debugText->setVisible(!ui->debugText->isVisible());
 	});
 
-	ui->debugText->setVisible(false);
-
-	gameWidget = ui->gameWidget;
-	gridWidget = ui->gridWidget;
+    ui->debugText->setVisible(false);
 
 	gridWidget->setFirstCell(ui->firstCell);
 
@@ -41,6 +46,11 @@ void MainWindow::openGameDir(const QString dir)
 		QString fileName = info.fileName();
 		emit sendGameFile(filePath);
 	}
+}
+
+void MainWindow::openGameFile(const QString filePath)
+{
+    emit sendGameFile(filePath);
 }
 
 void MainWindow::initCellGrid(const int n)
@@ -143,6 +153,16 @@ void MainWindow::victory()
 {
 	qDebug() << "V -> VICTORY!";
 	gameWidget->setEnabled(false);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    int x = ui->centralwidget->x();
+    int y = ui->centralwidget->y();
+    int w = ui->centralwidget->width();
+    int h = ui->centralwidget->height();
+    levelSelector->setGeometry(x, y, w, h);
 }
 
 void MainWindow::debug(QString newText, bool keep)

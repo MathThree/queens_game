@@ -48,9 +48,10 @@ void GamePresenter::handleChooseGame()
 	_view->openGameDir(_model->getGameDir());
 }
 
-void GamePresenter::handleGetGameFile(const QString fileName)
+void GamePresenter::handleGetGameFile(const QString filePath)
 {
-	_model->loadGameFile(fileName);
+    qDebug() << "LS-> file: " << filePath;
+    _model->loadGameFile(filePath);
 	_view->setCellGridSize(_model->getSize());
 	initCells();
 }

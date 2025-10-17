@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- Detection of Qt 5 or Qt 6 ---
 find_package(Qt6 COMPONENTS Widgets LinguistTools QUIET)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 if(Qt6_FOUND)
     message(STATUS "Using Qt 6")
     set(QT_VERSION_MAJOR 6)
@@ -52,6 +53,11 @@ set(APP_SOURCES
     ${INC}gridcontainer.h
     ${SRC}gridwidget.cpp
     ${INC}gridwidget.h
+    ${SRC}levelselector.cpp
+    ${INC}levelselector.h
+    ${SRC}levelselector.ui
+    ${SRC}levelbutton.cpp
+    ${INC}levelbutton.h
     ${TS_FILES}
     ${RESOURCES}
 )
@@ -61,7 +67,7 @@ if(${QT_VERSION_MAJOR} EQUAL 6)
 	qt_standard_project_setup()
 	qt_add_executable(queens_game
 		WIN32 MACOSX_BUNDLE
-		${APP_SOURCES}
+                ${APP_SOURCES}
 	)
 else()
 	add_executable(queens_game
@@ -76,6 +82,7 @@ if(${QT_VERSION_MAJOR} EQUAL 6)
     target_link_libraries(queens_game PRIVATE Qt::Core Qt::Widgets)
 else()
     target_link_libraries(queens_game PRIVATE Qt5::Widgets)
+target_link_libraries(queens_game PRIVATE Qt6::Widgets)
 endif()
 
 # --- WebAssembly deployment ---
