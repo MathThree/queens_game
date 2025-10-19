@@ -23,7 +23,7 @@ void GridWidget::paintEvent(QPaintEvent *event)
 
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
-	painter.setBrush(colorTheme);
+	painter.setBrush(colorTheme[0]);
 	painter.setPen(Qt::NoPen);
 	painter.drawRoundedRect(rect(), radius, radius);
 }

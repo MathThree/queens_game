@@ -50,7 +50,6 @@ void GamePresenter::handleChooseGame()
 
 void GamePresenter::handleGetGameFile(const QString filePath)
 {
-    qDebug() << "LS-> file: " << filePath;
     _model->loadGameFile(filePath);
 	_view->setCellGridSize(_model->getSize());
 	initCells();

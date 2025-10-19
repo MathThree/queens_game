@@ -23,7 +23,7 @@ class GridWidget : public QWidget
 public:
 	explicit GridWidget(QWidget *parent = nullptr);
 	void setFirstCell(CellButton* cell) { firstCell = cell; }
-	void setColorTheme(QColor color) { colorTheme = color; }
+	void setColorTheme(vector<QColor> color) { colorTheme = color; }
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
@@ -34,7 +34,7 @@ private:
 	CellButton *firstCell = nullptr;
 	CellButton *startCell = nullptr;
 	QPoint startPoint;
-	QColor colorTheme = Qt::black;
+	vector<QColor> colorTheme;
 };
 
 #endif // GRIDWIDGET_H

@@ -69,8 +69,9 @@ void CellButton::updateDisplay()
 	.arg(_corners[1] ? cornerValue*cornerFactor : 0)
 	.arg(_corners[2] ? cornerValue*cornerFactor : 0)
 	.arg(_corners[3] ? cornerValue*cornerFactor : 0)
-	.arg(colorTheme.name())
-	.arg(borderColor.name())
+	.arg(colorTheme[0].name())
+	.arg(_color.darker(130).name())
+	//.arg(borderColor.name())
 	);
 }
 

@@ -5,6 +5,12 @@
 #include <QPushButton>
 #include <QString>
 #include <QFileInfo>
+#include <QDebug>
+#include <QFont>
+#include <QColor>
+#include <vector>
+
+using namespace std;
 
 class LevelButton : public QPushButton
 {
@@ -12,10 +18,17 @@ class LevelButton : public QPushButton
 public:
     explicit LevelButton(const QString &filePath, QWidget *parent = nullptr);
 
-    QString getFilePath() { qDebug() << "LS-> return: " << _filePath; return _filePath; }
+	QString getFilePath() { return _filePath; }
+	void setColorTheme(vector<QColor> color) { colorTheme = color; }
+	void updateDisplay();
+
+protected:
+	void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QString _filePath;
+	QString _filePath;
+	vector<QColor> colorTheme = {Qt::black, Qt::white};
+	int cornerRadius = 15;
 };
 
 #endif // LEVELBUTTON_H

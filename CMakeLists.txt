@@ -10,13 +10,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- Detection of Qt 5 or Qt 6 ---
 find_package(Qt6 COMPONENTS Widgets LinguistTools QUIET)
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
 if(Qt6_FOUND)
-    message(STATUS "Using Qt 6")
+	message(STATUS "Using Qt 6")
+	find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
     set(QT_VERSION_MAJOR 6)
 else()
     message(STATUS "Using Qt 5")
-    find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
+	find_package(Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
     set(QT_VERSION_MAJOR 5)
 endif()
 
@@ -79,10 +79,9 @@ endif()
 
 # --- Linker ---
 if(${QT_VERSION_MAJOR} EQUAL 6)
-    target_link_libraries(queens_game PRIVATE Qt::Core Qt::Widgets)
+	target_link_libraries(queens_game PRIVATE Qt::Core Qt::Widgets)
 else()
-    target_link_libraries(queens_game PRIVATE Qt5::Widgets)
-target_link_libraries(queens_game PRIVATE Qt6::Widgets)
+	target_link_libraries(queens_game PRIVATE Qt5::Widgets)
 endif()
 
 # --- WebAssembly deployment ---

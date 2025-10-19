@@ -12,8 +12,7 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
     levelSelector = new LevelSelector(ui->centralwidget);
     levelSelector->raise();
 
-    //connect(ui->chooseGameButton, &QPushButton::clicked, this, &MainWindow::chooseGameclicked);
-    connect(ui->chooseGameButton, &QPushButton::clicked, levelSelector, &LevelSelector::show);
+	connect(ui->chooseGameButton, &QPushButton::clicked, levelSelector, &LevelSelector::handleShowOverlay);
 	connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::askHelp);
     connect(levelSelector, &LevelSelector::sendGameFile, this, &MainWindow::sendGameFile);
 
@@ -26,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 
 	gridWidget->setFirstCell(ui->firstCell);
 
-	setColorTheme(QColor(55, 55, 98));
+	setColorTheme({QColor(55, 55, 98), QColor(76, 76, 136)});
 
     //setAttribute(Qt::WA_TranslucentBackground);
     //setWindowFlags(Qt::FramelessWindowHint);
@@ -162,7 +161,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     int y = ui->centralwidget->y();
     int w = ui->centralwidget->width();
     int h = ui->centralwidget->height();
-    levelSelector->setGeometry(x, y, w, h);
+	levelSelector->setGeometry(x, y, w, h);
 }
 
 void MainWindow::debug(QString newText, bool keep)

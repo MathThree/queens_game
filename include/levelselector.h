@@ -10,6 +10,12 @@
 #include <QDir>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QScrollArea>
+#include <QColor>
+#include <QScrollBar>
+#include <vector>
+
+using namespace std;
 
 namespace Ui {
 class LevelSelector;
@@ -23,18 +29,25 @@ public:
 	explicit LevelSelector(QWidget *parent = nullptr);
 	~LevelSelector();
 
+	void setColorTheme(vector<QColor> color) { colorTheme = color; }
+	void updateDisplay();
+
 signals:
     void sendGameFile(QString fileName);
 
+public slots:
+	void handleShowOverlay();
+
 private:
 	Ui::LevelSelector *ui;
-    QWidget *levelWidget;
+	QWidget *levelWidget;
+	vector<QColor> colorTheme;
 
-    void addLevels();
+	void addLevels();
+	void updateButtonSize();
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
+	void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif // LEVELSELECTOR_H

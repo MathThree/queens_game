@@ -23,7 +23,7 @@ public:
 	CellButton(const int row, const int col, QWidget* parent = nullptr, const QColor color = QColor("white"));
 	void setCellValue(const QString value) { this->setText(value); }
 	void setColors(const pair<QColor, QColor> colors) { _color = colors.first; borderColor = colors.second; }
-	void setColorTheme(const QColor color) { colorTheme = color; }
+	void setColorTheme(vector<QColor> color) { colorTheme = color; }
 	void setBorders(const array<int, 4>& borders) { _borders = borders; }
 	void setCorners(const array<bool, 4>& corners) { _corners = corners; }
 	void setVisitID() { lastVisitID = globalVisitID; }
@@ -49,7 +49,7 @@ private:
 	int _col;
 	QColor _color;
 	QColor borderColor;
-	QColor colorTheme = Qt::black;
+	vector<QColor> colorTheme = {Qt::black, Qt::white};
 	array<int, 4> _borders;
 	array<bool, 4> _corners;
 	qint64 lastVisitID = 0;

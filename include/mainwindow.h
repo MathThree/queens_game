@@ -44,7 +44,7 @@ public:
 	void setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<bool, 4>& corners);
 	void setCellValue(const int row, const int col, const int value);
 	void setGameName(const QString gameName);
-	void setColorTheme(QColor color) { colorTheme = color; }
+	void setColorTheme(vector<QColor>color) { colorTheme = color; }
 	void updateColorTheme();
 	void victory();
 
@@ -69,7 +69,7 @@ private:
     QString debugText;
     vector<vector<CellButton*>> cells;
 	vector<QString> symbols = {"", "•", "♛", "·"};
-	QColor colorTheme = Qt::black;
+	vector<QColor> colorTheme;
 
 	void connectCell(const CellButton *cell);
 };
