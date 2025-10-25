@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "gamemodel.h"
 #include "gamepresenter.h"
+#include "thememanager.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -11,22 +12,24 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-    //QTranslator translator;
+	//QTranslator translator;
 
-    //translator.load("../queens_game/qm/queens_game_fr_FR.qm");
-    //a.installTranslator(&translator);
+	//translator.load("../queens_game/qm/queens_game_fr_FR.qm");
+	//a.installTranslator(&translator);
 
+	QString themeName = "gilded";
+	ThemeManager::instance().applyTheme(themeName);
 
-    MainWindow view;
+	MainWindow view;
     GameModel model;
     GamePresenter presenter(&model, &view);
 
-    QString level = "002.txt";
+	QString level = "001.txt";
     model.loadGameFile(level);
     view.initCellGrid(model.getSize());
     view.setCellGridSize(model.getSize());
     presenter.initCells();
 
-    view.show();
+	view.show();
 	return a.exec();
 }

@@ -53,6 +53,7 @@ void GamePresenter::handleGetGameFile(const QString filePath)
     _model->loadGameFile(filePath);
 	_view->setCellGridSize(_model->getSize());
 	initCells();
+	_view->updateGridWidget();
 }
 
 void GamePresenter::handleGetGameName(const QString gameName)

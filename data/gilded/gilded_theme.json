@@ -1,0 +1,10 @@
+{
+	"name": "Gilded",
+	"colors": {
+		"primary": [187, 160, 72],
+		"secondary": [27, 23, 18],
+		"p_hover": [221, 185, 69],
+		"s_hover": [46, 35, 18]
+	}
+}
+

@@ -1,0 +1,10 @@
+{
+	"name": "Nature",
+	"colors": {
+		"primary": [91, 177, 74],
+		"secondary": [149, 55, 52],
+		"p_hover": [39, 152, 17],
+		"s_hover": [140, 95, 94]
+	}
+}
+

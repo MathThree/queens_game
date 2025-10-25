@@ -12,21 +12,11 @@ LevelButton::LevelButton(const QString &filePath, QWidget *parent) : QPushButton
 
 void LevelButton::updateDisplay()
 {
-	QString style = QString(
-		"QPushButton {"
-		" background-color: %1;"
-		" border: none;"
-		" border-radius: %2px;"
-		" color: %3;"
-		"}"
-		"QPushButton:hover {"
-		" color: white;"
-		"}"
-	).arg(colorTheme[0].name())
-	 .arg(cornerRadius)
-	 .arg(QColor(170, 170, 170).name());
+	QString qss = TM::instance().getStyle("overlayButtons");
 
-	setStyleSheet(style);
+	qss.replace("%CORNER_RADIUS%", QString::number(cornerRadius));
+
+	this->setStyleSheet(qss);
 }
 
 void LevelButton::resizeEvent(QResizeEvent *event)

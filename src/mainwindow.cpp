@@ -11,10 +11,14 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
     gridWidget = ui->gridWidget;
     levelSelector = new LevelSelector(ui->centralwidget);
     levelSelector->raise();
+	settingsOverlay = new SettingsOverlay(ui->centralwidget);
+	settingsOverlay->raise();
 
 	connect(ui->chooseGameButton, &QPushButton::clicked, levelSelector, &LevelSelector::handleShowOverlay);
-	connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::askHelp);
-    connect(levelSelector, &LevelSelector::sendGameFile, this, &MainWindow::sendGameFile);
+	connect(ui->settingsButton, &QPushButton::clicked, settingsOverlay, &SettingsOverlay::handleShowOverlay);
+	connect(levelSelector, &LevelSelector::sendGameFile, this, &MainWindow::sendGameFile);
+	connect(settingsOverlay, &SettingsOverlay::updateThemeDisplay, this, &MainWindow::handleUpdateThemeDisplay);
+	connect(settingsOverlay, &SettingsOverlay::askHelp, this, &MainWindow::askHelp);
 
 	QShortcut *toggleDebug = new QShortcut(QKeySequence(Qt::Key_F3), this);
 	connect(toggleDebug, &QShortcut::activated, this, [this]() {
@@ -25,10 +29,9 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 
 	gridWidget->setFirstCell(ui->firstCell);
 
-	setColorTheme({QColor(55, 55, 98), QColor(76, 76, 136)});
-
-    //setAttribute(Qt::WA_TranslucentBackground);
-    //setWindowFlags(Qt::FramelessWindowHint);
+	//setAttribute(Qt::WA_TranslucentBackground);
+	//setWindowFlags(Qt::FramelessWindowHint);
+	showMaximized();
 }
 
 MainWindow::~MainWindow()
@@ -95,8 +98,7 @@ void MainWindow::setCellGridSize(const int n)
 		}
 	}
 	gameWidget->setEnabled(true);
-	gameWidget->update();
-	updateColorTheme();
+	updateDisplay();
 }
 
 void MainWindow::setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<bool, 4>& corners)
@@ -128,17 +130,34 @@ void MainWindow::setGameName(const QString gameName)
 	ui->gameName->setText(gameName);
 }
 
-void MainWindow::updateColorTheme()
+void MainWindow::updateDisplay()
 {
-	gridWidget->setColorTheme(colorTheme);
 	for (auto &row : cells)
 	{
 		for (auto &cell : row)
 		{
-			cell->setColorTheme(colorTheme);
 			cell->updateDisplay();
 		}
 	}
+
+	QString qss0 = TM::instance().getStyle("central");
+	QString qss1 = TM::instance().getStyle("centralButtons");
+
+	ui->centralwidget->setStyleSheet(qss0);
+	ui->centralwidget->style()->unpolish(ui->centralwidget);
+	ui->centralwidget->style()->polish(ui->centralwidget);
+	ui->centralwidget->update();
+
+	ui->buttonContainer->setStyleSheet(qss1);
+	ui->buttonContainer->style()->unpolish(ui->buttonContainer);
+	ui->buttonContainer->style()->polish(ui->buttonContainer);
+	ui->buttonContainer->update();
+}
+
+void MainWindow::updateGridWidget()
+{
+	gridWidget->update();
+	QTimer::singleShot(0, [this](){ gameWidget->update(); }); // WebAssembly mandatory!
 }
 
 void MainWindow::connectCell(const CellButton *cell)
@@ -162,6 +181,14 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     int w = ui->centralwidget->width();
     int h = ui->centralwidget->height();
 	levelSelector->setGeometry(x, y, w, h);
+	settingsOverlay->setGeometry(x, y, w, h);
+}
+
+void MainWindow::handleUpdateThemeDisplay()
+{
+	updateDisplay();
+	levelSelector->updateDisplay();
+	settingsOverlay->updateDisplay();
 }
 
 void MainWindow::debug(QString newText, bool keep)

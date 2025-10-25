@@ -8,6 +8,7 @@ LevelSelector::LevelSelector(QWidget *parent)
     ui->setupUi(this);
 
 	levelWidget = ui->levelWidget;
+	ui->overlayWidget->raise();
 
     hide();
     setMouseTracking(true);
@@ -30,6 +31,11 @@ void LevelSelector::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
 	updateButtonSize();
+
+	ui->noiseWidget->setGeometry(rect());
+
+	int overlayWidth = ui->overlayWidget->width();
+	ui->overlayWidget->setGeometry(0, 0, overlayWidth, height());
 }
 
 void LevelSelector::addLevels()
@@ -63,26 +69,19 @@ void LevelSelector::updateDisplay()
 		LevelButton *button = qobject_cast<LevelButton*>(child);
 		if (button)
 		{
-			button->setColorTheme(colorTheme);
 			button->updateDisplay();
 		}
 	}
 
 	QScrollArea *scrollArea = ui->scrollArea;
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-	QScrollBar *vScroll = scrollArea->verticalScrollBar();
-	if (vScroll)
-	{
-		QColor darker = colorTheme[0].darker(130);
-		QString style = QString(
-					"QScrollBar:vertical { background: rgba(0,0,0,50); width:10px; border-radius:5px; }"
-					"QScrollBar::handle:vertical { background:%1; border-radius:5px; min-height:20px; }"
-					"QScrollBar::handle:vertical:hover { background:%2; }"
-					"QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height:0px; }"
-					).arg(colorTheme[0].name()).arg(darker.name());
 
-		vScroll->setStyleSheet(style);
-	}
+	QString qss = TM::instance().getStyle("overlay");
+
+	ui->overlayWidget->setStyleSheet(qss);
+	ui->overlayWidget->style()->unpolish(ui->overlayWidget);
+	ui->overlayWidget->style()->polish(ui->overlayWidget);
+	ui->overlayWidget->update();
 }
 
 void LevelSelector::updateButtonSize()

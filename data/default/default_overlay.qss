@@ -1,0 +1,70 @@
+#overlayWidget {
+	background-color: %PRIMARY%;
+}
+
+#overlayWidget QPushButton {
+	background-color: %SECONDARY%;
+	border: none;
+	border-radius: 6px;
+	padding: 4px 8px;
+	color: %PRIMARY%;
+}
+
+#overlayWidget QPushButton:hover {
+	background-color: %S_HOVER%;
+	color: %P_HOVER%;
+}
+
+
+
+#overlayWidget QRadioButton {
+	background-color: %SECONDARY%;
+	border: none;
+	border-radius: 6px;
+	padding: 4px 8px;
+	color: %PRIMARY%;
+}
+
+#overlayWidget QRadioButton:hover {
+	background-color: %S_HOVER%;
+	color: %P_HOVER%;
+}
+
+
+
+#overlayWidget QRadioButton::indicator {
+	width: 10px;
+	height: 10px;
+	border-radius: 7px;
+	background-color: %PRIMARY%;
+	border: 2px solid %PRIMARY%;
+}
+
+#overlayWidget QRadioButton::indicator:checked {
+	background-color: %SECONDARY%;
+	border: 2px solid %PRIMARY%;
+}
+
+
+
+#overlayWidget QScrollBar:vertical {
+	background-color: rgba(0,0,0,50);
+	width: 10px;
+	border-radius: 5px;
+}
+
+#overlayWidget QScrollBar::handle:vertical {
+	background-color: %SECONDARY%;
+	border-radius: 5px;
+	min-height: 20px;
+}
+
+#overlayWidget QScrollBar::handle:vertical:hover {
+	background-color: %S_HOVER%;
+}
+
+#overlayWidget QScrollBar::add-line:vertical,
+#overlayWidget QScrollBar::sub-line:vertical {
+	height: 0px;
+}
+

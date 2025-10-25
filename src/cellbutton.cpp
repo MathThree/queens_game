@@ -32,47 +32,22 @@ void CellButton::resetCellButton(int row, int col, const QColor color)
 
 void CellButton::updateDisplay()
 {
-	this->setStyleSheet(QString(
-	"QPushButton {"
-		"color: %11;"
-		"background-color: %1;"
-		"border-top: %2px solid %11;"
-		"border-right: %3px solid %11;"
-		"border-bottom: %4px solid %11;"
-		"border-left: %5px solid %11;"
-		"border-top-left-radius: %6px;"
-		"border-top-right-radius: %7px;"
-		"border-bottom-right-radius: %8px;"
-		"border-bottom-left-radius: %9px;"
-	"}"
-	"QPushButton:hover {"
-		"color: %11;"
-		"border-top: %2px solid %11;"
-		"border-right: %3px solid %11;"
-		"border-bottom: %4px solid %11;"
-		"border-left: %5px solid %11;"
-	"}"
-	"QPushButton:disabled {"
-		"color: %10;"
-		"border-top: 0px solid %11;"
-		"border-right: 0px solid %11;"
-		"border-bottom: 0px solid %11;"
-		"border-left: 0px solid %11;"
-	"}"
-	)
-	.arg(_color.name())
-	.arg(_borders[0]*width()*0.03)
-	.arg(_borders[1]*width()*0.03)
-	.arg(_borders[2]*width()*0.03)
-	.arg(_borders[3]*width()*0.03)
-	.arg(_corners[0] ? cornerValue*cornerFactor : 0)
-	.arg(_corners[1] ? cornerValue*cornerFactor : 0)
-	.arg(_corners[2] ? cornerValue*cornerFactor : 0)
-	.arg(_corners[3] ? cornerValue*cornerFactor : 0)
-	.arg(colorTheme[0].name())
-	.arg(_color.darker(130).name())
-	//.arg(borderColor.name())
-	);
+	QString qss = TM::instance().getStyle("cell");
+
+	qss.replace("%BORDER_TOP%", QString::number(_borders[0] * width() * 0.03));
+	qss.replace("%BORDER_RIGHT%", QString::number(_borders[1] * width() * 0.03));
+	qss.replace("%BORDER_BOTTOM%", QString::number(_borders[2] * width() * 0.03));
+	qss.replace("%BORDER_LEFT%", QString::number(_borders[3] * width() * 0.03));
+
+	qss.replace("%CORNER_RADIUS_TL%", QString::number(_corners[0] ? cornerValue * cornerFactor : 0));
+	qss.replace("%CORNER_RADIUS_TR%", QString::number(_corners[1] ? cornerValue * cornerFactor : 0));
+	qss.replace("%CORNER_RADIUS_BR%", QString::number(_corners[2] ? cornerValue * cornerFactor : 0));
+	qss.replace("%CORNER_RADIUS_BL%", QString::number(_corners[3] ? cornerValue * cornerFactor : 0));
+
+	qss.replace("%CELL_COLOR%", _color.name());
+	qss.replace("%CELL_DARK%", _color.darker(150).name());
+
+	this->setStyleSheet(qss);
 }
 
 void CellButton::resizeEvent(QResizeEvent *event)

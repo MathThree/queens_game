@@ -1,7 +1,0 @@
-<RCC>
-	<qresource prefix="/games">
-		<file>000.txt</file>
-		<file>001.txt</file>
-		<file>002.txt</file>
-	</qresource>
-</RCC>

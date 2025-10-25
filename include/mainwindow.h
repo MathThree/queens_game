@@ -1,10 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "thememanager.h"
 #include "cellbutton.h"
 #include "gridcontainer.h"
 #include "gridwidget.h"
 #include "levelselector.h"
+#include "settingsoverlay.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -22,8 +24,11 @@
 #include <QRect>
 #include <QShortcut>
 #include <QKeySequence>
+#include <QStyle>
+#include <QTimer>
 
 using namespace std;
+using TM = ThemeManager;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -44,8 +49,8 @@ public:
 	void setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<bool, 4>& corners);
 	void setCellValue(const int row, const int col, const int value);
 	void setGameName(const QString gameName);
-	void setColorTheme(vector<QColor>color) { colorTheme = color; }
-	void updateColorTheme();
+	void updateDisplay();
+	void updateGridWidget();
 	void victory();
 
 	void debug(QString newText, bool keep = true);
@@ -58,6 +63,9 @@ signals:
 	void sendGameFile(QString fileName);
     void askHelp();
 
+private slots:
+	void handleUpdateThemeDisplay();
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
@@ -66,10 +74,11 @@ private:
     GridContainer *gameWidget;
     GridWidget *gridWidget;
     LevelSelector *levelSelector;
+	SettingsOverlay *settingsOverlay;
     QString debugText;
     vector<vector<CellButton*>> cells;
 	vector<QString> symbols = {"", "•", "♛", "·"};
-	vector<QColor> colorTheme;
+	Theme _theme;
 
 	void connectCell(const CellButton *cell);
 };

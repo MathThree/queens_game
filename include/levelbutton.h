@@ -1,6 +1,8 @@
 #ifndef LEVELBUTTON_H
 #define LEVELBUTTON_H
 
+#include "thememanager.h"
+
 #include <QWidget>
 #include <QPushButton>
 #include <QString>
@@ -9,8 +11,10 @@
 #include <QFont>
 #include <QColor>
 #include <vector>
+#include <QStyle>
 
 using namespace std;
+using TM = ThemeManager;
 
 class LevelButton : public QPushButton
 {
@@ -19,7 +23,6 @@ public:
     explicit LevelButton(const QString &filePath, QWidget *parent = nullptr);
 
 	QString getFilePath() { return _filePath; }
-	void setColorTheme(vector<QColor> color) { colorTheme = color; }
 	void updateDisplay();
 
 protected:
@@ -27,7 +30,6 @@ protected:
 
 private:
 	QString _filePath;
-	vector<QColor> colorTheme = {Qt::black, Qt::white};
 	int cornerRadius = 15;
 };
 

@@ -6,10 +6,15 @@ GameModel::GameModel(QObject *parent) : QObject(parent), offsets{-1, 1}
 
 void GameModel::loadGameFile(QString gameName)
 {
-    QFile file(":/games/" + gameName);
+	//qDebug() << "TM-> game name: " << gameName;
+
+	QFile file(":/games/" + gameName);
 
 	if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() << "TM-> game file: " << file.fileName();
 		return;
+	}
 
 	QFileInfo info(file);
 	emit sendGameName(info.completeBaseName());
@@ -21,7 +26,8 @@ void GameModel::loadGameFile(QString gameName)
 	setSize(line.toInt());
 
 	line = in.readLine();
-    QStringList numbers = line.split(QRegularExpression("\\s+"), QS_SKIP_EMPTY);
+	static QRegularExpression regex("\\s+");
+	QStringList numbers = line.split(regex, QS_SKIP_EMPTY);
 	setQueens(numbers);
 
 	line = in.readAll();
@@ -53,7 +59,8 @@ void GameModel::setZones(const QStringList zoneList)
 {
 	for (int i=0; i<zoneList.size(); ++i)
 	{
-        QStringList line = zoneList.at(i).split(QRegularExpression("\\s+"), QS_SKIP_EMPTY);
+		static QRegularExpression regex("\\s+");
+		QStringList line = zoneList.at(i).split(regex, QS_SKIP_EMPTY);
 		for (int j=0; j<line.size(); ++j)
 		{
 			int colorZone = line.at(j).toInt();

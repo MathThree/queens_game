@@ -1,0 +1,16 @@
+#buttonContainer QPushButton {
+	background: %PRIMARY%;
+	border: none;
+	border-radius: 6px;
+	padding: 4px 8px;
+	color: %SECONDARY%;
+}
+
+#buttonContainer QPushButton:hover {
+	color: %S_HOVER%;
+}
+
+#buttonContainer QPushButton:pressed {
+	color: %S_HOVER%;
+}
+

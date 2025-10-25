@@ -25,16 +25,20 @@ set(TS_FILES i18n/queens_game_fr_FR.ts)
 set(SRC src/)
 set(INC include/)
 
-file(GLOB GAMES "games/*")
-add_custom_target(games SOURCES ${GAMES})
+file(GLOB GAMES "data/*.txt")
+file(GLOB THEMES "data/*.json")
+file(GLOB DATA "data/gamesData.qrc")
+
+source_group("games" FILES ${GAMES})
+source_group("themes" FILES ${THEMES})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # --- Qt Ressources ---
 if(${QT_VERSION_MAJOR} EQUAL 6)
-    qt_add_resources(RESOURCES games/gamesData.qrc)
+	qt_add_resources(RESOURCES data/gamesData.qrc)
 else()
-    qt5_add_resources(RESOURCES games/gamesData.qrc)
+	qt5_add_resources(RESOURCES data/gamesData.qrc)
 endif()
 
 # --- Application files ---
@@ -58,6 +62,13 @@ set(APP_SOURCES
     ${SRC}levelselector.ui
     ${SRC}levelbutton.cpp
     ${INC}levelbutton.h
+	${SRC}thememanager.cpp
+	${INC}thememanager.h
+    ${SRC}settingsoverlay.cpp
+    ${INC}settingsoverlay.h
+    ${SRC}settingsoverlay.ui
+    ${SRC}themebutton.cpp
+    ${INC}themebutton.h
     ${TS_FILES}
     ${RESOURCES}
 )

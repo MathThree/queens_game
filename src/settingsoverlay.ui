@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LevelSelector</class>
- <widget class="QWidget" name="LevelSelector">
+ <class>SettingsOverlay</class>
+ <widget class="QWidget" name="SettingsOverlay">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -25,7 +25,7 @@
   <widget class="QWidget" name="overlayWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>670</x>
      <y>0</y>
      <width>191</width>
      <height>517</height>
@@ -78,19 +78,19 @@ QPushButton:hover {
        <bool>true</bool>
       </property>
       <property name="alignment">
-       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
       </property>
-      <widget class="QWidget" name="levelWidget">
+      <widget class="QWidget" name="colorsWidget">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
          <width>171</width>
-         <height>456</height>
+         <height>448</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">#levelWidget {
+        <string notr="true">#colorsWidget {
     background-color: transparent;
 }
 </string>
@@ -98,7 +98,7 @@ QPushButton:hover {
       </widget>
      </widget>
     </item>
-    <item>
+    <item alignment="Qt::AlignmentFlag::AlignLeft">
      <widget class="QWidget" name="widget_2" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -110,7 +110,7 @@ QPushButton:hover {
        <string notr="true"/>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item alignment="Qt::AlignRight">
+       <item>
         <widget class="QPushButton" name="closeOverlay">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -123,6 +123,22 @@ QPushButton:hover {
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QRadioButton" name="helpDisplay">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Help</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -131,8 +147,8 @@ QPushButton:hover {
   <widget class="QWidget" name="noiseWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>6</x>
-     <y>0</y>
+     <x>0</x>
+     <y>20</y>
      <width>851</width>
      <height>471</height>
     </rect>

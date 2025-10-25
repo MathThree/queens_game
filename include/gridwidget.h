@@ -1,7 +1,8 @@
 #ifndef GRIDWIDGET_H
 #define GRIDWIDGET_H
 
-#include <cellbutton.h>
+#include "cellbutton.h"
+#include "thememanager.h"
 
 #include <QWidget>
 #include <QMouseEvent>
@@ -16,6 +17,9 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QColor>
+#include <QSize>
+
+using TM = ThemeManager;
 
 class GridWidget : public QWidget
 {
@@ -23,7 +27,6 @@ class GridWidget : public QWidget
 public:
 	explicit GridWidget(QWidget *parent = nullptr);
 	void setFirstCell(CellButton* cell) { firstCell = cell; }
-	void setColorTheme(vector<QColor> color) { colorTheme = color; }
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
@@ -34,7 +37,6 @@ private:
 	CellButton *firstCell = nullptr;
 	CellButton *startCell = nullptr;
 	QPoint startPoint;
-	vector<QColor> colorTheme;
 };
 
 #endif // GRIDWIDGET_H

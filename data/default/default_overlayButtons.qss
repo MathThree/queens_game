@@ -1,0 +1,12 @@
+QPushButton {
+	background-color: %SECONDARY%;
+	border: none;
+	border-radius: %CORNER_RADIUS%;
+	color: %PRIMARY%;
+}
+
+QPushButton:hover {
+	background-color: %S_HOVER%;
+	color: %P_HOVER%;
+}
+

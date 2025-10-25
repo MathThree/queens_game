@@ -1,7 +1,7 @@
-#ifndef LEVELSELECTOR_H
-#define LEVELSELECTOR_H
+#ifndef SETTINGSOVERLAY_H
+#define SETTINGSOVERLAY_H
 
-#include "levelbutton.h"
+#include "themebutton.h"
 #include "thememanager.h"
 
 #include <QWidget>
@@ -15,42 +15,46 @@
 #include <QColor>
 #include <QScrollBar>
 #include <vector>
+#include <utility>
 #include <QStyle>
+#include <QRadioButton>
 
 using namespace std;
 using TM = ThemeManager;
 
 namespace Ui {
-class LevelSelector;
+class SettingsOverlay;
 }
 
-class LevelSelector : public QWidget
+class SettingsOverlay : public QWidget
 {
 	Q_OBJECT
 
 public:
-	explicit LevelSelector(QWidget *parent = nullptr);
-	~LevelSelector();
+	explicit SettingsOverlay(QWidget *parent = nullptr);
+	~SettingsOverlay();
 
 	void setColorTheme(vector<QColor> color) { colorTheme = color; }
 	void updateDisplay();
 
 signals:
-    void sendGameFile(QString fileName);
+	void sendGameFile(QString fileName);
+	void updateThemeDisplay();
+	void askHelp();
 
 public slots:
 	void handleShowOverlay();
 
 private:
-	Ui::LevelSelector *ui;
-	QWidget *levelWidget;
+	Ui::SettingsOverlay *ui;
+	QWidget *colorsWidget;
 	vector<QColor> colorTheme;
 
-	void addLevels();
+	void addColors();
 	void updateButtonSize();
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
 };
 
-#endif // LEVELSELECTOR_H
+#endif // SETTINGSOVERLAY_H

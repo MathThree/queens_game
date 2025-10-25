@@ -1,0 +1,10 @@
+{
+	"name": "Default",
+	"colors": {
+		"primary": [55, 55, 98],
+		"secondary": [76, 76, 136],
+		"p_hover": [80, 80, 160],
+		"s_hover": [95, 95, 155]
+	}
+}
+

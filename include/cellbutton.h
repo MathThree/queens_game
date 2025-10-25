@@ -1,6 +1,8 @@
 #ifndef CELLBUTTON_H
 #define CELLBUTTON_H
 
+#include "thememanager.h"
+
 #include <QPushButton>
 #include <QString>
 #include <QColor>
@@ -12,8 +14,11 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QColor>
+#include <QStyle>
+#include <QRegularExpression>
 
 using namespace std;
+using TM = ThemeManager;
 
 class CellButton : public QPushButton
 {
@@ -23,7 +28,6 @@ public:
 	CellButton(const int row, const int col, QWidget* parent = nullptr, const QColor color = QColor("white"));
 	void setCellValue(const QString value) { this->setText(value); }
 	void setColors(const pair<QColor, QColor> colors) { _color = colors.first; borderColor = colors.second; }
-	void setColorTheme(vector<QColor> color) { colorTheme = color; }
 	void setBorders(const array<int, 4>& borders) { _borders = borders; }
 	void setCorners(const array<bool, 4>& corners) { _corners = corners; }
 	void setVisitID() { lastVisitID = globalVisitID; }
@@ -49,7 +53,6 @@ private:
 	int _col;
 	QColor _color;
 	QColor borderColor;
-	vector<QColor> colorTheme = {Qt::black, Qt::white};
 	array<int, 4> _borders;
 	array<bool, 4> _corners;
 	qint64 lastVisitID = 0;

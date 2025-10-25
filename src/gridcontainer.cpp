@@ -9,7 +9,6 @@ void GridContainer::resizeEvent(QResizeEvent *event)
 	QWidget::resizeEvent(event);
 
 	child = findChild<QWidget*>("gridWidget");
-
 	if (!child) return;
 
 	int side = qMin(width(), height());
