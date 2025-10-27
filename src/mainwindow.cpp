@@ -11,16 +11,16 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 
     gameWidget = ui->gameWidget;
     gridWidget = ui->gridWidget;
-	levelSelector = new LevelSelector(ui->centralwidget);
-	levelSelector->raise();
-	settingsOverlay = new SettingsOverlay(ui->centralwidget);
-	settingsOverlay->raise();
+    levelSelector = new LevelSelector(ui->centralwidget);
+    settingsOverlay = new SettingsOverlay(ui->centralwidget);
+    startOverlay = new StartOverlay(ui->centralwidget);
 
 	connect(ui->chooseGameButton, &QPushButton::clicked, levelSelector, &LevelSelector::handleShowOverlay);
 	connect(ui->settingsButton, &QPushButton::clicked, settingsOverlay, &SettingsOverlay::handleShowOverlay);
+    connect(ui->startButton, &QPushButton::clicked, startOverlay, &StartOverlay::handleShowOverlay);
 	connect(levelSelector, &LevelSelector::sendGameFile, this, &MainWindow::sendGameFile);
 	connect(settingsOverlay, &SettingsOverlay::updateThemeDisplay, this, &MainWindow::handleUpdateThemeDisplay);
-	connect(settingsOverlay, &SettingsOverlay::askHelp, this, &MainWindow::askHelp);
+    connect(settingsOverlay, &SettingsOverlay::askHelp, this, &MainWindow::askHelp);
 
 	QShortcut *toggleDebug = new QShortcut(QKeySequence(Qt::Key_F3), this);
 	connect(toggleDebug, &QShortcut::activated, this, [this]() {
@@ -67,6 +67,7 @@ void MainWindow::initCellGrid(const int n)
 
 void MainWindow::setCellGridSize(const int n)
 {
+    gridWidget->hide();
 	int old_n = cells.size();
 	if (old_n > n)
 	{
@@ -159,7 +160,8 @@ void MainWindow::updateDisplay()
 void MainWindow::updateGridWidget()
 {
 	gridWidget->update();
-	QTimer::singleShot(0, [this](){ gameWidget->update(); }); // WebAssembly mandatory!
+    //QTimer::singleShot(0, [this](){ gameWidget->update(); }); // WebAssembly mandatory!
+    gridWidget->show();
 }
 
 void MainWindow::connectCell(const CellButton *cell)
@@ -182,8 +184,9 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     int y = ui->centralwidget->y();
     int w = ui->centralwidget->width();
     int h = ui->centralwidget->height();
-	levelSelector->setGeometry(x, y, w, h);
-	settingsOverlay->setGeometry(x, y, w, h);
+    levelSelector->setGeometry(x, y, w, h);
+    settingsOverlay->setGeometry(x, y, w, h);
+    startOverlay->setGeometry(x, y, w, h);
 }
 
 void MainWindow::handleUpdateThemeDisplay()
@@ -191,6 +194,7 @@ void MainWindow::handleUpdateThemeDisplay()
 	updateDisplay();
 	levelSelector->updateDisplay();
 	settingsOverlay->updateDisplay();
+    startOverlay->updateDisplay();
 }
 
 void MainWindow::debug(QString newText, bool keep)

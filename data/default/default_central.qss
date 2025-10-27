@@ -8,9 +8,8 @@
     );
 }
 
-#centralwidget QLabel {
-	background: transparent;
-	border: none;
-	color: %PRIMARY%;
+#gameName {
+        background: transparent;
+        border: none;
+        color: %PRIMARY%;
 }
-

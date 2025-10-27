@@ -30,5 +30,6 @@ int main(int argc, char *argv[])
     presenter.initCells();
 
 	view.show();
+    view.updateGridWidget();
 	return a.exec();
 }

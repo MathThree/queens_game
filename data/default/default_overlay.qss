@@ -1,5 +1,6 @@
 #overlayWidget {
-	background-color: %PRIMARY%;
+        background-color: %PRIMARY%;
+	border-radius: 12px;
 }
 
 #overlayWidget QPushButton {
@@ -16,6 +17,12 @@
 }
 
 
+QLabel {
+        background: transparent;
+	border: none;
+	color: %SECONDARY%;
+}
+
 
 #overlayWidget QRadioButton {
 	background-color: %SECONDARY%;
@@ -29,7 +36,6 @@
 	background-color: %S_HOVER%;
 	color: %P_HOVER%;
 }
-
 
 
 #overlayWidget QRadioButton::indicator {

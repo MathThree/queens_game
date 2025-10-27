@@ -7,6 +7,7 @@
 #include "gridwidget.h"
 #include "levelselector.h"
 #include "settingsoverlay.h"
+#include "startoverlay.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -75,6 +76,7 @@ private:
     GridWidget *gridWidget;
     LevelSelector *levelSelector;
 	SettingsOverlay *settingsOverlay;
+    StartOverlay *startOverlay;
     QString debugText;
     vector<vector<CellButton*>> cells;
 	vector<QString> symbols = {"", "•", "♛", "·"};

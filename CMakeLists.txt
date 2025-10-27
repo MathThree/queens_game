@@ -62,13 +62,16 @@ set(APP_SOURCES
     ${SRC}levelselector.ui
     ${SRC}levelbutton.cpp
     ${INC}levelbutton.h
-	${SRC}thememanager.cpp
-	${INC}thememanager.h
+    ${SRC}thememanager.cpp
+    ${INC}thememanager.h
     ${SRC}settingsoverlay.cpp
     ${INC}settingsoverlay.h
     ${SRC}settingsoverlay.ui
     ${SRC}themebutton.cpp
     ${INC}themebutton.h
+    ${SRC}startoverlay.cpp
+    ${INC}startoverlay.h
+    ${SRC}startoverlay.ui
     ${TS_FILES}
     ${RESOURCES}
 )
