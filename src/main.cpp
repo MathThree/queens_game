@@ -17,8 +17,7 @@ int main(int argc, char *argv[])
 	//translator.load("../queens_game/qm/queens_game_fr_FR.qm");
 	//a.installTranslator(&translator);
 
-	QString themeName = "gilded";
-	ThemeManager::instance().applyTheme(themeName);
+	ThemeManager::instance().applyTheme();
 
 	MainWindow view;
     GameModel model;

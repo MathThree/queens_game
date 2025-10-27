@@ -1,10 +1,10 @@
 #centralwidget {
     background: qradialgradient(
-        cx: 0.5, cy: 0.5,  /* centre du gradient */
-        radius: 0.8,       /* rayon = 50% du plus petit côté du widget */
-        fx: 0.5, fy: 0.5,  /* foyer au centre */
-        stop: 0.0 %S_HOVER%,
-        stop: 1.0 %SECONDARY%
+        cx: 0.5, cy: 0.5,
+        radius: 0.8,
+        fx: 0.5, fy: 0.5,
+        stop: 0.0 %SECONDARY%,
+        stop: 0.8 %S_HOVER%
     );
 }
 

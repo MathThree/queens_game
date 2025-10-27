@@ -132,8 +132,11 @@ QLabel {
         <height>50</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0">
-       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+       <item alignment="Qt::AlignHCenter">
         <widget class="QLabel" name="gameName">
          <property name="font">
           <font>
@@ -195,7 +198,7 @@ border: 2px dashed rgb(255, 0, 0); */
           </property>
           <layout class="QGridLayout" name="gameGrid">
            <property name="sizeConstraint">
-            <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+            <enum>QLayout::SetDefaultConstraint</enum>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -234,7 +237,7 @@ border-radius: 0px;</string>
          </widget>
         </widget>
        </item>
-       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+       <item alignment="Qt::AlignHCenter">
         <widget class="QWidget" name="buttonContainer" native="true">
          <property name="minimumSize">
           <size>
@@ -356,7 +359,7 @@ QPushButton:pressed {
        </font>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
      </widget>
     </item>

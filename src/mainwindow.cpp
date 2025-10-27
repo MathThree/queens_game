@@ -7,10 +7,12 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
 {
 	ui->setupUi(this);
 
+	setMouseTracking(true);
+
     gameWidget = ui->gameWidget;
     gridWidget = ui->gridWidget;
-    levelSelector = new LevelSelector(ui->centralwidget);
-    levelSelector->raise();
+	levelSelector = new LevelSelector(ui->centralwidget);
+	levelSelector->raise();
 	settingsOverlay = new SettingsOverlay(ui->centralwidget);
 	settingsOverlay->raise();
 

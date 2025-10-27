@@ -1,4 +1,4 @@
-#buttonContainer QPushButton {
+QPushButton {
 	background: %PRIMARY%;
 	border: none;
 	border-radius: 6px;
@@ -6,11 +6,13 @@
 	color: %SECONDARY%;
 }
 
-#buttonContainer QPushButton:hover {
+QPushButton:hover {
+	background: %P_HOVER%;
 	color: %S_HOVER%;
 }
 
-#buttonContainer QPushButton:pressed {
+QPushButton:pressed {
+	background: %P_HOVER%;
 	color: %S_HOVER%;
 }
 

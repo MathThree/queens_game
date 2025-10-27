@@ -11,7 +11,7 @@ SettingsOverlay::SettingsOverlay(QWidget *parent)
 	ui->overlayWidget->raise();
 
 	hide();
-    setMouseTracking(true);
+	setMouseTracking(true);
 
 	connect(ui->closeOverlay, &QPushButton::clicked, this, [this]() { hide(); });
 	connect(ui->noiseButton, &QPushButton::clicked, this, [this]() { hide(); });

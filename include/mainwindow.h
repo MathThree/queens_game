@@ -67,7 +67,7 @@ private slots:
 	void handleUpdateThemeDisplay();
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+	void resizeEvent(QResizeEvent *event) override;
 
 private:
     Ui::MainWindow *ui;
