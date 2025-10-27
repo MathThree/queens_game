@@ -91,9 +91,13 @@ vector<tuple<QString, QColor, QColor>> ThemeManager::getAvailableThemes()
 	vector<tuple<QString, QColor, QColor>> list;
 
 	QDir themesDir(":/themes/");
-	const QStringList themeFolders = themesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+	QStringList themeFolders = themesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-	for (const QString &themeName : themeFolders)
+	if (themeFolders.contains("default")) {
+		themeFolders.move(themeFolders.indexOf("default"), 0);
+	}
+
+	for (QString &themeName : themeFolders)
 	{
 		QString themeFile = QString(":/themes/%1/%1_theme.json").arg(themeName);
 		QFile file(themeFile);

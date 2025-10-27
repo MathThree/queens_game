@@ -1,18 +1,18 @@
 <RCC>
-<qresource prefix="/games">
-<file>000.txt</file>
-<file>001.txt</file>
-<file>002.txt</file>
-</qresource>
-<qresource prefix="/themes">
-<file>default/default_theme.json</file>
-<file>default/default_central.qss</file>
-<file>default/default_centralButtons.qss</file>
-<file>default/default_overlay.qss</file>
-<file>default/default_overlayButtons.qss</file>
-<file>default/default_cell.qss</file>
-<file>gilded/gilded_theme.json</file>
-<file>iridescent/iridescent_theme.json</file>
-<file>nature/nature_theme.json</file>
-</qresource>
+    <qresource prefix="/games">
+        <file>000.txt</file>
+        <file>001.txt</file>
+        <file>002.txt</file>
+    </qresource>
+    <qresource prefix="/themes">
+        <file>default/default_theme.json</file>
+        <file>default/default_central.qss</file>
+        <file>default/default_centralButtons.qss</file>
+        <file>default/default_overlay.qss</file>
+        <file>default/default_overlayButtons.qss</file>
+        <file>default/default_cell.qss</file>
+        <file>gilded/gilded_theme.json</file>
+        <file>iridescent/iridescent_theme.json</file>
+        <file>candy/candy_theme.json</file>
+    </qresource>
 </RCC>
