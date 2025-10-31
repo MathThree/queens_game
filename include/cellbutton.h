@@ -33,6 +33,9 @@ public:
 	void setVisitID() { lastVisitID = globalVisitID; }
 	void setHoverActivated(bool hoverValue) { hoverActivated = hoverValue; }
 	float getCornerRadius() { return cornerValue * cornerFactor; }
+    const QColor getColor() { return _color; }
+    const int getBorders(int index) { return _borders[index]; }
+    const bool getCorners(int index) { return _corners[index]; }
 	bool isHoverActivated() { return hoverActivated; }
 	void updateDisplay();
 	void resetCellButton(int row, int col, const QColor color = QColor("white"));
@@ -59,13 +62,14 @@ private:
 	static qint64 globalVisitID;
 	static bool hoverActivated;
 	int cornerValue;
-	float cornerFactor = .7;
+    float cornerFactor;
+    float borderFactor;
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
 	void paintEvent(QPaintEvent *event) override;
 	void mousePressEvent(QMouseEvent *event) override;
-	void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 };
 

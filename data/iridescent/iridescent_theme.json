@@ -1,10 +1,19 @@
 {
 	"name": "Iridescent",
 	"colors": {
-		"primary": [233, 189, 238],
-		"secondary": [134, 98, 160],
-		"p_hover": [218, 170, 240],
-		"s_hover": [200, 150, 230]
+		"primary": [134, 98, 160],
+		"secondary": [233, 189, 238],
+		"p_hover": [200, 150, 230],
+		"s_hover": [218, 170, 240]
+	},
+	"bools": {
+		"fillCellsIn": true,
+		"fillCellsOut": false,
+		"fillCellsInDisabled": false
+	},
+	"floats": {
+		"cornerFactor": 0.5,
+		"borderFactor": 0.03
 	}
 }
 

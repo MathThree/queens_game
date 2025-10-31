@@ -1,6 +1,6 @@
 #overlayWidget {
         background-color: %PRIMARY%;
-	border-radius: 12px;
+	border-radius: %OVERLAY_RADIUS%px;
 }
 
 #overlayWidget QPushButton {

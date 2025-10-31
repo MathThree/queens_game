@@ -36,6 +36,18 @@ void ThemeManager::setTheme(const QString &themeName)
 		if (arr.size() != 3) continue;
 		currentTheme.values[it.key()] = QColor(arr[0].toInt(), arr[1].toInt(), arr[2].toInt());
 	}
+
+    QJsonObject bools = obj["bools"].toObject();
+    for (auto it = bools.begin(); it != bools.end(); ++it) {
+        if (!it.value().isBool()) continue;
+        currentTheme.values[it.key()] = it.value().toBool();
+    }
+
+    QJsonObject floats = obj["floats"].toObject();
+    for (auto it = floats.begin(); it != floats.end(); ++it) {
+        if (!it.value().isDouble()) continue;
+        currentTheme.values[it.key()] = static_cast<float>(it.value().toDouble());
+    }
 }
 
 void ThemeManager::setStyle(const QString &themeName)
@@ -66,10 +78,11 @@ void ThemeManager::setStyle(const QString &themeName)
 			continue;
 		}
 
-		qss.replace("%PRIMARY%", currentTheme.values["primary"].value<QColor>().name());
-		qss.replace("%SECONDARY%", currentTheme.values["secondary"].value<QColor>().name());
-		qss.replace("%P_HOVER%", currentTheme.values["p_hover"].value<QColor>().name());
-		qss.replace("%S_HOVER%", currentTheme.values["s_hover"].value<QColor>().name());
+        qss.replace("%PRIMARY%", getColor("primary").name());
+        qss.replace("%SECONDARY%", getColor("secondary").name());
+        qss.replace("%P_HOVER%", getColor("p_hover").name());
+        qss.replace("%S_HOVER%", getColor("s_hover").name());
+        qss.replace("%OVERLAY_RADIUS%", QString::number(30 * getFloat("cornerFactor")));
 
 		styles[qssName] = qss;
 		qDebug() << "TM-> QSS updated: " << qssName;
@@ -134,4 +147,51 @@ vector<tuple<QString, QColor, QColor>> ThemeManager::getAvailableThemes()
 		list.emplace_back(themeName, primary, secondary);
 	}
 	return list;
+}
+
+const bool ThemeManager::getBool(QString key)
+{
+    if (currentTheme.values.contains(key)) {
+        return currentTheme.values[key].toBool();
+    } else {
+        qWarning() << "TM-> Bool key not found: " << key;
+        return false;
+    }
+}
+
+const float ThemeManager::getFloat(QString key)
+{
+    if (currentTheme.values.contains(key)) {
+        return static_cast<float>(currentTheme.values[key].toDouble());
+    } else {
+        qWarning() << "TM-> Bool key not found: " << key;
+        return 0.;
+    }
+}
+
+const QColor ThemeManager::getColor(QString key)
+{
+    if (currentTheme.values.contains(key)) {
+        return currentTheme.values[key].value<QColor>();
+    } else {
+        qWarning() << "TM-> Bool key not found: " << key;
+        return Qt::white;
+    }
+}
+
+void ThemeManager::swapThemeColors()
+{
+    auto tmpPrimary   = getColor("primary");
+    auto tmpSecondary = getColor("secondary");
+    auto tmpPHover    = getColor("p_hover");
+    auto tmpSHover    = getColor("s_hover");
+
+    currentTheme.values["primary"]   = tmpSecondary;
+    currentTheme.values["secondary"] = tmpPrimary;
+    currentTheme.values["p_hover"]   = tmpSHover;
+    currentTheme.values["s_hover"]   = tmpPHover;
+
+    setStyle(currentTheme.name);
+
+    qDebug() << "TM-> Primary and secondary colors swapped for theme: " << currentTheme.name;
 }

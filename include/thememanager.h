@@ -30,11 +30,14 @@ public:
 
 	void applyTheme(const QString &themeName = "default");
 	void setTheme(const QString &themeName = "default");
-	void setStyle(const QString &themeName = "default");
-	const Theme& getTheme() { return currentTheme; }
+    void setStyle(const QString &themeName = "default");
 	QString getStyle(const QString& qssName);
 	const QString& getName() { return currentTheme.name; }
-	vector<tuple<QString, QColor, QColor>> getAvailableThemes();
+    vector<tuple<QString, QColor, QColor>> getAvailableThemes();
+    const bool getBool(QString key);
+    const float getFloat(QString key);
+    const QColor getColor(QString key);
+    void swapThemeColors();
 
 private:
 	ThemeManager() {

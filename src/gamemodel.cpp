@@ -323,7 +323,7 @@ int GameModel::getBorder(int row, int col, const Cell *cell) const
 		return 3; // out
 	const Cell *other_cell = &grid[row][col];
 	if (cell->colorZone != other_cell->colorZone)
-		return 3; // different color
+        return 3; // different color
 	return 1; // same color
 }
 

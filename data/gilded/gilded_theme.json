@@ -1,10 +1,19 @@
 {
 	"name": "Gilded",
 	"colors": {
-		"primary": [187, 160, 72],
-		"secondary": [27, 23, 18],
-		"p_hover": [221, 185, 69],
-		"s_hover": [46, 35, 18]
+		"primary": [27, 23, 18],
+		"secondary": [187, 160, 72],
+		"p_hover": [46, 35, 18],
+		"s_hover": [221, 185, 69]
+	},
+	"bools": {
+		"fillCellsIn": false,
+		"fillCellsOut": true,
+		"fillCellsInDisabled": false
+	},
+	"floats": {
+		"cornerFactor": 0.3,
+		"borderFactor": 0.02
 	}
 }
 

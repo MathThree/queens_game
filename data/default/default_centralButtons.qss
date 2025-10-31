@@ -1,7 +1,7 @@
 QPushButton {
 	background: %PRIMARY%;
 	border: none;
-	border-radius: 6px;
+	border-radius: %RADIUS%px;
 	padding: 4px 8px;
 	color: %SECONDARY%;
 }

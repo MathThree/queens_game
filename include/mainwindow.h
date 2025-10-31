@@ -45,7 +45,6 @@ public:
 
     void openGameDir(const QString dir);
     void openGameFile(const QString filePath);
-	void initCellGrid(const int n);
 	void setCellGridSize(const int n);
 	void setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<bool, 4>& corners);
 	void setCellValue(const int row, const int col, const int value);
@@ -82,6 +81,7 @@ private:
 	vector<QString> symbols = {"", "•", "♛", "·"};
 	Theme _theme;
 
-	void connectCell(const CellButton *cell);
+    void initCellGrid();
+    void connectCell(const CellButton *cell);
 };
 #endif // MAINWINDOW_H

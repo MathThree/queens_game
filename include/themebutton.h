@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QEvent>
+#include <QPropertyAnimation>
 
 using namespace std;
 using TM = ThemeManager;
@@ -22,10 +23,13 @@ using TM = ThemeManager;
 class ThemeButton : public QPushButton
 {
 	Q_OBJECT
+    Q_PROPERTY(float animationProgress READ getAnimationProgress WRITE setAnimationProgress)
 public:
 	explicit ThemeButton(const QString &filePath, const QColor &primary, const QColor &secondary, QWidget *parent = nullptr);
 
 	void updateDisplay();
+    float getAnimationProgress() { return _animationProgress; }
+    void setAnimationProgress(float value) { _animationProgress = value; update(); }
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
@@ -45,6 +49,9 @@ private:
 	QColor _secondary;
 	int cornerRadius = 15;
 	bool _hovered = false;
+    float _animationProgress = 0.0f;
+
+    void animationClicked(bool backward = false);
 };
 
 #endif // THEMEBUTTON_H

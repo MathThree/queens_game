@@ -5,9 +5,7 @@
 
 MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWindow)
 {
-	ui->setupUi(this);
-
-	setMouseTracking(true);
+    ui->setupUi(this);
 
     gameWidget = ui->gameWidget;
     gridWidget = ui->gridWidget;
@@ -30,10 +28,12 @@ MainWindow::MainWindow(QWidget *parent)	: QMainWindow(parent), ui(new Ui::MainWi
     ui->debugText->setVisible(false);
 
 	gridWidget->setFirstCell(ui->firstCell);
+    gridWidget->setCells(cells);
 
 	//setAttribute(Qt::WA_TranslucentBackground);
 	//setWindowFlags(Qt::FramelessWindowHint);
 	showMaximized();
+    initCellGrid();
 }
 
 MainWindow::~MainWindow()
@@ -57,7 +57,7 @@ void MainWindow::openGameFile(const QString filePath)
     emit sendGameFile(filePath);
 }
 
-void MainWindow::initCellGrid(const int n)
+void MainWindow::initCellGrid()
 {
 	cells.resize(1);
 	cells[0].resize(1);
@@ -143,8 +143,14 @@ void MainWindow::updateDisplay()
 		}
 	}
 
+    QSize size = ui->startButton->size();
+
+    int radius = TM::instance().getFloat("cornerFactor") * min(size.height(), size.width()) * 0.5;
+
 	QString qss0 = TM::instance().getStyle("central");
 	QString qss1 = TM::instance().getStyle("centralButtons");
+
+    qss1.replace("%RADIUS%", QString::number(radius));
 
 	ui->centralwidget->setStyleSheet(qss0);
 	ui->centralwidget->style()->unpolish(ui->centralwidget);

@@ -36,7 +36,8 @@ void SettingsOverlay::resizeEvent(QResizeEvent *event)
 	ui->noiseWidget->setGeometry(rect());
 
 	int overlayWidth = ui->overlayWidget->width();
-	ui->overlayWidget->setGeometry(width() - overlayWidth, 0, overlayWidth, height());
+    int offset = 40;
+    ui->overlayWidget->setGeometry(width() - overlayWidth - offset, offset, overlayWidth, height() - 2 * offset);
 }
 
 void SettingsOverlay::addColors()

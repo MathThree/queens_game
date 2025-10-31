@@ -1,0 +1,21 @@
+QPushButton {
+	color: %CELL_DARK%;
+	background-color: %CELL_COLOR%;
+	border-top: %BORDER_TOP%px solid %CELL_DARK%;
+	border-right: %BORDER_RIGHT%px solid %CELL_DARK%;
+	border-bottom: %BORDER_BOTTOM%px solid %CELL_DARK%;
+	border-left: %BORDER_LEFT%px solid %CELL_DARK%;
+	border-top-left-radius: %CORNER_RADIUS_TL%px;
+	border-top-right-radius: %CORNER_RADIUS_TR%px;
+	border-bottom-right-radius: %CORNER_RADIUS_BR%px;
+	border-bottom-left-radius: %CORNER_RADIUS_BL%px;
+}
+
+QPushButton:disabled {
+        color: %CELL_DARK%;
+	border-top: %BORDER_TOP_DISABLED%px solid %CELL_DARK%;
+	border-right: %BORDER_RIGHT_DISABLED%px solid %CELL_DARK%;
+	border-bottom: %BORDER_BOTTOM_DISABLED%px solid %CELL_DARK%;
+	border-left: %BORDER_LEFT_DISABLED%px solid %CELL_DARK%;
+}
+

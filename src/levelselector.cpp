@@ -16,8 +16,7 @@ LevelSelector::LevelSelector(QWidget *parent)
 	connect(ui->closeOverlay, &QPushButton::clicked, this, [this]() { hide(); });
 	connect(ui->noiseButton, &QPushButton::clicked, this, [this]() { hide(); });
 
-	addLevels();
-	setColorTheme({QColor(76, 76, 136)});
+    addLevels();
 	updateDisplay();
 	updateButtonSize();
 }
@@ -35,7 +34,8 @@ void LevelSelector::resizeEvent(QResizeEvent *event)
 	ui->noiseWidget->setGeometry(rect());
 
 	int overlayWidth = ui->overlayWidget->width();
-	ui->overlayWidget->setGeometry(0, 0, overlayWidth, height());
+    int offset = 40;
+    ui->overlayWidget->setGeometry(offset, offset, overlayWidth, height() - 2 * offset);
 }
 
 void LevelSelector::addLevels()

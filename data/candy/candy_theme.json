@@ -1,10 +1,19 @@
 {
 	"name": "Candy",
 	"colors": {
-		"primary": [91, 177, 74],
-		"secondary": [149, 55, 52],
+		"primary": [44, 118, 29],
+		"secondary": [170, 170, 18],
 		"p_hover": [39, 152, 17],
-		"s_hover": [140, 95, 94]
+		"s_hover": [221, 221, 86]
+	},
+	"bools": {
+		"fillCellsIn": false,
+		"fillCellsOut": true,
+		"fillCellsInDisabled": false
+	},
+	"floats": {
+		"cornerFactor": 1.0,
+		"borderFactor": 0.05
 	}
 }
 

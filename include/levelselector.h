@@ -32,7 +32,6 @@ public:
 	explicit LevelSelector(QWidget *parent = nullptr);
 	~LevelSelector();
 
-	void setColorTheme(vector<QColor> color) { colorTheme = color; }
 	void updateDisplay();
 
 signals:
@@ -43,8 +42,7 @@ public slots:
 
 private:
 	Ui::LevelSelector *ui;
-	QWidget *levelWidget;
-	vector<QColor> colorTheme;
+    QWidget *levelWidget;
 
 	void addLevels();
 	void updateButtonSize();

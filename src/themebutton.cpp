@@ -36,18 +36,17 @@ void ThemeButton::paintEvent(QPaintEvent *event)
 
 	int w = width();
 	int h = height();
-	int side = TM::instance().getName() == _themeName ? qMin(w, h)*.7 : qMin(w, h);
-	QRect rect((w - side)/2, (h - side)/2, side, side);
+    int side = TM::instance().getName() == _themeName ? qMin(w, h)*(1.0-0.3*_animationProgress) : qMin(w, h);
+    QRect rect((w - side)/2, (h - side)/2, side, side);
 
-	int factor = 135;
-	if (TM::instance().getName() != _themeName & _hovered) factor = 100;
+    int factor = (/*TM::instance().getName() != _themeName & */_hovered) ? 100 : 135;
 
 	painter.setBrush(_primary.darker(factor));
 	painter.drawEllipse(rect);
 
 	QPainterPath path2;
 	path2.moveTo(rect.center());
-	path2.arcTo(rect, -45, 180);
+    path2.arcTo(rect, -45 + _animationProgress * 360, 180);
 	path2.closeSubpath();
 	painter.setBrush(_secondary.darker(factor));
 	painter.drawPath(path2);
@@ -69,7 +68,20 @@ void ThemeButton::leaveEvent(QEvent *event)
 
 void ThemeButton::handleClicked()
 {
-	if (TM::instance().getName() == _themeName) return;
-	TM::instance().applyTheme(_themeName);
+    animationClicked();
+    if (TM::instance().getName() == _themeName)// return;
+        TM::instance().swapThemeColors();
+    else
+        TM::instance().applyTheme(_themeName);
 	emit updateThemeDisplay();
+}
+
+void ThemeButton::animationClicked(bool backward)
+{
+    QPropertyAnimation *anim = new QPropertyAnimation(this, "animationProgress");
+    anim->setDuration(720);
+    anim->setStartValue(backward ? 1.0 : 0.0);
+    anim->setEndValue(backward ? 0.0 : 1.0);
+    anim->setEasingCurve(QEasingCurve::OutCubic);
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
 }

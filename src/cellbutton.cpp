@@ -32,12 +32,19 @@ void CellButton::resetCellButton(int row, int col, const QColor color)
 
 void CellButton::updateDisplay()
 {
-	QString qss = TM::instance().getStyle("cell");
+    QString qss = TM::instance().getStyle("cell");
+    cornerFactor = TM::instance().getFloat("cornerFactor");
+    borderFactor = TM::instance().getFloat("borderFactor");
 
-	qss.replace("%BORDER_TOP%", QString::number(_borders[0] * width() * 0.03));
-	qss.replace("%BORDER_RIGHT%", QString::number(_borders[1] * width() * 0.03));
-	qss.replace("%BORDER_BOTTOM%", QString::number(_borders[2] * width() * 0.03));
-	qss.replace("%BORDER_LEFT%", QString::number(_borders[3] * width() * 0.03));
+    qss.replace("%BORDER_TOP%", QString::number(    _borders[0] * width() * borderFactor));
+    qss.replace("%BORDER_RIGHT%", QString::number(  _borders[1] * width() * borderFactor));
+    qss.replace("%BORDER_BOTTOM%", QString::number( _borders[2] * width() * borderFactor));
+    qss.replace("%BORDER_LEFT%", QString::number(   _borders[3] * width() * borderFactor));
+
+    qss.replace("%BORDER_TOP_DISABLED%", QString::number(   _borders[0] == 1 ? 0 : _borders[0] * width() * borderFactor));
+    qss.replace("%BORDER_RIGHT_DISABLED%", QString::number( _borders[1] == 1 ? 0 : _borders[1] * width() * borderFactor));
+    qss.replace("%BORDER_BOTTOM_DISABLED%", QString::number(_borders[2] == 1 ? 0 : _borders[2] * width() * borderFactor));
+    qss.replace("%BORDER_LEFT_DISABLED%", QString::number(  _borders[3] == 1 ? 0 : _borders[3] * width() * borderFactor));
 
 	qss.replace("%CORNER_RADIUS_TL%", QString::number(_corners[0] ? cornerValue * cornerFactor : 0));
 	qss.replace("%CORNER_RADIUS_TR%", QString::number(_corners[1] ? cornerValue * cornerFactor : 0));
