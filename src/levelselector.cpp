@@ -13,8 +13,10 @@ LevelSelector::LevelSelector(QWidget *parent)
     hide();
     setMouseTracking(true);
 
-	connect(ui->closeOverlay, &QPushButton::clicked, this, [this]() { hide(); });
-	connect(ui->noiseButton, &QPushButton::clicked, this, [this]() { hide(); });
+	connect(ui->closeOverlay, &QPushButton::clicked, this, [this]() { animationClicked(true); });
+	connect(ui->noiseButton, &QPushButton::clicked, this, [this]() { animationClicked(true); });
+
+	effect = new QGraphicsOpacityEffect(ui->noiseWidget);
 
     addLevels();
 	updateDisplay();
@@ -28,14 +30,22 @@ LevelSelector::~LevelSelector()
 
 void LevelSelector::resizeEvent(QResizeEvent *event)
 {
-    QWidget::resizeEvent(event);
+	QWidget::resizeEvent(event);
+	updateLayout();
+}
+
+void LevelSelector::updateLayout()
+{
 	updateButtonSize();
 
 	ui->noiseWidget->setGeometry(rect());
 
+	effect->setOpacity(animationFactor);
+	ui->noiseWidget->setGraphicsEffect(effect);
+
 	int overlayWidth = ui->overlayWidget->width();
-    int offset = 40;
-    ui->overlayWidget->setGeometry(offset, offset, overlayWidth, height() - 2 * offset);
+	int offset = 40;
+	ui->overlayWidget->setGeometry(offset * animationFactor - overlayWidth * (1.0 - animationFactor), offset, overlayWidth, height() - 2 * offset);
 }
 
 void LevelSelector::addLevels()
@@ -52,8 +62,8 @@ void LevelSelector::addLevels()
 	levelWidget->setLayout(layout);
 	layout->setAlignment(Qt::AlignTop);
 
-    QStringList files = dir.entryList(QDir::Files);
-    for (const QString &file : files)
+	const QStringList files = dir.entryList(QDir::Files);
+	for (const QString &file : files)
     {
         LevelButton *levelButton = new LevelButton(file, this);
 		layout->addWidget(levelButton);
@@ -96,8 +106,23 @@ void LevelSelector::updateButtonSize()
 	}
 }
 
+void LevelSelector::animationClicked(bool backward)
+{
+	int duration = 360;
+	QPropertyAnimation *animPos = new QPropertyAnimation(this, "animationFactor");
+	animPos->setDuration(duration);
+	animPos->setStartValue(backward ? 1.0 : 0.0);
+	animPos->setEndValue(backward ? 0.0 : 1.0);
+	animPos->setEasingCurve(QEasingCurve::OutCubic);
+
+	if (backward)
+		connect(animPos, &QPropertyAnimation::finished, this, [this]() { hide(); });
+
+	animPos->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
 void LevelSelector::handleShowOverlay()
 {
+	animationClicked();
 	show();
-	updateButtonSize();
 }

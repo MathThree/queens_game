@@ -13,9 +13,11 @@ SettingsOverlay::SettingsOverlay(QWidget *parent)
 	hide();
 	setMouseTracking(true);
 
-	connect(ui->closeOverlay, &QPushButton::clicked, this, [this]() { hide(); });
-	connect(ui->noiseButton, &QPushButton::clicked, this, [this]() { hide(); });
+	connect(ui->closeOverlay, &QPushButton::clicked, this, [this]() { animationClicked(true); });
+	connect(ui->noiseButton, &QPushButton::clicked, this, [this]() { animationClicked(true); });
 	connect(ui->helpDisplay, &QRadioButton::clicked, this, &SettingsOverlay::askHelp);
+
+	effect = new QGraphicsOpacityEffect(ui->noiseWidget);
 
 	addColors();
 	setColorTheme({QColor(76, 76, 136)});
@@ -30,14 +32,22 @@ SettingsOverlay::~SettingsOverlay()
 
 void SettingsOverlay::resizeEvent(QResizeEvent *event)
 {
-    QWidget::resizeEvent(event);
+	QWidget::resizeEvent(event);
+	updateLayout();
+}
+
+void SettingsOverlay::updateLayout()
+{
 	updateButtonSize();
 
 	ui->noiseWidget->setGeometry(rect());
 
+	effect->setOpacity(animationFactor);
+	ui->noiseWidget->setGraphicsEffect(effect);
+
 	int overlayWidth = ui->overlayWidget->width();
-    int offset = 40;
-    ui->overlayWidget->setGeometry(width() - overlayWidth - offset, offset, overlayWidth, height() - 2 * offset);
+	int offset = 40;
+	ui->overlayWidget->setGeometry(width() - (overlayWidth + offset) * animationFactor, offset, overlayWidth, height() - 2 * offset);
 }
 
 void SettingsOverlay::addColors()
@@ -93,8 +103,23 @@ void SettingsOverlay::updateButtonSize()
 	}
 }
 
+void SettingsOverlay::animationClicked(bool backward)
+{
+	int duration = 360;
+	QPropertyAnimation *animPos = new QPropertyAnimation(this, "animationFactor");
+	animPos->setDuration(duration);
+	animPos->setStartValue(backward ? 1.0 : 0.0);
+	animPos->setEndValue(backward ? 0.0 : 1.0);
+	animPos->setEasingCurve(QEasingCurve::OutCubic);
+
+	if (backward)
+		connect(animPos, &QPropertyAnimation::finished, this, [this]() { hide(); });
+
+	animPos->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
 void SettingsOverlay::handleShowOverlay()
 {
+	animationClicked();
 	show();
-	updateButtonSize();
 }

@@ -35,7 +35,7 @@ void StartOverlay::resizeEvent(QResizeEvent *event)
     ui->overlayWidget->setGeometry(x, y, size, size);
 
     QFont font = ui->gameRules->font();
-    font.setPixelSize(size / 55.0);
+	font.setPixelSize(size / 40.0);
     ui->gameRules->setFont(font);
 }
 

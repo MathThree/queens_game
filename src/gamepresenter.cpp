@@ -13,6 +13,7 @@ GamePresenter::GamePresenter(GameModel *model, MainWindow *view, QObject *parent
 	connect(_model, &GameModel::sendGameName, this, &GamePresenter::handleGetGameName);
 	connect(_model, &GameModel::cellUpdated, this, &GamePresenter::handleCellUpdated);
 	connect(_model, &GameModel::victory, this, &GamePresenter::handleVictory);
+	connect(_model, &GameModel::sendConflictValue, this, &GamePresenter::handleConflict);
 }
 
 void GamePresenter::initCells()
@@ -74,4 +75,9 @@ void GamePresenter::handleCellHovered(const int row, const int col)
 void GamePresenter::handleAskHelp()
 {
 	_model->toggleHelp();
+}
+
+void GamePresenter::handleConflict(const int row, const int col, const int conflict)
+{
+	_view->sendConflictValue(row, col, conflict);
 }

@@ -270,6 +270,8 @@ signals:
 	 * @param keep Append if true, replace if false (bool, default true)
 	 */
 	void debug(const QString debugText, const bool keep = true);
+
+	void sendConflictValue(const int row, const int col, const bool conflict);
 };
 
 #endif // GAMEMODEL_H

@@ -145,7 +145,7 @@ void GameModel::updateGrid(const int row, const int col)
 	if (isVictory())
 	{
 		qDebug() << "M -> ##### VICTORY! #####";
-		debug("M -> ##### VICTORY! #####");
+		emit debug("M -> ##### VICTORY! #####");
 		emit victory();
 	}
 }
@@ -154,6 +154,7 @@ void GameModel::setQueenToCell(const int row, const int col)
 {
 	queenList.push_back(make_pair(row, col));
 	emit cellUpdated(row, col, getValueToSend(&grid[row][col]));
+	bool conflict = false;
 	for (const pair<int, int>& p : getRelatedCells(row, col))
 	{
 		Cell *c = &grid[p.first][p.second];
@@ -165,27 +166,33 @@ void GameModel::setQueenToCell(const int row, const int col)
 				qDebug() << "M -> Value to send:\t" << getValueToSend(&grid[p.first][p.second]);
 				emit cellUpdated(p.first, p.second, getValueToSend(&grid[p.first][p.second]));
 			}
+
+			if (c->playerValue == 2)
+			{
+				qDebug() << "M -> QUEEN CONFLICT: [" << row << "; " << col << "] <> [" << p.first << "; " << p.second << "]";
+				emit sendConflictValue(p.first, p.second, true);
+			}
 		}
 		if (c->playerValue == 2)
-		{
-			qDebug() << "QUEEN CONFLICT: [" << row << "; " << col << "] <> [" << p.first << "; " << p.second << "]";
-		}
+			conflict = true;
 	}
-	debug(toQString());
+	if (conflict)
+		emit sendConflictValue(row, col, true);
+	emit debug(toQString());
 }
 
 void GameModel::setDotToCell(const int row, const int col)
 {
 	removeQueen(row, col);
 	emit cellUpdated(row, col, getValueToSend(&grid[row][col]));
-	debug(toQString());
+	emit debug(toQString());
 }
 
 void GameModel::setNoneToCell(const int row, const int col)
 {
 	removeQueen(row, col);
 	emit cellUpdated(row, col, getValueToSend(&grid[row][col]));
-	debug(toQString());
+	emit debug(toQString());
 }
 
 void GameModel::removeQueen(const int row, const int col)
@@ -196,6 +203,7 @@ void GameModel::removeQueen(const int row, const int col)
 		queenList.erase(it);
 		//if (!grid[row][col].couldHaveQueen)
 		qDebug() << "M -> QUEEN CLEAR: [" << row << "; " << col << "] <> [" << "?" << "; " << "?" << "]";
+		emit sendConflictValue(row, col, false);
 
 		for (const pair<int, int>& p : getRelatedCells(row, col))
 		{
@@ -204,6 +212,7 @@ void GameModel::removeQueen(const int row, const int col)
 			if (!b)
 			{
 				c->couldHaveQueen = true;
+				emit sendConflictValue(p.first, p.second, false);
 				if (help)
 					emit cellUpdated(p.first, p.second, getValueToSend(&grid[p.first][p.second]));
 			}

@@ -24,10 +24,10 @@ qint64 CellButton::globalVisitID = 0;
 
 bool CellButton::hoverActivated = false;
 
-void CellButton::resetCellButton(int row, int col, const QColor color)
+void CellButton::resetCellButton()
 {
-	//_color = color;
 	setCellValue("");
+	inConflict = false;
 }
 
 void CellButton::updateDisplay()
@@ -52,6 +52,7 @@ void CellButton::updateDisplay()
 	qss.replace("%CORNER_RADIUS_BL%", QString::number(_corners[3] ? cornerValue * cornerFactor : 0));
 
 	qss.replace("%CELL_COLOR%", _color.name());
+	qss.replace("%TEXT_COLOR%", inConflict ? QColor(255, 0, 0).name() : _color.darker(250).name());
 	qss.replace("%CELL_DARK%", _color.darker(150).name());
 
 	this->setStyleSheet(qss);

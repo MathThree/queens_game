@@ -16,6 +16,8 @@
 #include <QScrollBar>
 #include <vector>
 #include <QStyle>
+#include <QPropertyAnimation>
+#include <QGraphicsOpacityEffect>
 
 using namespace std;
 using TM = ThemeManager;
@@ -27,11 +29,14 @@ class LevelSelector;
 class LevelSelector : public QWidget
 {
 	Q_OBJECT
+	Q_PROPERTY(float animationFactor READ getAnimationFactor WRITE setAnimationFactor NOTIFY update)
 
 public:
 	explicit LevelSelector(QWidget *parent = nullptr);
 	~LevelSelector();
 
+	float getAnimationFactor() { return animationFactor; }
+	void setAnimationFactor(float value) { animationFactor = value; updateLayout(); }
 	void updateDisplay();
 
 signals:
@@ -43,9 +48,13 @@ public slots:
 private:
 	Ui::LevelSelector *ui;
     QWidget *levelWidget;
+	float animationFactor = 0.0f;
+	QGraphicsOpacityEffect *effect;
 
 	void addLevels();
 	void updateButtonSize();
+	void updateLayout();
+	void animationClicked(bool backward = false);
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;

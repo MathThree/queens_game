@@ -52,6 +52,7 @@ public:
 	void updateDisplay();
 	void updateGridWidget();
 	void victory();
+	void sendConflictValue(const int row, const int col, const bool conflict);
 
 	void debug(QString newText, bool keep = true);
 

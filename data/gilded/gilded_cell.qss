@@ -12,10 +12,10 @@ QPushButton {
 }
 
 QPushButton:disabled {
-        color: %CELL_DARK%;
-        border-top: 0px solid %SECONDARY%;
-        border-right: 0px solid %SECONDARY%;
-        border-bottom: 0px solid %SECONDARY%;
-        border-left: 0px solid %SECONDARY%;
+        color: %TEXT_COLOR%;
+        border-top: %BORDER_TOP_DISABLED%px solid %PRIMARY%;
+        border-right: %BORDER_RIGHT_DISABLED%px solid %PRIMARY%;
+        border-bottom: %BORDER_BOTTOM_DISABLED%px solid %PRIMARY%;
+        border-left: %BORDER_LEFT_DISABLED%px solid %PRIMARY%;
 }
 

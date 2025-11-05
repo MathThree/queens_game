@@ -23,13 +23,16 @@ using TM = ThemeManager;
 class ThemeButton : public QPushButton
 {
 	Q_OBJECT
-    Q_PROPERTY(float animationProgress READ getAnimationProgress WRITE setAnimationProgress)
+	Q_PROPERTY(float rotation READ getRotation WRITE setRotation NOTIFY update)
+	Q_PROPERTY(float sideFactor READ getSideFactor WRITE setSideFactor NOTIFY update)
 public:
 	explicit ThemeButton(const QString &filePath, const QColor &primary, const QColor &secondary, QWidget *parent = nullptr);
 
 	void updateDisplay();
-    float getAnimationProgress() { return _animationProgress; }
-    void setAnimationProgress(float value) { _animationProgress = value; update(); }
+	float getRotation() { return _rotation; }
+	void setRotation(float value) { _rotation = value; update(); }
+	float getSideFactor() { return _sideFactor; }
+	void setSideFactor(float value) { _sideFactor = value; update(); }
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
@@ -49,9 +52,10 @@ private:
 	QColor _secondary;
 	int cornerRadius = 15;
 	bool _hovered = false;
-    float _animationProgress = 0.0f;
+	float _rotation = 0.0f;
+	float _sideFactor = 1.0f;
 
-    void animationClicked(bool backward = false);
+	void animationClicked(bool rotationOnly = false, bool backward = false);
 };
 
 #endif // THEMEBUTTON_H

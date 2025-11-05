@@ -7,7 +7,11 @@ ThemeButton::ThemeButton(const QString &themeName, const QColor &primary, const 
 
 	connect(this, &ThemeButton::clicked, this, &ThemeButton::handleClicked);
 
-	//updateDisplay();
+	if (themeName == TM::instance().getName())
+	{
+		_rotation = 0;
+		_sideFactor = 0.7;
+	}
 }
 
 void ThemeButton::updateDisplay()
@@ -36,7 +40,7 @@ void ThemeButton::paintEvent(QPaintEvent *event)
 
 	int w = width();
 	int h = height();
-    int side = TM::instance().getName() == _themeName ? qMin(w, h)*(1.0-0.3*_animationProgress) : qMin(w, h);
+	int side = TM::instance().getName() == _themeName ? qMin(w, h)*_sideFactor : qMin(w, h);
     QRect rect((w - side)/2, (h - side)/2, side, side);
 
     int factor = (/*TM::instance().getName() != _themeName & */_hovered) ? 100 : 135;
@@ -46,7 +50,7 @@ void ThemeButton::paintEvent(QPaintEvent *event)
 
 	QPainterPath path2;
 	path2.moveTo(rect.center());
-    path2.arcTo(rect, -45 + _animationProgress * 360, 180);
+	path2.arcTo(rect, -45 + _rotation, 180);
 	path2.closeSubpath();
 	painter.setBrush(_secondary.darker(factor));
 	painter.drawPath(path2);
@@ -68,20 +72,36 @@ void ThemeButton::leaveEvent(QEvent *event)
 
 void ThemeButton::handleClicked()
 {
-    animationClicked();
-    if (TM::instance().getName() == _themeName)// return;
+	if (TM::instance().getName() == _themeName)
+	{
         TM::instance().swapThemeColors();
+		animationClicked(true);
+	}
     else
-        TM::instance().applyTheme(_themeName);
+	{
+	   TM::instance().applyTheme(_themeName);
+		animationClicked();
+	}
 	emit updateThemeDisplay();
 }
 
-void ThemeButton::animationClicked(bool backward)
+void ThemeButton::animationClicked(bool rotationOnly, bool backward)
 {
-    QPropertyAnimation *anim = new QPropertyAnimation(this, "animationProgress");
-    anim->setDuration(720);
-    anim->setStartValue(backward ? 1.0 : 0.0);
-    anim->setEndValue(backward ? 0.0 : 1.0);
-    anim->setEasingCurve(QEasingCurve::OutCubic);
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
+	int duration = 720;
+	QPropertyAnimation *animRotation = new QPropertyAnimation(this, "rotation");
+	animRotation->setDuration(duration);
+	animRotation->setStartValue(backward ? 360.0 : 0.0);
+	animRotation->setEndValue(backward ? 0.0 : 360.0);
+	animRotation->setEasingCurve(QEasingCurve::OutCubic);
+	animRotation->start(QAbstractAnimation::DeleteWhenStopped);
+
+	if (!rotationOnly)
+	{
+		QPropertyAnimation *animSideFactor = new QPropertyAnimation(this, "sideFactor");
+		animSideFactor->setDuration(duration);
+		animSideFactor->setStartValue(backward ? 0.7 : 1.0);
+		animSideFactor->setEndValue(backward ? 1.0 : 0.7);
+		animSideFactor->setEasingCurve(QEasingCurve::OutCubic);
+		animSideFactor->start(QAbstractAnimation::DeleteWhenStopped);
+	}
 }

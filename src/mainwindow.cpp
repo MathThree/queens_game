@@ -110,11 +110,11 @@ void MainWindow::setCell(const int row, const int col, const pair<QColor, QColor
 	if (col<0 || col>=cells[row].size()) return;
 
 	CellButton *cell = cells[row][col];
+	cell->resetCellButton();
 	cell->setColors(colors);
 	cell->setBorders(borders);
 	cell->setCorners(corners);
 	cell->updateDisplay();
-	setCellValue(row, col, 0);
 	if (!ui->gameGrid->itemAtPosition(row, col))
 	{
 		ui->gameGrid->addWidget(cell, row, col);
@@ -201,6 +201,13 @@ void MainWindow::handleUpdateThemeDisplay()
 	levelSelector->updateDisplay();
 	settingsOverlay->updateDisplay();
     startOverlay->updateDisplay();
+}
+
+void MainWindow::sendConflictValue(const int row, const int col, const bool conflict)
+{
+	cells[row][col]->setInConflict(conflict);
+	cells[row][col]->updateDisplay();
+	cells[row][col]->update();
 }
 
 void MainWindow::debug(QString newText, bool keep)

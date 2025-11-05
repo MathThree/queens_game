@@ -32,13 +32,14 @@ public:
 	void setCorners(const array<bool, 4>& corners) { _corners = corners; }
 	void setVisitID() { lastVisitID = globalVisitID; }
 	void setHoverActivated(bool hoverValue) { hoverActivated = hoverValue; }
+	void setInConflict(const bool conflict) { inConflict = conflict; }
 	float getCornerRadius() { return cornerValue * cornerFactor; }
     const QColor getColor() { return _color; }
     const int getBorders(int index) { return _borders[index]; }
     const bool getCorners(int index) { return _corners[index]; }
 	bool isHoverActivated() { return hoverActivated; }
 	void updateDisplay();
-	void resetCellButton(int row, int col, const QColor color = QColor("white"));
+	void resetCellButton();
 	void click() { emit clicked(_row, _col, true); };
 	void hover() { emit hovered(_row, _col); }
 	bool hasBeenVisited() { return (globalVisitID == lastVisitID); }
@@ -64,6 +65,7 @@ private:
 	int cornerValue;
     float cornerFactor;
     float borderFactor;
+	bool inConflict = false;
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
