@@ -52,7 +52,7 @@ void SettingsOverlay::updateLayout()
 
 void SettingsOverlay::addColors()
 {
-	vector<tuple<QString, QColor, QColor>> colorsList = TM::instance().getAvailableThemes();
+	vector<tuple<QString, QColor, QColor>> colorsList = _themeM->getAvailableThemes();
 
 	QVBoxLayout *layout = new QVBoxLayout(colorsWidget);
 	colorsWidget->setLayout(layout);
@@ -83,7 +83,7 @@ void SettingsOverlay::updateDisplay()
 	QScrollArea *scrollArea = ui->scrollArea;
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-	QString qss = TM::instance().getStyle("overlay");
+	QString qss = _themeM->getStyle("overlay");
 
 	ui->overlayWidget->setStyleSheet(qss);
 	ui->overlayWidget->style()->unpolish(ui->overlayWidget);
@@ -105,7 +105,11 @@ void SettingsOverlay::updateButtonSize()
 
 void SettingsOverlay::animationClicked(bool backward)
 {
+#ifdef Q_OS_WASM
+	int duration = 72;
+#else
 	int duration = 360;
+#endif
 	QPropertyAnimation *animPos = new QPropertyAnimation(this, "animationFactor");
 	animPos->setDuration(duration);
 	animPos->setStartValue(backward ? 1.0 : 0.0);

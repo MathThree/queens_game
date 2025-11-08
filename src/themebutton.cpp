@@ -7,7 +7,7 @@ ThemeButton::ThemeButton(const QString &themeName, const QColor &primary, const 
 
 	connect(this, &ThemeButton::clicked, this, &ThemeButton::handleClicked);
 
-	if (themeName == TM::instance().getName())
+	if (themeName == _themeM->getName())
 	{
 		_rotation = 0;
 		_sideFactor = 0.7;
@@ -16,7 +16,7 @@ ThemeButton::ThemeButton(const QString &themeName, const QColor &primary, const 
 
 void ThemeButton::updateDisplay()
 {
-	QString qss = TM::instance().getStyle("overlayButtons");
+	QString qss = _themeM->getStyle("overlayButtons");
 
 	qss.replace("%CORNER_RADIUS%", QString::number(cornerRadius));
 
@@ -40,10 +40,10 @@ void ThemeButton::paintEvent(QPaintEvent *event)
 
 	int w = width();
 	int h = height();
-	int side = TM::instance().getName() == _themeName ? qMin(w, h)*_sideFactor : qMin(w, h);
+	int side = _themeM->getName() == _themeName ? qMin(w, h)*_sideFactor : qMin(w, h);
     QRect rect((w - side)/2, (h - side)/2, side, side);
 
-    int factor = (/*TM::instance().getName() != _themeName & */_hovered) ? 100 : 135;
+	int factor = (_hovered) ? 100 : 135;
 
 	painter.setBrush(_primary.darker(factor));
 	painter.drawEllipse(rect);
@@ -72,14 +72,14 @@ void ThemeButton::leaveEvent(QEvent *event)
 
 void ThemeButton::handleClicked()
 {
-	if (TM::instance().getName() == _themeName)
+	if (_themeM->getName() == _themeName)
 	{
-        TM::instance().swapThemeColors();
+		_themeM->swapThemeColors();
 		animationClicked(true);
 	}
     else
 	{
-	   TM::instance().applyTheme(_themeName);
+	   _themeM->applyTheme(_themeName);
 		animationClicked();
 	}
 	emit updateThemeDisplay();

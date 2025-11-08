@@ -42,24 +42,24 @@ void GridWidget::resizeEvent(QResizeEvent *event)
 
 void GridWidget::paintEvent(QPaintEvent *event)
 {
-    QColor primary = TM::instance().getColor("primary");
+	QColor primary = _themeM->getColor("primary");
 
     int margin = width() * 0.025;
     int cellRadius = _firstCell->getCornerRadius();
     int radius = cellRadius == 0 ? 0 : cellRadius + margin;
 
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+	painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(primary);
     painter.setPen(Qt::NoPen);
     painter.drawRoundedRect(rect(), radius, radius);
 
-    if (_cells && !_cells->empty() && (this->isEnabled() || TM::instance().getBool("fillCellsInDisabled")))
-        if (TM::instance().getBool("fillCellsIn"))
+	if (_cells && !_cells->empty() && (this->isEnabled() || _themeM->getBool("fillCellsInDisabled")))
+		if (_themeM->getBool("fillCellsIn"))
         {
             paintCells(painter);
             paintCornerCells(painter);
-            if (!TM::instance().getBool("fillCellsOut"))
+			if (!_themeM->getBool("fillCellsOut"))
                 paintFrame(painter);
         }
 
@@ -122,7 +122,7 @@ void GridWidget::paintFrame(QPainter &painter)
 
     QRectF innerRect = outerRect.adjusted(halfCell / 2.0f, halfCell / 2.0f, -halfCell / 2.0f, -halfCell / 2.0f);
 
-    QPen pen(TM::instance().getColor("primary"));
+	QPen pen(_themeM->getColor("primary"));
     pen.setWidthF(halfCell);
     pen.setJoinStyle(Qt::MiterJoin);
 

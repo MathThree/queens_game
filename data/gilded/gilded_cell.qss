@@ -1,5 +1,5 @@
 QPushButton {
-        color: %PRIMARY%;
+        color: %TEXT_COLOR%;
         background-color: %CELL_COLOR%;
         border-top: %BORDER_TOP%px solid %PRIMARY%;
         border-right: %BORDER_RIGHT%px solid %PRIMARY%;

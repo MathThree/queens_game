@@ -43,6 +43,8 @@ private:
     float cornerFactor = .7;
     float borderFactor = .03;
 
+	TM *_themeM = &TM::instance();
+
     void paintCells(QPainter &painter);
     void paintCornerCells(QPainter &painter);
     void paintFrame(QPainter &painter);

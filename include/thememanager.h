@@ -18,7 +18,10 @@ using namespace std;
 
 struct Theme {
 	QString name;
-	QMap<QString, QVariant> values;
+	QMap<QString, QColor> colors;
+	QMap<QString, bool> bools;
+	QMap<QString, float> floats;
+	QMap<QString, QString> strings;
 };
 
 class ThemeManager {
@@ -35,8 +38,9 @@ public:
 	const QString& getName() { return currentTheme.name; }
     vector<tuple<QString, QColor, QColor>> getAvailableThemes();
     const bool getBool(QString key);
-    const float getFloat(QString key);
-    const QColor getColor(QString key);
+	const float getFloat(QString key);
+	const QColor getColor(QString key);
+	const QString getString(QString key);
     void swapThemeColors();
 
 private:

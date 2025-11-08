@@ -21,12 +21,12 @@ int main(int argc, char *argv[])
 
 	MainWindow view;
     GameModel model;
-    GamePresenter presenter(&model, &view);
+	GamePresenter presenter(&model, &view);
 
 	QString level = "001.txt";
-    model.loadGameFile(level);
-    view.setCellGridSize(model.getSize());
-    presenter.initCells();
+	model.loadGameFile(level);
+	view.setCellGridSize(model.getSize());
+	presenter.initCells();
 
 	view.show();
     view.updateGridWidget();

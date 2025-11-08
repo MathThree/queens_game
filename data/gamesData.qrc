@@ -6,6 +6,7 @@
         <file>003.txt</file>
         <file>004.txt</file>
         <file>005.txt</file>
+        <file>006.txt</file>
     </qresource>
     <qresource prefix="/themes">
         <file>default/default_theme.json</file>

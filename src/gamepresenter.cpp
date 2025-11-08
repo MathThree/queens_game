@@ -2,18 +2,20 @@
 
 GamePresenter::GamePresenter(GameModel *model, MainWindow *view, QObject *parent) : QObject(parent), _model(model), _view(view)
 {
-    connect(_view, &MainWindow::clicked, this, &GamePresenter::handleCellClicked);
-    connect(_view, &MainWindow::chooseGameclicked, this, &GamePresenter::handleChooseGame);
-    connect(_view, &MainWindow::sendGameFile, this, &GamePresenter::handleGetGameFile);
-    connect(_view, &MainWindow::askFilter, this, &GamePresenter::handleAskFilter);
-    connect(_view, &MainWindow::hovered, this, &GamePresenter::handleCellHovered);
-    connect(_view, &MainWindow::askHelp, this, &GamePresenter::handleAskHelp);
+	connect(_view, &MainWindow::chooseGameclicked,   this, &GamePresenter::handleChooseGame);
+	connect(_view, &MainWindow::sendGameFile,        this, &GamePresenter::handleGetGameFile);
+	connect(_view, &MainWindow::clicked,           _model, &GameModel::togglePlayerValue);
+	connect(_view, &MainWindow::askFilter,         _model, &GameModel::setFilter);
+	connect(_view, &MainWindow::hovered,           _model, &GameModel::tryTogglePlayerValue);
+	connect(_view, &MainWindow::askHelp,           _model, &GameModel::toggleHelp);
 
-	connect(_model, &GameModel::debug, this, &GamePresenter::handleModelDebug);
-	connect(_model, &GameModel::sendGameName, this, &GamePresenter::handleGetGameName);
-	connect(_model, &GameModel::cellUpdated, this, &GamePresenter::handleCellUpdated);
-	connect(_model, &GameModel::victory, this, &GamePresenter::handleVictory);
-	connect(_model, &GameModel::sendConflictValue, this, &GamePresenter::handleConflict);
+	connect(_model, &GameModel::debug,              _view, &MainWindow::debug);
+	connect(_model, &GameModel::sendGameName,       _view, &MainWindow::setGameName);
+	connect(_model, &GameModel::cellUpdated,        _view, &MainWindow::setCellValue);
+	connect(_model, &GameModel::victory,            _view, &MainWindow::victory);
+	connect(_model, &GameModel::sendConflictValue,  _view, &MainWindow::sendConflictValue);
+
+
 }
 
 void GamePresenter::initCells()
@@ -21,27 +23,6 @@ void GamePresenter::initCells()
 	for (int i=0; i<_model->getSize(); ++i)
 		for(int j=0; j<_model->getSize(); ++j)
 			_view->setCell(i, j, _model->getColors(i, j), _model->getBorders(i, j), _model->getCorners(i, j));
-}
-
-void GamePresenter::handleCellClicked(const int row, const int col, const bool left)
-{
-	_model->togglePlayerValue(row, col, left);
-}
-
-void GamePresenter::handleModelDebug(const QString debugText, const bool keep)
-{
-	_view->debug(debugText, keep);
-}
-
-void GamePresenter::handleCellUpdated(const int row, const int col, const int value)
-{
-	_view->setCellValue(row, col, value);
-	_view->debug(QString("P -> Cell updated: [%1; %2] -> %3\n").arg(row).arg(col).arg(value));
-}
-
-void GamePresenter::handleVictory()
-{
-	_view->victory();
 }
 
 void GamePresenter::handleChooseGame()
@@ -55,29 +36,4 @@ void GamePresenter::handleGetGameFile(const QString filePath)
 	_view->setCellGridSize(_model->getSize());
 	initCells();
 	_view->updateGridWidget();
-}
-
-void GamePresenter::handleGetGameName(const QString gameName)
-{
-	_view->setGameName(gameName);
-}
-
-void GamePresenter::handleAskFilter(const int row, const int col)
-{
-	_model->setFilter(row, col);
-}
-
-void GamePresenter::handleCellHovered(const int row, const int col)
-{
-	_model->tryTogglePlayerValue(row, col);
-}
-
-void GamePresenter::handleAskHelp()
-{
-	_model->toggleHelp();
-}
-
-void GamePresenter::handleConflict(const int row, const int col, const int conflict)
-{
-	_view->sendConflictValue(row, col, conflict);
 }

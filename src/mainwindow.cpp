@@ -104,7 +104,7 @@ void MainWindow::setCellGridSize(const int n)
 	updateDisplay();
 }
 
-void MainWindow::setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<bool, 4>& corners)
+void MainWindow::setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<int, 4>& corners)
 {
 	if (row<0 || row>=cells.size()) return;
 	if (col<0 || col>=cells[row].size()) return;
@@ -122,10 +122,12 @@ void MainWindow::setCell(const int row, const int col, const pair<QColor, QColor
 	}
 }
 
-void MainWindow::setCellValue(const int row, const int col, const int value)
+void MainWindow::setCellValue(const int row, const int col, const QString value)
 {
 	qDebug() << "V -> Cell value:\t\t[" << row << "; " << col << "] -> " << value;
-	((CellButton *) cells[row][col])->setCellValue(symbols[value]);
+	CellButton *cell = cells[row][col];
+	cell->setCellValue(value);
+	cell->updateValueDisplay();
 }
 
 void MainWindow::setGameName(const QString gameName)
@@ -140,15 +142,16 @@ void MainWindow::updateDisplay()
 		for (auto &cell : row)
 		{
 			cell->updateDisplay();
+			cell->updateValueDisplay();
 		}
 	}
 
     QSize size = ui->startButton->size();
 
-    int radius = TM::instance().getFloat("cornerFactor") * min(size.height(), size.width()) * 0.5;
+	int radius = _themeM->getFloat("cornerFactor") * min(size.height(), size.width()) * 0.5;
 
-	QString qss0 = TM::instance().getStyle("central");
-	QString qss1 = TM::instance().getStyle("centralButtons");
+	QString qss0 = _themeM->getStyle("central");
+	QString qss1 = _themeM->getStyle("centralButtons");
 
     qss1.replace("%RADIUS%", QString::number(radius));
 

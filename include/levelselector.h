@@ -51,6 +51,8 @@ private:
 	float animationFactor = 0.0f;
 	QGraphicsOpacityEffect *effect;
 
+	TM *_themeM = &TM::instance();
+
 	void addLevels();
 	void updateButtonSize();
 	void updateLayout();

@@ -55,6 +55,8 @@ private:
 	float _rotation = 0.0f;
 	float _sideFactor = 1.0f;
 
+	TM *_themeM = &TM::instance();
+
 	void animationClicked(bool rotationOnly = false, bool backward = false);
 };
 

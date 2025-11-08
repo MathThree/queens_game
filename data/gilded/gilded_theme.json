@@ -13,7 +13,16 @@
 	},
 	"floats": {
 		"cornerFactor": 0.3,
-		"borderFactor": 0.02
+		"borderFactor": 0.16,
+		"disableBorderFactor": 0.16
+	},
+	"strings": {
+		"": "",
+		"cornerColor": "primary",
+		"none": "",
+		"dot": "•",
+		"queen": "✦",
+		"helpDot": "·"
 	}
 }
 

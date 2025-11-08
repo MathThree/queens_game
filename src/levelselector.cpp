@@ -64,11 +64,12 @@ void LevelSelector::addLevels()
 
 	const QStringList files = dir.entryList(QDir::Files);
 	for (const QString &file : files)
-    {
+	{
+		if (file == "000.txt") continue;
         LevelButton *levelButton = new LevelButton(file, this);
 		layout->addWidget(levelButton);
 
-		connect(levelButton, &LevelButton::clicked, this, [this, levelButton]() { hide(); emit sendGameFile(levelButton->getFilePath()); } );
+		connect(levelButton, &LevelButton::clicked, this, [this, levelButton]() { animationClicked(true); emit sendGameFile(levelButton->getFilePath()); } );
     }
 }
 
@@ -86,7 +87,7 @@ void LevelSelector::updateDisplay()
 	QScrollArea *scrollArea = ui->scrollArea;
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-	QString qss = TM::instance().getStyle("overlay");
+	QString qss = _themeM->getStyle("overlay");
 
 	ui->overlayWidget->setStyleSheet(qss);
 	ui->overlayWidget->style()->unpolish(ui->overlayWidget);
@@ -108,7 +109,11 @@ void LevelSelector::updateButtonSize()
 
 void LevelSelector::animationClicked(bool backward)
 {
+#ifdef Q_OS_WASM
+	int duration = 72;
+#else
 	int duration = 360;
+#endif
 	QPropertyAnimation *animPos = new QPropertyAnimation(this, "animationFactor");
 	animPos->setDuration(duration);
 	animPos->setStartValue(backward ? 1.0 : 0.0);

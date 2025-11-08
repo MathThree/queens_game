@@ -12,7 +12,7 @@ LevelButton::LevelButton(const QString &filePath, QWidget *parent) : QPushButton
 
 void LevelButton::updateDisplay()
 {
-	QString qss = TM::instance().getStyle("overlayButtons");
+	QString qss = _themeM->getStyle("overlayButtons");
 
 	qss.replace("%CORNER_RADIUS%", QString::number(cornerRadius));
 

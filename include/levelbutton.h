@@ -31,6 +31,8 @@ protected:
 private:
 	QString _filePath;
 	int cornerRadius = 15;
+
+	TM *_themeM = &TM::instance();
 };
 
 #endif // LEVELBUTTON_H

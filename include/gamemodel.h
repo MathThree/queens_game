@@ -4,7 +4,6 @@
 #pragma once
 
 #include <QtGlobal>
-#include <QString>
 
 #if QT_VERSION_MAJOR >= 6
 #define QS_SKIP_EMPTY Qt::SkipEmptyParts
@@ -18,12 +17,8 @@
 #define QS_CASE_SENSITIVE QString::CaseSensitive
 #endif
 
+#include <QString>
 #include <QObject>
-#include <vector>
-#include <list>
-#include <set>
-#include <tuple>
-#include <utility>
 #include <QStringList>
 #include <QColor>
 #include <QFile>
@@ -32,6 +27,12 @@
 #include <QString>
 #include <QDebug>
 #include <QRegularExpression>
+
+#include <vector>
+#include <list>
+#include <set>
+#include <tuple>
+#include <utility>
 #include <random>
 
 using namespace std;
@@ -73,16 +74,38 @@ public:
 	 * @brief Get cell color
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
-	 * @return Color associated with the cell's zone (QColor)
+	 * @return Pair of cell and border colors (QColor, QColor)
 	 */
 	pair<QColor, QColor> getColors(const int row, const int col) const { return make_pair(cellColors[grid[row][col].colorZone], borderColors[grid[row][col].colorZone]); }
 
+	/**
+	 * @brief Get borders between adjacent cells
+	 * @param row Row index of the cell (int)
+	 * @param col Column index of the cell (int)
+	 * @return Array of 4 border states (top, right, bottom, left) (array<int, 4>)
+	 */
 	array<int, 4> getBorders(const int row, const int col) const;
 
-	array<bool, 4> getCorners(const int row, const int col) const;
+	/**
+	 * @brief Get corner values for cell drawing
+	 * @param row Row index of the cell (int)
+	 * @param col Column index of the cell (int)
+	 * @return Array of 4 corner states (top-left, top-right, bottom-right, bottom-left) (array<int, 4>)
+	 */
+	array<int, 4> getCorners(const int row, const int col) const;
 
+	/**
+	 * @brief Set current filter value based on clicked cell
+	 * @param row Row index of the cell (int)
+	 * @param col Column index of the cell (int)
+	 */
 	void setFilter(const int row, const int col) { filter = getFilterValue(grid[row][col].playerValue); }
 
+	/**
+	 * @brief Try toggling player value depending on current filter
+	 * @param row Row index of the cell (int)
+	 * @param col Column index of the cell (int)
+	 */
 	void tryTogglePlayerValue(const int row, const int col);
 
 	/**
@@ -93,10 +116,13 @@ public:
 	 */
 	void togglePlayerValue(const int row, const int col, const bool left);
 
+	/**
+	 * @brief Enable or disable help mode
+	 */
 	void toggleHelp();
 
 	/**
-	 * @brief Load game file
+	 * @brief Load a game configuration file
 	 * @param gameName Name of the game file (QString)
 	 */
 	void loadGameFile(QString gameName);
@@ -125,10 +151,10 @@ private:
 	vector<vector<pair<int, int>>> zones;               ///< Cells grouped by zone
 	list<pair<int, int>> queenList;                     ///< Positions of queens placed by the player
 	vector<QColor> cellColors;                          ///< Colors per zone
-	vector<QColor> borderColors;
+	vector<QColor> borderColors;                        ///< Border Colors per zone
 	int offsets[2];                                     ///< Helper array {-1, 1} for diagonals
 	bool help = false;                                  ///< Show help dots if true
-	int filter = 0;
+	int filter = 0;                                     ///< Current filter value
 
 	/**
 	 * @brief Initialize colors according to number of zones
@@ -142,14 +168,14 @@ private:
 	void setSize(const int newSize);
 
 	/**
-	 * @brief Set queens from input
-	 * @param queenList List of strings of numbers with queen data (QStringList)
+	 * @brief Initialize queens from game file data
+	 * @param queenList List of queen position (QStringList)
 	 */
 	void setQueens(const QStringList queenList);
 
 	/**
-	 * @brief Set zones from input
-	 * @param zoneList List of strings of numbers with zone data (QStringList)
+	 * @brief Initialize zones from game file data
+	 * @param zoneList List of zone definitions (QStringList)
 	 */
 	void setZones(const QStringList zoneList);
 
@@ -175,14 +201,14 @@ private:
 	void setNoneToCell(const int row, const int col);
 
 	/**
-	 * @brief Remove a queen (if exists) and update concerned cells
+	 * @brief Remove a queen (if exists) and update related cells
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
 	 */
 	void removeQueen(const int row, const int col);
 
 	/**
-	 * @brief Check if a queen exists in a cell zone, ignoring the cell itself
+	 * @brief Check if a queen exists in a cell's influence zone, ignoring the cell itself
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
 	 * @return True if a queen is present (bool)
@@ -190,7 +216,7 @@ private:
 	bool isQueenInZone(const int row, const int col);
 
 	/**
-	 * @brief Check if a queen exists in a color zone of a cell, ignoring the cell itself
+	 * @brief Check if a queen exists in the color zone of a cell, ignoring the cell itself
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
 	 * @return True if a queen is present (bool)
@@ -198,7 +224,7 @@ private:
 	bool isQueenInColorZone(const int row, const int col);
 
 	/**
-	 * @brief Check if a queen exists in a row of a cell, ignoring the cell itself
+	 * @brief Check if a queen exists in the row of a cell, ignoring the cell itself
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
 	 * @return True if a queen is present (bool)
@@ -206,7 +232,7 @@ private:
 	bool isQueenInRow(const int row, const int col);
 
 	/**
-	 * @brief Check if a queen exists in a column of a cell, ignoring the cell itself
+	 * @brief Check if a queen exists in the column of a cell, ignoring the cell itself
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
 	 * @return True if a queen is present (bool)
@@ -222,37 +248,65 @@ private:
 	bool isQueenInKingZone(const int row, const int col);
 
 	/**
-	 * @brief Check if all queens are placed to the right cells according to the game rules
-	 * @return True if there is a victory
+	 * @brief Check if all queens are correctly placed according to game rules
+	 * @return True if there is a victory (bool)
 	 */
 	bool isVictory();
 
 	/**
-	 * @brief Get related cells (same zone/row/col/corners)
+	 * @brief Get related cells (same zone, row, column or adjacent diagonals)
 	 * @param row Row index of the cell (int)
 	 * @param col Column index of the cell (int)
-	 * @param addTarget Include the target cell if true (bool, default false)
-	 * @return Related cells (set<pair<int,int>>)
+	 * @param addTarget Include the cell itself if true (bool, default false)
+	 * @return Set of related cell coordinates (set<pair<int,int>>)
 	 */
 	set<pair<int, int>> getRelatedCells(const int row, const int col, const bool addTarget = false);
 
 	/**
-	 * @brief Compute value sent to the view
-	 * @param cell Cell pointer (Cell*)
-	 * @return Computed value (int)
+	 * @brief Compute string value sent to the view
+	 * @param cell Pointer to the cell (Cell *)
+	 * @return Cell value as string ("none", "dot", "queen", "helpDot") (int)
 	 */
-	int getValueToSend(const Cell *cell) const;
+	QString getValueToSend(const Cell *cell) const;
 
+	/**
+	 * @brief Compute border state for one direction
+	 * @param row Target row index (can be outside from the grid game) (int)
+	 * @param col Target column index (can be outside from the grid game) (int)
+	 * @param cell Pointer to the cell (Cell *)
+	 * @return Border type (int)
+	 */
 	int getBorder(int row, int col, const Cell *cell) const;
 
-	bool getCorner(const array<int, 3>& rows, const array<int, 3>& cols, const Cell *cell) const;
+	/**
+	 * @brief Compute corner state for drawing
+	 * @param rows Array of 3 row indices
+	 * @param cols Array of 3 column indices
+	 * @param cell Pointer to the cell (Cell *)
+	 * @return Corner type (int)
+	 */
+	int getCorner(const array<int, 3>& rows, const array<int, 3>& cols, const Cell *cell) const;
 
+	/**
+	 * @brief Get filtered player value
+	 * @param playerValue Value to process (int)
+	 * @return Filtered value (int)
+	 */
 	int getFilterValue(int playerValue);
 
+	/**
+	 * @brief Update grid and check victory after a change
+	 * @param row Row index of the cell (int)
+	 * @param col Column index of the cell (int)
+	 */
 	void updateGrid(const int row, const int col);
 
 signals:
-	void sendGameName(const QString row);
+	/**
+	 * @brief Send game name
+	 * @param name Game name
+	 */
+	void sendGameName(const QString name);
 
 	/**
 	 * @brief Emitted when a cell is updated
@@ -260,8 +314,11 @@ signals:
 	 * @param col Colum index of the cell (int)
 	 * @param value New cell value (int)
 	 */
-	void cellUpdated(const int row, const int col, const int value);
+	void cellUpdated(const int row, const int col, const QString value);
 
+	/**
+	 * @brief Emitted when there is a victory
+	 */
 	void victory();
 
 	/**
@@ -271,6 +328,12 @@ signals:
 	 */
 	void debug(const QString debugText, const bool keep = true);
 
+	/**
+	 * @brief Emitted when a conflict occurs or is resolved between queens
+	 * @param row Row index of the cell (int)
+	 * @param col Column index of the cell (int)
+	 * @param conflict True if there is a conflict, false otherwise
+	 */
 	void sendConflictValue(const int row, const int col, const bool conflict);
 };
 

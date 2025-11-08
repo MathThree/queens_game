@@ -17,7 +17,7 @@ void GameModel::loadGameFile(QString gameName)
 	}
 
 	QFileInfo info(file);
-	emit sendGameName(info.completeBaseName());
+	emit sendGameName("");//info.completeBaseName());
 
 	QTextStream in(&file);
 	QString line;
@@ -147,6 +147,7 @@ void GameModel::updateGrid(const int row, const int col)
 		qDebug() << "M -> ##### VICTORY! #####";
 		emit debug("M -> ##### VICTORY! #####");
 		emit victory();
+		emit sendGameName("VICTORY!");
 	}
 }
 
@@ -303,13 +304,13 @@ set<pair<int, int>> GameModel::getRelatedCells(const int row, const int col, con
 	return relatedCells;
 }
 
-int GameModel::getValueToSend(const Cell *cell) const
+QString GameModel::getValueToSend(const Cell *cell) const
 {
 	if (cell->playerValue != 0)
-		return cell->playerValue;
+		return cell->playerValue == 1 ? "dot" : "queen";
 	if (help)
-		return cell->couldHaveQueen ? 0 : 3;
-	return 0;
+		return cell->couldHaveQueen ? "none" : "helpDot";
+	return "none";
 }
 
 array<int, 4> GameModel::getBorders(const int row, const int col) const
@@ -336,9 +337,9 @@ int GameModel::getBorder(int row, int col, const Cell *cell) const
 	return 1; // same color
 }
 
-array<bool, 4> GameModel::getCorners(const int row, const int col) const
+array<int, 4> GameModel::getCorners(const int row, const int col) const
 {
-	array<bool, 4> corners;
+	array<int, 4> corners;
 	const Cell *cell = &grid[row][col];
 	const array<pair<int, int>, 8> directions = {{{-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}}};
 	for (int k=0; k<4; ++k)
@@ -356,12 +357,17 @@ array<bool, 4> GameModel::getCorners(const int row, const int col) const
 	return corners;
 }
 
-bool GameModel::getCorner(const array<int, 3>& rows, const array<int, 3>& cols, const Cell *cell) const
+int GameModel::getCorner(const array<int, 3>& rows, const array<int, 3>& cols, const Cell *cell) const
 {
-	for (int k = 0; k < 3; k += 2) // if one next cell in the grid and same color
-		if (rows[k] != -1 && rows[k] != n && cols[k] != -1 && cols[k] != n && grid[rows[k]][cols[k]].colorZone == cell->colorZone)
-			return false;
-	return true;
+	bool b0 = (rows[0] != -1 && rows[0] != n && cols[0] != -1 && cols[0] != n && grid[rows[0]][cols[0]].colorZone == cell->colorZone);
+	bool b1 = (rows[1] != -1 && rows[1] != n && cols[1] != -1 && cols[1] != n && grid[rows[1]][cols[1]].colorZone != cell->colorZone);
+	bool b2 = (rows[2] != -1 && rows[2] != n && cols[2] != -1 && cols[2] != n && grid[rows[2]][cols[2]].colorZone == cell->colorZone);
+
+	if (b0 && b1 && b2)
+		return 2;
+	if (b0 || b2)
+		return 0;
+	return 1;
 }
 
 int GameModel::getFilterValue(int playerValue)

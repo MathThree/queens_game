@@ -34,20 +34,26 @@ void ThemeManager::setTheme(const QString &themeName)
 	{
 		QJsonArray arr = it.value().toArray();
 		if (arr.size() != 3) continue;
-		currentTheme.values[it.key()] = QColor(arr[0].toInt(), arr[1].toInt(), arr[2].toInt());
+		currentTheme.colors[it.key()] = QColor(arr[0].toInt(), arr[1].toInt(), arr[2].toInt());
 	}
 
     QJsonObject bools = obj["bools"].toObject();
     for (auto it = bools.begin(); it != bools.end(); ++it) {
         if (!it.value().isBool()) continue;
-        currentTheme.values[it.key()] = it.value().toBool();
-    }
+		currentTheme.bools[it.key()] = it.value().toBool();
+	}
 
-    QJsonObject floats = obj["floats"].toObject();
-    for (auto it = floats.begin(); it != floats.end(); ++it) {
-        if (!it.value().isDouble()) continue;
-        currentTheme.values[it.key()] = static_cast<float>(it.value().toDouble());
-    }
+	QJsonObject floats = obj["floats"].toObject();
+	for (auto it = floats.begin(); it != floats.end(); ++it) {
+		if (!it.value().isDouble()) continue;
+		currentTheme.floats[it.key()] = static_cast<float>(it.value().toDouble());
+	}
+
+	QJsonObject strings = obj["strings"].toObject();
+	for (auto it = strings.begin(); it != strings.end(); ++it) {
+		if (!it.value().isString()) continue;
+		currentTheme.strings[it.key()] = it.value().toString();
+	}
 }
 
 void ThemeManager::setStyle(const QString &themeName)
@@ -151,45 +157,47 @@ vector<tuple<QString, QColor, QColor>> ThemeManager::getAvailableThemes()
 
 const bool ThemeManager::getBool(QString key)
 {
-    if (currentTheme.values.contains(key)) {
-        return currentTheme.values[key].toBool();
-    } else {
-        qWarning() << "TM-> Bool key not found: " << key;
-        return false;
-    }
+	if (currentTheme.bools.contains(key))
+		return currentTheme.bools[key];
+	qWarning() << "TM-> Bool key not found: " << key;
+	return false;
 }
 
 const float ThemeManager::getFloat(QString key)
 {
-    if (currentTheme.values.contains(key)) {
-        return static_cast<float>(currentTheme.values[key].toDouble());
-    } else {
-        qWarning() << "TM-> Bool key not found: " << key;
-        return 0.;
-    }
+	if (currentTheme.floats.contains(key))
+		return currentTheme.floats[key];
+	qWarning() << "TM-> Float key not found: " << key;
+	return 0.0;
 }
 
 const QColor ThemeManager::getColor(QString key)
 {
-    if (currentTheme.values.contains(key)) {
-        return currentTheme.values[key].value<QColor>();
-    } else {
-        qWarning() << "TM-> Bool key not found: " << key;
-        return Qt::white;
-    }
+	if (currentTheme.colors.contains(key))
+		return currentTheme.colors[key];
+	qWarning() << "TM-> Color key not found: " << key;
+	return Qt::white;
+}
+
+const QString ThemeManager::getString(QString key)
+{
+	if (currentTheme.strings.contains(key))
+		return currentTheme.strings[key];
+	qWarning() << "TM-> Source key not found: " << key;
+	return QString("");
 }
 
 void ThemeManager::swapThemeColors()
 {
-    auto tmpPrimary   = getColor("primary");
-    auto tmpSecondary = getColor("secondary");
-    auto tmpPHover    = getColor("p_hover");
-    auto tmpSHover    = getColor("s_hover");
+	QColor tmpPrimary   = getColor("primary");
+	QColor tmpSecondary = getColor("secondary");
+	QColor tmpPHover    = getColor("p_hover");
+	QColor tmpSHover    = getColor("s_hover");
 
-    currentTheme.values["primary"]   = tmpSecondary;
-    currentTheme.values["secondary"] = tmpPrimary;
-    currentTheme.values["p_hover"]   = tmpSHover;
-    currentTheme.values["s_hover"]   = tmpPHover;
+	currentTheme.colors["primary"]   = tmpSecondary;
+	currentTheme.colors["secondary"] = tmpPrimary;
+	currentTheme.colors["p_hover"]   = tmpSHover;
+	currentTheme.colors["s_hover"]   = tmpPHover;
 
     setStyle(currentTheme.name);
 

@@ -46,8 +46,8 @@ public:
     void openGameDir(const QString dir);
     void openGameFile(const QString filePath);
 	void setCellGridSize(const int n);
-	void setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<bool, 4>& corners);
-	void setCellValue(const int row, const int col, const int value);
+	void setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<int, 4>& corners);
+	void setCellValue(const int row, const int col, const QString value);
 	void setGameName(const QString gameName);
 	void updateDisplay();
 	void updateGridWidget();
@@ -78,9 +78,10 @@ private:
 	SettingsOverlay *settingsOverlay;
     StartOverlay *startOverlay;
     QString debugText;
-    vector<vector<CellButton*>> cells;
-	vector<QString> symbols = {"", "•", "♛", "·"};
+	vector<vector<CellButton*>> cells;
 	Theme _theme;
+
+	TM *_themeM = &TM::instance();
 
     void initCellGrid();
     void connectCell(const CellButton *cell);
