@@ -52,81 +52,82 @@ void GridWidget::paintEvent(QPaintEvent *event)
 	painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(primary);
     painter.setPen(Qt::NoPen);
-    painter.drawRoundedRect(rect(), radius, radius);
+	painter.drawRoundedRect(rect(), radius, radius);
 
-	if (_cells && !_cells->empty() && (this->isEnabled() || _themeM->getBool("fillCellsInDisabled")))
-		if (_themeM->getBool("fillCellsIn"))
-        {
-            paintCells(painter);
-            paintCornerCells(painter);
-			if (!_themeM->getBool("fillCellsOut"))
-                paintFrame(painter);
-        }
-
+	paintCellBackground(painter);
     QWidget::paintEvent(event);
 }
 
-void GridWidget::paintCells(QPainter &painter)
+void GridWidget::paintCellBackground(QPainter &painter)
 {
-    int n = _cells->size();
+	painter.setRenderHint(QPainter::Antialiasing, false);
 
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            CellButton* cell = (*_cells)[i][j];
-            if (!cell) continue;
-            if ((i == 0 || i == n-1) && (j == 0 || j == n-1)) continue;
+	int n = _cells->size();
 
-            QRectF rect = cell->geometry();
-            QColor cellColor = this->isEnabled() ? cell->getColor().darker(150) : cell->getColor();
+	for (int i=0; i<n; ++i)
+		for (int j=0; j<n; ++j)
+		{
+			CellButton* cell = (*_cells)[i][j];
 
-            painter.fillRect(rect, cellColor);
-        }
-    }
+			for (int c=0; c<4; ++c)
+			{
+				int c_corner = cell->getCorners(c);
+				//int n_border = cell->getBorders(c);
+				//int p_border = cell->getBorders((c+3)%4);
+
+				if (c_corner == 0 || c_corner == 2)
+				{
+					pair cDir = cornerDirections[c];
+					int halfWidth = (int) round(cell->width() * 0.5f);
+					int halfHeight = (int) round(cell->height() * 0.5f);
+
+					/*painter.fillRect(QRect(round(cell->x()) + cDir.second * halfWidth,
+										   round(cell->y()) + cDir.first * halfHeight,
+										   halfWidth,
+										   halfHeight),
+									 _themeM->getCellColor(cell->getColorZone(), "base"));*/
+				}
+				if (c_corner == 1 && _themeM->getBool("fillCorners"))
+				{
+					pair d = directions[2*c];
+					pair cDir = cornerDirections[c];
+					int halfWidth = (int) round(cell->width() * 0.5f);
+					int halfHeight = (int) round(cell->height() * 0.5f);
+					pair<QColor, bool> pairColor = getCornerColor(i, j, c, i+d.first, j+d.second);
+
+					if (pairColor.second)
+						painter.fillRect(QRect(round(cell->x()) + cDir.second * halfWidth,
+											   round(cell->y()) + cDir.first * halfHeight,
+											   halfWidth,
+											   halfHeight),
+										 pairColor.first);
+				}
+			}
+		}
 }
 
-void GridWidget::paintCornerCells(QPainter &painter)
+pair<QColor, bool> GridWidget::getCornerColor(int row, int col, int cornerIndex, int otherRow, int otherCol)
 {
-    int n = _cells->size();
-    if (n == 1) return;
-    float cellSize = (*_cells)[0][0]->geometry().width();
-    float half = cellSize * 0.5f;
+	int n = _cells->size();
+	int r = 2*row + cornerDirections[cornerIndex].first;
+	int c = 2*col + cornerDirections[cornerIndex].second;
+	bool isREdge = (r == 0 || r == (2*n-1));
+	bool isCEdge = (c == 0 || c == (2*n-1));
 
-    for (int i=0; i<n; i+=n-1)
-    {
-        for (int j=0; j<n; j+=n-1)
-        {
-            CellButton* cell = (*_cells)[i][j];
-            QRectF base = cell->geometry();
-            QColor cellColor = this->isEnabled() ? cell->getColor().darker(150) : cell->getColor();
+	if (isREdge && isCEdge) // grid corners
+		return make_pair(_themeM->getColor("primary"), false);
+	if (isREdge || isCEdge) // grid borders
+	{
+		if (_themeM->getBool("fillCornersOut"))
+			return make_pair(_themeM->getCellColor((*_cells)[row][col]->getColorZone(), isEnabled() ? "cornerOut" : "cornerOutDisabled"), true);
+		return make_pair(_themeM->getColor("primary"), false);
+	}
+	if (_themeM->getBool("fillCornersOwnColor"))
+		return make_pair(_themeM->getCellColor((*_cells)[row][col]->getColorZone(), isEnabled() ? "cornerOut" : "cornerOutDisabled"), true);
 
-            int x = base.x() + (j == 0 ? half : 0);
-            int y = base.y() + (i == 0 ? half : 0);
+	CellButton * otherCell = (*_cells)[otherRow][otherCol];
 
-            painter.fillRect(QRectF(x, base.y(), half, cellSize), cellColor);
-            painter.fillRect(QRectF(base.x(), y, cellSize, half), cellColor);
-        }
-    }
-}
-
-void GridWidget::paintFrame(QPainter &painter)
-{
-    int n = _cells->size();
-    CellButton* firstCell = (*_cells)[0][0];
-    CellButton* lastCell = (*_cells)[n-1][n-1];
-    if (!firstCell || !lastCell) return;
-
-    QRectF outerRect = firstCell->geometry().united(lastCell->geometry());
-
-    float cellSize = firstCell->geometry().width();
-    float halfCell = cellSize / 2.0f;
-
-    QRectF innerRect = outerRect.adjusted(halfCell / 2.0f, halfCell / 2.0f, -halfCell / 2.0f, -halfCell / 2.0f);
-
-	QPen pen(_themeM->getColor("primary"));
-    pen.setWidthF(halfCell);
-    pen.setJoinStyle(Qt::MiterJoin);
-
-    painter.setPen(pen);
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRect(innerRect);
+	if (otherCell->getCorners((cornerIndex+2)%4) == 2)
+		return make_pair(_themeM->getCellColor(otherCell->getColorZone(), isEnabled() ? "cornerOut" : "cornerOutDisabled"), true);
+	return make_pair(_themeM->getColor("primary"), false);
 }

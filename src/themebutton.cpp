@@ -75,11 +75,13 @@ void ThemeButton::handleClicked()
 	if (_themeM->getName() == _themeName)
 	{
 		_themeM->swapThemeColors();
+		_themeM->updateZoneColors(0);
 		animationClicked(true);
 	}
     else
 	{
-	   _themeM->applyTheme(_themeName);
+		_themeM->applyTheme(_themeName);
+		_themeM->updateZoneColors(0, false);
 		animationClicked();
 	}
 	emit updateThemeDisplay();

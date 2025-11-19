@@ -13,6 +13,7 @@
 #include <QVariant>
 #include <vector>
 #include <utility>
+#include <random>
 
 using namespace std;
 
@@ -22,6 +23,10 @@ struct Theme {
 	QMap<QString, bool> bools;
 	QMap<QString, float> floats;
 	QMap<QString, QString> strings;
+};
+
+struct CellColors {
+	QMap<QString, QColor> colors;
 };
 
 class ThemeManager {
@@ -41,6 +46,8 @@ public:
 	const float getFloat(QString key);
 	const QColor getColor(QString key);
 	const QString getString(QString key);
+	const QColor getCellColor(const int colorZone, QString key);
+	void updateZoneColors(int n, bool random = true);
     void swapThemeColors();
 
 private:
@@ -50,6 +57,11 @@ private:
 	Theme currentTheme;
 	QMap<QString, QString> styles;
 	QStringList qssNames = { "cell", "central", "overlay", "centralButtons", "overlayButtons" };
+	vector<CellColors> zoneColors;
+
+	void fillCellColors(const int colorZone);
+	void randomizeBaseColors(int n);
+	void addCellColor(const int colorZone, QString key);
 };
 
 

@@ -7,14 +7,19 @@
 		"s_hover": [221, 221, 86]
 	},
 	"bools": {
-		"fillCellsIn": false,
-		"fillCellsOut": true,
-		"fillCellsInDisabled": false
+		"fillCorners": true,
+		"fillCornersOut": true,
+		"fillCornersOwnColor": true
 	},
 	"floats": {
 		"cornerFactor": 1.0,
 		"borderFactor": 0.4,
-		"disableBorderFactor": 0.4
+		"disableBorderFactor": 0.4,
+		"text": 250,
+		"borderIn": 150,
+		"borderOut": 150,
+		"cornerOut": 150,
+		"cornerOutDisabled": 150
 	},
 	"strings": {
 		"": "",
@@ -22,7 +27,14 @@
 		"none": "",
 		"dot": "❧",
 		"queen": "✿",
-		"helpDot": "·"
+		"helpDot": "·",
+		"text": "cell_dark",
+		"borderIn": "cell_dark",
+		"borderOut": "cell_dark",
+		"borderInDisabled": "cell",
+		"borderOutDisabled": "cell",
+		"cornerOut": "secondary",
+		"cornerOutDisabled": "secondary"
 	}
 }
 

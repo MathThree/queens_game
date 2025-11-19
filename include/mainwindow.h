@@ -46,7 +46,7 @@ public:
     void openGameDir(const QString dir);
     void openGameFile(const QString filePath);
 	void setCellGridSize(const int n);
-	void setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<int, 4>& corners);
+	void setCell(const int row, const int col, const int colorZone, const array<int, 4>& borders, const array<int, 4>& corners);
 	void setCellValue(const int row, const int col, const QString value);
 	void setGameName(const QString gameName);
 	void updateDisplay();

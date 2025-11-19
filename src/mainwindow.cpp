@@ -67,7 +67,8 @@ void MainWindow::initCellGrid()
 
 void MainWindow::setCellGridSize(const int n)
 {
-    gridWidget->hide();
+	gridWidget->hide();
+	_themeM->updateZoneColors(n);
 	int old_n = cells.size();
 	if (old_n > n)
 	{
@@ -104,14 +105,14 @@ void MainWindow::setCellGridSize(const int n)
 	updateDisplay();
 }
 
-void MainWindow::setCell(const int row, const int col, const pair<QColor, QColor> colors, const array<int, 4>& borders, const array<int, 4>& corners)
+void MainWindow::setCell(const int row, const int col, const int colorZone, const array<int, 4>& borders, const array<int, 4>& corners)
 {
 	if (row<0 || row>=cells.size()) return;
 	if (col<0 || col>=cells[row].size()) return;
 
 	CellButton *cell = cells[row][col];
 	cell->resetCellButton();
-	cell->setColors(colors);
+	cell->setColorZone(colorZone);
 	cell->setBorders(borders);
 	cell->setCorners(corners);
 	cell->updateDisplay();

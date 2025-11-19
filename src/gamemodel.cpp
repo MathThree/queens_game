@@ -43,7 +43,6 @@ void GameModel::setSize(const int newSize)
 	grid = vector<vector<Cell>>(n, vector<Cell>(n));
 	zones = vector<vector<pair<int, int>>>(n, vector<pair<int, int>>(0));
 	queenList.clear();
-	setColors();
 }
 
 void GameModel::setQueens(const QStringList queenList)
@@ -67,31 +66,6 @@ void GameModel::setZones(const QStringList zoneList)
 			grid[i][j].colorZone = colorZone-1;
 			zones[colorZone-1].push_back(pair<int, int>(i, j));
 		}
-	}
-}
-
-void GameModel::setColors()
-{
-	static mt19937 rng(random_device{}());
-	vector<int> indexes(n);
-	iota(indexes.begin(), indexes.end(), 0);
-	shuffle(indexes.begin(), indexes.end(), rng);
-	uniform_real_distribution<double> dist(0.0, 1.0);
-
-	cellColors.resize(n);
-	borderColors.resize(n);
-	double h = -dist(rng) / n;
-	double sC = .62;
-	double vC = .78;
-	double sB = .72;
-	double vB = .46;
-
-	double offset = .5 / n;
-	for (int i=0; i<cellColors.size(); ++i)
-	{
-		h += 2. * offset;
-		cellColors[indexes[i]] = QColor::fromHsvF(h, sC, vC);
-		borderColors[indexes[i]] = QColor::fromHsvF(h, sB, vB);
 	}
 }
 

@@ -45,9 +45,11 @@ private:
 
 	TM *_themeM = &TM::instance();
 
-    void paintCells(QPainter &painter);
-    void paintCornerCells(QPainter &painter);
-    void paintFrame(QPainter &painter);
+	const array<pair<int, int>, 8> directions = {{{-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}}};
+	const array<pair<int, int>, 4> cornerDirections = {{{0, 0}, {0, 1}, {1, 1}, {1, 0}}};
+
+	void paintCellBackground(QPainter &painter);
+	pair<QColor, bool> getCornerColor(int row, int col, int cornerIndex, int otherRow, int otherCol);
 };
 
 #endif // GRIDWIDGET_H

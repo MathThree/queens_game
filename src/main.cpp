@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
 	//a.installTranslator(&translator);
 
 	ThemeManager::instance().applyTheme();
+	ThemeManager::instance().updateZoneColors(1);
 
 	MainWindow view;
     GameModel model;

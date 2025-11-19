@@ -11,10 +11,6 @@ QPushButton {
 	border-bottom-left-radius: %CORNER_RADIUS_BL%px;
 }
 
-QPushButton:hover {
-	color: %TEXT_COLOR%;
-}
-
 QPushButton:disabled {
 	color: %TEXT_COLOR%;
 	border-top: 0px solid %SECONDARY%;

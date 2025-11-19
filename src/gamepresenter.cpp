@@ -22,7 +22,7 @@ void GamePresenter::initCells()
 {
 	for (int i=0; i<_model->getSize(); ++i)
 		for(int j=0; j<_model->getSize(); ++j)
-			_view->setCell(i, j, _model->getColors(i, j), _model->getBorders(i, j), _model->getCorners(i, j));
+			_view->setCell(i, j, _model->getColorZone(i, j), _model->getBorders(i, j), _model->getCorners(i, j));
 }
 
 void GamePresenter::handleChooseGame()

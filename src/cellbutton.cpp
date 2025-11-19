@@ -1,6 +1,6 @@
 #include "cellbutton.h"
 
-CellButton::CellButton(const int row, const int col, QWidget* parent, const QColor color) : QPushButton(parent), _row(row), _col(col), _color(color)
+CellButton::CellButton(const int row, const int col, QWidget* parent, const QColor color) : QPushButton(parent), _row(row), _col(col)
 {
 	updateDisplay();
 
@@ -13,7 +13,6 @@ CellButton::CellButton(QWidget *parent) : QPushButton(parent)
 {
 	_row = 0;
 	_col = 0;
-	_color = QColor("white");
 
 	updateDisplay();
 
@@ -32,10 +31,13 @@ void CellButton::resetCellButton()
 
 void CellButton::updateDisplay()
 {
-    QString qss = TM::instance().getStyle("cell");
-    cornerFactor = TM::instance().getFloat("cornerFactor");
-	borderFactor = TM::instance().getFloat("borderFactor");
-	disableBorderFactor = TM::instance().getFloat("disableBorderFactor");
+	QString qss = _themeM->getStyle("cell");
+	cornerFactor = _themeM->getFloat("cornerFactor");
+	borderFactor = _themeM->getFloat("borderFactor");
+	disableBorderFactor = _themeM->getFloat("disableBorderFactor");
+	QColor base = _themeM->getCellColor(_colorZone, "base");
+	QColor borderOut = _themeM->getCellColor(_colorZone, "borderOut");
+
 
 	qss.replace("%BORDER_TOP%",    QString::number(_borders[0] * width() * 0.125 * borderFactor));
 	qss.replace("%BORDER_RIGHT%",  QString::number(_borders[1] * width() * 0.125 * borderFactor));
@@ -52,9 +54,9 @@ void CellButton::updateDisplay()
 	qss.replace("%CORNER_RADIUS_BR%", QString::number(_corners[2] == 1 ? cornerValue * cornerFactor : 0));
 	qss.replace("%CORNER_RADIUS_BL%", QString::number(_corners[3] == 1 ? cornerValue * cornerFactor : 0));
 
-	qss.replace("%CELL_COLOR%", _color.name());
-	qss.replace("%TEXT_COLOR%", inConflict ? QColor(255, 0, 0).name() : _color.darker(250).name());
-	qss.replace("%CELL_DARK%", _color.darker(150).name());
+	qss.replace("%CELL_COLOR%", base.name());
+	qss.replace("%TEXT_COLOR%", inConflict ? QColor(255, 0, 0).name() : _themeM->getCellColor(_colorZone, "text").name());
+	qss.replace("%CELL_DARK%", borderOut.name());
 
 	this->setStyleSheet(qss);
 }
@@ -77,8 +79,8 @@ void CellButton::paintEvent(QPaintEvent *event)
 	p.setRenderHint(QPainter::Antialiasing);
 	p.setPen(Qt::NoPen);
 
-	QString source = TM::instance().getString("cornerColor");
-	QColor fillColor = (source == "cell_dark") ? _color.darker(150) : TM::instance().getColor(source);
+	QString source = _themeM->getString("cornerColor");
+	QColor fillColor = (source == "cell_dark") ? _themeM->getCellColor(_colorZone, "borderOut") : _themeM->getColor(source);
 
 	p.setBrush(fillColor);
 
@@ -91,7 +93,7 @@ void CellButton::paintEvent(QPaintEvent *event)
 		if (_corners[i] == 2)
 		{
 			QRectF cornerRect(cornerPositions[i].first-radius, cornerPositions[i].second-radius, double(radius * 2.0), double(radius * 2.0));
-			if (TM::instance().getFloat("cornerFactor") != 0.0)
+			if (_themeM->getFloat("cornerFactor") != 0.0)
 				p.drawPie(cornerRect, -90 * i * 16, -90 * 16);
 			else
 				p.drawRect(cornerRect);

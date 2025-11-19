@@ -176,7 +176,7 @@ const QColor ThemeManager::getColor(QString key)
 	if (currentTheme.colors.contains(key))
 		return currentTheme.colors[key];
 	qWarning() << "TM-> Color key not found: " << key;
-	return Qt::white;
+	return Qt::cyan;
 }
 
 const QString ThemeManager::getString(QString key)
@@ -185,6 +185,80 @@ const QString ThemeManager::getString(QString key)
 		return currentTheme.strings[key];
 	qWarning() << "TM-> Source key not found: " << key;
 	return QString("");
+}
+
+const QColor ThemeManager::getCellColor(const int colorZone, QString key)
+{
+	if (colorZone < zoneColors.size() && zoneColors[colorZone].colors.contains(key))
+		return zoneColors[colorZone].colors[key];
+	qWarning() << "TM-> Cell color key not found: " << key;
+	return Qt::yellow;
+}
+
+void ThemeManager::updateZoneColors(int n, bool random)
+{
+	if (random)
+		randomizeBaseColors(n);
+
+	for (int i=0; i<zoneColors.size(); ++i)
+		fillCellColors(i);
+
+	qDebug() << "TM-> Zone colors updated: " << n;
+}
+
+void ThemeManager::randomizeBaseColors(int n)
+{
+	if (n == 0)
+		n = zoneColors.size()-1;
+	static mt19937 rng(random_device{}());
+	vector<int> indexes(n);
+	iota(indexes.begin(), indexes.end(), 0);
+	shuffle(indexes.begin(), indexes.end(), rng);
+	uniform_real_distribution<double> dist(0.0, 1.0);
+
+	zoneColors.resize(n+1);
+	double h = -dist(rng) / n;
+	double sC = .62;
+	double vC = .78;
+	double sB = .72;
+	double vB = .46;
+
+	double offset = .5 / n;
+	for (int i=0; i<n; ++i)
+	{
+		h += 2. * offset;
+		zoneColors[indexes[i]].colors["base"] = QColor::fromHsvF(h, sC, vC);
+	}
+	zoneColors[n].colors["base"] = QColor(255, 255, 255);
+}
+
+void ThemeManager::fillCellColors(const int colorZone)
+{
+	QColor baseColor = zoneColors[colorZone].colors["base"];
+
+	QStringList keys = {
+		"text",
+		"borderIn",
+		"borderOut",
+		"borderInDisabled",
+		"borderOutDisabled",
+		"cornerOut",
+		"cornerOutDisabled"
+	};
+
+	for (const QString &key : keys)
+		addCellColor(colorZone, key);
+}
+
+void ThemeManager::addCellColor(const int colorZone, QString key)
+{
+	QString colorName = getString(key);
+	if (colorName == "cell")
+		zoneColors[colorZone].colors[key] = zoneColors[colorZone].colors["base"];
+	else if (colorName == "cell_dark")
+		zoneColors[colorZone].colors[key] = zoneColors[colorZone].colors["base"].darker((int) getFloat(key));
+	else
+		zoneColors[colorZone].colors[key] = getColor(colorName);
 }
 
 void ThemeManager::swapThemeColors()
